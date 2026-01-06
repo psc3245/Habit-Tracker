@@ -11,56 +11,67 @@ body {
   box-sizing: border-box;
 
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
 }
 
+.notebook-container {
+  display: flex;
+  flex-direction: column;
+  width: 98vw;
+  height: 98vh;
+  max-width: none;
+  max-height: none;
 
-/* Notebook page */
+  background: #8b5e3c;
+  border-radius: 16px;
+  padding: 10px;
+  box-sizing: border-box;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  gap: 12px;
+}
+
 .notebook {
   flex: 1;
   display: flex;
-
   background: #c8b89a;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
-
+  border-radius: 12px;
   overflow: hidden;
+  padding: 5px;
+  box-sizing: border-box;
+  gap: 10px;
 }
-
-
-
 
 .page {
-  flex: 1;
-  height: 100%;
-  background: #fffef8;
-  padding: 40px 50px;
   position: relative;
-  overflow-y: auto;
+  flex: 1;
+  border-radius: 6px;
+  padding: 40px 50px;
+  background: #fffef8;
+  overflow: hidden;
+  align-self: stretch;
 }
 
-
-
-/* Ruled lines */
 .page::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      to bottom,
-      transparent,
-      transparent 28px,
-      rgba(0, 0, 255, 0.08) 29px
-    );
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 255, 0.08) 29px
+  );
   pointer-events: none;
 }
 
-/* Red margin line */
 .page::after {
   content: "";
   position: absolute;
@@ -73,12 +84,11 @@ body {
 
 .spine {
   width: 16px;
-  background: linear-gradient(
-    to right,
-    #b5a98a,
-    #e0d5b7,
-    #b5a98a
-  );
+  border-radius: 6px;
+  background: #e0d5b7;
+  align-self: stretch;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .top-tabs {
@@ -86,7 +96,6 @@ body {
   gap: 8px;
   padding-left: 12px;
 }
-
 
 .tabs {
   position: absolute;
@@ -96,7 +105,6 @@ body {
   flex-direction: column;
   gap: 12px;
 }
-
 
 .tab {
   padding: 8px 16px;
@@ -111,4 +119,3 @@ body {
   background: #ffd966;
   font-weight: bold;
 }
-
