@@ -9,11 +9,9 @@ body {
   height: 100vh;
   padding: 10px;
   box-sizing: border-box;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
 }
 
@@ -22,14 +20,10 @@ body {
   flex-direction: column;
   width: 98vw;
   height: 98vh;
-  max-width: none;
-  max-height: none;
-
   background: #8b5e3c;
   border-radius: 16px;
   padding: 10px;
   box-sizing: border-box;
-
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
   gap: 12px;
 }
@@ -87,35 +81,4 @@ body {
   border-radius: 6px;
   background: #e0d5b7;
   align-self: stretch;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.top-tabs {
-  display: flex;
-  gap: 8px;
-  padding-left: 12px;
-}
-
-.tabs {
-  position: absolute;
-  left: -45px;
-  top: 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.tab {
-  padding: 8px 16px;
-  background: #e5e5e5;
-  border-radius: 6px 6px 0 0;
-  font-size: 13px;
-  cursor: pointer;
-  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-}
-
-.tab.active {
-  background: #ffd966;
-  font-weight: bold;
 }

@@ -1,25 +1,21 @@
+import { useState } from "react";
 import "./App.css";
-import NavBar from "./Components/Navbar";
+import "./Style/NavBar.css"
+import NavBar from "./Components/NavBar";
+import DailyPage from "./Components/DailyPage";
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState("Daily");
+
   return (
     <div className="app">
       <div className="notebook-container">
-        <NavBar />
+        <NavBar activeTab={activeTab} onTabChange={setActiveTab} />
 
         <div className="notebook">
-          <div className="page left">
-            <h2>Habits</h2>
-          </div>
-
-          <div className="spine" />
-
-          <div className="page right">
-            <h2>Today</h2>
-          </div>
+          {activeTab === "Daily" && <DailyPage />} {/* render full page */}
         </div>
       </div>
     </div>
   );
 }
-

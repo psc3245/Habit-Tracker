@@ -65,3 +65,24 @@
   font-weight: 600;
   color: #333333;
 }
+
+.tab-btn {
+  background: white;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.tab-btn:hover {
+  background: #eee;
+}
+
+.tab-btn.active {
+  background: #fdf5e6; /* light creme for active */
+  border-color: #aaa;
+  font-weight: bold;
+}
