@@ -1,14 +1,10 @@
 import "./App.css";
-import Habit from "./Components/Habit";
+import NavBar from "./Components/Navbar";
 
 export default function App() {
   return (
     <div className="app">
-      <div className="top-tabs">
-        <div className="tab active">Daily</div>
-        <div className="tab">Weekly</div>
-        <div className="tab">Notes</div>
-      </div>
+      <NavBar />
 
       <div className="notebook">
         <div className="page left">
