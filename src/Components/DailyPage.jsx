@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DailyHabit from "./DailyHabit";
+import "../Style/DailyPage.css";
 
 export default function DailyPage() {
   const initialHabits = ["Drink water", "Exercise", "Read", "Meditate", "Sleep 8h"];
@@ -17,32 +18,17 @@ export default function DailyPage() {
   };
 
   return (
-    <>
-      <div className="page left">
-        <h2>Habits</h2>
-        {habits.map((habit, i) => (
-          <DailyHabit
-            key={habit.name}
-            habit={habit.name}
-            completed={habit.completed}
-            onToggle={() => toggleHabit(i)}
-          />
-        ))}
-      </div>
-
-      <div className="spine" />
-
-      <div className="page right">
-        <h2>Today</h2>
-        {habits.map((habit, i) => (
-          <DailyHabit
-            key={habit.name}
-            habit={habit.name}
-            completed={habit.completed}
-            onToggle={() => toggleHabit(i)}
-          />
-        ))}
-      </div>
-    </>
+    <div className="daily-page">
+      <h2 className="daily-title">Daily Habits</h2>
+      <button className="new-habit-btn">+ New Habit</button>
+      {habits.map((habit, i) => (
+        <DailyHabit
+          key={habit.name}
+          habit={habit.name}
+          completed={habit.completed}
+          onToggle={() => toggleHabit(i)}
+        />
+      ))}
+    </div>
   );
 }

@@ -1,3 +1,6 @@
+import "../Style/Navbar.css";
+import { useState } from "react";
+
 export default function NavBar({ activeTab, onTabChange }) {
   const tabs = ["Daily", "Weekly", "Notes"];
 
@@ -7,17 +10,16 @@ export default function NavBar({ activeTab, onTabChange }) {
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${activeTab === tab ? "active" : ""}`}
+            className={`nav-tab ${activeTab === tab ? "active" : ""}`}
             onClick={() => onTabChange(tab)}
           >
             {tab}
           </button>
         ))}
       </div>
-
       <div className="nav-right">
-        <button className="nav-btn">Login</button>
-        <button className="nav-btn">Sign Up</button>
+        <button className="nav-auth">Login</button>
+        <button className="nav-auth primary">Sign Up</button>
       </div>
     </div>
   );

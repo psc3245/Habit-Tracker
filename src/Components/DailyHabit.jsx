@@ -1,3 +1,6 @@
+import "../Style/DailyHabit.css";
+import { useState } from "react";
+
 export default function DailyHabit({ habit, completed, onToggle }) {
   return (
     <div className="daily-habit">

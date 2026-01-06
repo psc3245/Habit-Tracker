@@ -1,0 +1,29 @@
+.daily-habit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  background: rgba(253, 245, 230, 0.6);
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease;
+}
+
+.daily-habit:hover {
+  background: rgba(253, 245, 230, 0.9);
+  border-color: #ccc;
+}
+
+.habit-name {
+  font-weight: 500;
+  font-size: 16px;
+  color: #2c2c2c;
+}
+
+.habit-checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #ffd966;
+}
