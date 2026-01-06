@@ -3,15 +3,24 @@ import Habit from "./Components/Habit";
 
 export default function App() {
   return (
-    <div className="notebook">
-      <div className="tabs">
-        <div className="tab active">Today</div>
-        <div className="tab">Week</div>
+    <div className="app">
+      <div className="top-tabs">
+        <div className="tab active">Daily</div>
+        <div className="tab">Weekly</div>
         <div className="tab">Notes</div>
       </div>
 
-      <h1>Habit Tracker</h1>
-      <Habit />
+      <div className="notebook">
+        <div className="page left">
+          <h2>Habits</h2>
+        </div>
+
+        <div className="spine" />
+
+        <div className="page right">
+          <h2>Today</h2>
+        </div>
+      </div>
     </div>
   );
 }
