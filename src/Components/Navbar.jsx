@@ -2,7 +2,6 @@ import { useState } from "react";
 import "../Style/NavBar.css";
 
 export default function NavBar() {
-  // Track which tab is active
   const [activeTab, setActiveTab] = useState("Daily");
 
   const tabs = ["Daily", "Weekly", "Notes"];

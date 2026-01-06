@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #d9d9d9; /* light gray background for page */
+  background: #d9d9d9;
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
@@ -20,37 +20,30 @@ body {
 .notebook-container {
   display: flex;
   flex-direction: column;
-  width: 98vw;      /* almost full width */
-  height: 98vh;     /* almost full height */
-  max-width: none;  /* remove previous constraints */
+  width: 98vw;
+  height: 98vh;
+  max-width: none;
   max-height: none;
 
-  background: #8b5e3c; /* brown notebook */
+  background: #8b5e3c;
   border-radius: 16px;
-  padding: 10px; /* margin from viewport edge */
+  padding: 10px;
   box-sizing: border-box;
 
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
   gap: 12px;
 }
 
-
 .notebook {
   flex: 1;
   display: flex;
-  background: #c8b89a; /* inner paper background */
+  background: #c8b89a;
   border-radius: 12px;
   overflow: hidden;
-  padding: 5px; /* 5px margin inside notebook edges */
+  padding: 5px;
   box-sizing: border-box;
-  gap: 10px; /* space between pages and spine */
+  gap: 10px;
 }
-
-
-
-
-
-
 
 .page {
   position: relative;
@@ -69,7 +62,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  margin: 0; /* ensure it stays inside page */
+  margin: 0;
   background-image: repeating-linear-gradient(
     to bottom,
     transparent,
@@ -79,9 +72,6 @@ body {
   pointer-events: none;
 }
 
-
-
-/* Red margin line */
 .page::after {
   content: "";
   position: absolute;
@@ -95,21 +85,17 @@ body {
 .spine {
   width: 16px;
   border-radius: 6px;
-  background: #e0d5b7; /* solid light color instead of gradient */
-  align-self: stretch; /* fills same height as pages */
+  background: #e0d5b7;
+  align-self: stretch;
   margin-top: 0;
   margin-bottom: 0;
 }
-
-
-
 
 .top-tabs {
   display: flex;
   gap: 8px;
   padding-left: 12px;
 }
-
 
 .tabs {
   position: absolute;
@@ -119,7 +105,6 @@ body {
   flex-direction: column;
   gap: 12px;
 }
-
 
 .tab {
   padding: 8px 16px;
@@ -134,4 +119,3 @@ body {
   background: #ffd966;
   font-weight: bold;
 }
-
