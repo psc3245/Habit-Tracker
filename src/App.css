@@ -20,28 +20,28 @@ body {
 .notebook-container {
   display: flex;
   flex-direction: column;
-  width: 90vw;
-  max-width: 1200px;
-  height: 90vh;
-  max-height: 800px;
+  width: 98vw;      /* almost full width */
+  height: 98vh;     /* almost full height */
+  max-width: none;  /* remove previous constraints */
+  max-height: none;
 
   background: #8b5e3c; /* brown notebook */
   border-radius: 16px;
-  padding: 10px; /* outer padding to container */
+  padding: 10px; /* margin from viewport edge */
   box-sizing: border-box;
 
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
   gap: 12px;
 }
 
-/* Notebook page */
+
 .notebook {
   flex: 1;
   display: flex;
-  background: #c8b89a; /* inner paper background (light) */
+  background: #c8b89a; /* inner paper background */
   border-radius: 12px;
   overflow: hidden;
-  padding: 5px; /* 5px space inside notebook edges */
+  padding: 5px; /* 5px margin inside notebook edges */
   box-sizing: border-box;
   gap: 10px; /* space between pages and spine */
 }
@@ -51,36 +51,35 @@ body {
 
 
 
-.page {
-  flex: 1;
-  background: #fffef8;
-  border-radius: 6px;
-  padding: 30px 40px;
-  overflow-y: auto;
 
-  /* Maximize page height */
-  height: auto;
-  align-self: stretch; /* match spine height */
+.page {
+  position: relative;
+  flex: 1;
+  border-radius: 6px;
+  padding: 40px 50px;
+  background: #fffef8;
+  overflow: hidden;
+  align-self: stretch;
 }
 
-
-
-
-
-/* Ruled lines */
 .page::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      to bottom,
-      transparent,
-      transparent 28px,
-      rgba(0, 0, 255, 0.08) 29px
-    );
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0; /* ensure it stays inside page */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 255, 0.08) 29px
+  );
   pointer-events: none;
 }
+
+
 
 /* Red margin line */
 .page::after {
@@ -96,14 +95,12 @@ body {
 .spine {
   width: 16px;
   border-radius: 6px;
-  background: linear-gradient(
-    to bottom,
-    #b5a98a 0%,   /* top color */
-    #e0d5b7 50%,  /* middle */
-    #b5a98a 100%  /* bottom color */
-  );
-  align-self: stretch; /* fills the height of notebook minus padding */
+  background: #e0d5b7; /* solid light color instead of gradient */
+  align-self: stretch; /* fills same height as pages */
+  margin-top: 0;
+  margin-bottom: 0;
 }
+
 
 
 
