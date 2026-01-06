@@ -1,4 +1,4 @@
-.daily-habit {
+.habit-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,7 +10,7 @@
   transition: all 0.2s ease;
 }
 
-.daily-habit:hover {
+.habit-container:hover {
   background: rgba(253, 245, 230, 0.9);
   border-color: #ccc;
 }

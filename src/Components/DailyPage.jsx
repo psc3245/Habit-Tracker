@@ -1,34 +1,86 @@
 import { useState } from "react";
 import DailyHabit from "./DailyHabit";
-import "../Style/DailyPage.css";
+import CreateHabitModal from "./CreateHabitModal";
+import "./../Style/DailyPage.css";
 
 export default function DailyPage() {
-  const initialHabits = ["Drink water", "Exercise", "Read", "Meditate", "Sleep 8h"];
+  const initialHabits = [
+    { id: "1", name: "Drink water", completed: false, type: "checkbox", tag: "--" },
+    { id: "2", name: "Exercise", completed: false, type: "checkbox", tag: "--" },
+    { id: "3", name: "Read", completed: false, type: "checkbox-with-tags", tag: "Morning" },
+    { id: "4", name: "Meditate", completed: false, type: "checkbox-with-tags", tag: "Evening" },
+    { id: "5", name: "Sleep 8h", completed: false, type: "checkbox", tag: "--" }
+  ];
 
-  const [habits, setHabits] = useState(
-    initialHabits.map((h) => ({ name: h, completed: false }))
-  );
+  const [habits, setHabits] = useState(initialHabits);
+  const [availableTags, setAvailableTags] = useState(["Morning", "Evening", "Afternoon"]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleHabit = (index) => {
+  const toggleHabit = (id) => {
     setHabits((prev) =>
-      prev.map((h, i) =>
-        i === index ? { ...h, completed: !h.completed } : h
+      prev.map((h) =>
+        h.id === id ? { ...h, completed: !h.completed } : h
       )
     );
   };
 
+  const updateHabitTag = (id, newTag) => {
+    if (newTag === "new-tag") {
+      const tagName = prompt("Enter new tag name:");
+      if (tagName && tagName.trim()) {
+        setAvailableTags((prev) => [...prev, tagName.trim()]);
+        setHabits((prev) =>
+          prev.map((h) =>
+            h.id === id ? { ...h, tag: tagName.trim() } : h
+          )
+        );
+      }
+    } else {
+      setHabits((prev) =>
+        prev.map((h) =>
+          h.id === id ? { ...h, tag: newTag } : h
+        )
+      );
+    }
+  };
+
+  const createHabit = (habitData) => {
+    const newHabit = {
+      id: Date.now().toString(),
+      name: habitData.name,
+      type: habitData.type,
+      completed: false,
+      tag: habitData.type === "checkbox-with-tags" ? "--" : undefined
+    };
+    setHabits((prev) => [...prev, newHabit]);
+  };
+
   return (
     <div className="daily-page">
-      <h2 className="daily-title">Daily Habits</h2>
-      <button className="new-habit-btn">+ New Habit</button>
-      {habits.map((habit, i) => (
+      <div className="page-header">
+        <h2 className="daily-title">Daily Habits</h2>
+        <button className="new-habit-btn" onClick={() => setIsModalOpen(true)}>
+          + New Habit
+        </button>
+      </div>
+      {habits.map((habit) => (
         <DailyHabit
-          key={habit.name}
+          key={habit.id}
           habit={habit.name}
           completed={habit.completed}
-          onToggle={() => toggleHabit(i)}
+          type={habit.type}
+          tag={habit.tag}
+          availableTags={availableTags}
+          onToggle={() => toggleHabit(habit.id)}
+          onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
         />
       ))}
+
+      <CreateHabitModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreateHabit={createHabit}
+      />
     </div>
   );
 }

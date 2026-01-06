@@ -1,16 +1,43 @@
-import "../Style/DailyHabit.css";
-import { useState } from "react";
+import CheckboxHabit from "./Habits/CheckboxHabit.jsx";
+import TaggedCheckboxHabit from "./Habits/TaggedCheckboxHabit.jsx";
 
-export default function DailyHabit({ habit, completed, onToggle }) {
+// Registry of all available habit types
+const HABIT_TYPE_COMPONENTS = {
+  "checkbox": CheckboxHabit,
+  "checkbox-with-tags": TaggedCheckboxHabit,
+  // "counter": CounterHabit,
+  // "timer": TimerHabit,
+  // Add new types here
+};
+
+export default function DailyHabit({ 
+  habit, 
+  completed, 
+  type, 
+  tag, 
+  availableTags, 
+  onToggle, 
+  onTagChange,
+  // Future props for other habit types
+  value,
+  onValueChange,
+  ...otherProps 
+}) {
+  // Get the component for this habit type
+  const HabitComponent = HABIT_TYPE_COMPONENTS[type] || HABIT_TYPE_COMPONENTS["checkbox"];
+  
+  // Pass all relevant props to the component
   return (
-    <div className="daily-habit">
-      <span className="habit-name">{habit}</span>
-      <input
-        type="checkbox"
-        checked={completed}
-        onChange={onToggle}
-        className="habit-checkbox"
-      />
-    </div>
+    <HabitComponent
+      habit={habit}
+      completed={completed}
+      tag={tag}
+      availableTags={availableTags}
+      onToggle={onToggle}
+      onTagChange={onTagChange}
+      value={value}
+      onValueChange={onValueChange}
+      {...otherProps}
+    />
   );
 }
