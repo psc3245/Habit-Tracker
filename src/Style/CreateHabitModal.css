@@ -22,11 +22,37 @@
   border: 2px solid #c8b89a;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
 .modal-title {
   color: #1a1a1a;
   font-size: 24px;
-  margin: 0 0 24px 0;
+  margin: 0;
   font-weight: 600;
+}
+
+.type-select {
+  padding: 8px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: black;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  font-weight: 500;
+}
+
+.type-select:focus {
+  outline: none;
+  border-color: #ffd966;
 }
 
 .habit-form {
@@ -47,8 +73,7 @@
   font-size: 14px;
 }
 
-.form-input,
-.form-select {
+.form-input {
   padding: 10px 12px;
   border: 2px solid #ddd;
   border-radius: 6px;
@@ -58,14 +83,49 @@
   transition: border-color 0.2s ease;
 }
 
-.form-input:focus,
-.form-select:focus {
+.form-input:focus {
   outline: none;
   border-color: #ffd966;
 }
 
 .form-input::placeholder {
   color: #999;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-button {
+  padding: 6px 14px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  background: #fff;
+  color: #333;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-button:hover {
+  border-color: #ffd966;
+  background: #fffef8;
+}
+
+.tag-button.selected {
+  background: #ffd966;
+  border-color: #ffd966;
+  color: #1a1a1a;
 }
 
 .modal-actions {

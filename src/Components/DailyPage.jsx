@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DailyHabit from "./DailyHabit";
 import CreateHabitModal from "./CreateHabitModal";
-import "./../Style/DailyPage.css";
+import "../Style/DailyPage.css";
 
 export default function DailyPage() {
   const initialHabits = [
@@ -80,6 +80,7 @@ export default function DailyPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreateHabit={createHabit}
+        availableTags={availableTags}
       />
     </div>
   );
