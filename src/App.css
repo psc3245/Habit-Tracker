@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #d9d9d9;
+  background: #d9d9d9; /* light gray background for page */
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
@@ -11,38 +11,59 @@ body {
   box-sizing: border-box;
 
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
 }
 
+.notebook-container {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  max-width: 1200px;
+  height: 90vh;
+  max-height: 800px;
 
+  background: #8b5e3c; /* brown notebook */
+  border-radius: 16px;
+  padding: 10px; /* outer padding to container */
+  box-sizing: border-box;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  gap: 12px;
+}
 
 /* Notebook page */
 .notebook {
   flex: 1;
   display: flex;
-
-  background: #c8b89a;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
-
+  background: #c8b89a; /* inner paper background (light) */
+  border-radius: 12px;
   overflow: hidden;
+  padding: 5px; /* 5px space inside notebook edges */
+  box-sizing: border-box;
+  gap: 10px; /* space between pages and spine */
 }
+
+
 
 
 
 
 .page {
   flex: 1;
-  height: 100%;
   background: #fffef8;
-  padding: 40px 50px;
-  position: relative;
+  border-radius: 6px;
+  padding: 30px 40px;
   overflow-y: auto;
+
+  /* Maximize page height */
+  height: auto;
+  align-self: stretch; /* match spine height */
 }
+
+
 
 
 
@@ -74,13 +95,17 @@ body {
 
 .spine {
   width: 16px;
+  border-radius: 6px;
   background: linear-gradient(
-    to right,
-    #b5a98a,
-    #e0d5b7,
-    #b5a98a
+    to bottom,
+    #b5a98a 0%,   /* top color */
+    #e0d5b7 50%,  /* middle */
+    #b5a98a 100%  /* bottom color */
   );
+  align-self: stretch; /* fills the height of notebook minus padding */
 }
+
+
 
 .top-tabs {
   display: flex;
