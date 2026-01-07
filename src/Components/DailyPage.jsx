@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DailyHabit from "./DailyHabit";
+import Habit from "./Habit";
 import CreateHabitModal from "./CreateHabitModal";
 import "../Style/DailyPage.css";
 
@@ -66,7 +66,7 @@ export default function DailyPage() {
         </button>
       </div>
       {habits.map((habit) => (
-        <DailyHabit
+        <Habit
           key={habit.id}
           habit={habit.name}
           completed={habit.completed}

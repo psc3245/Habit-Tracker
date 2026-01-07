@@ -8,7 +8,7 @@ const HABIT_TYPE_COMPONENTS = {
   // Add new types here
 };
 
-export default function DailyHabit({ 
+export default function Habit({ 
   habit, 
   completed, 
   type, 
