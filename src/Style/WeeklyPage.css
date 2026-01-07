@@ -1,0 +1,28 @@
+.weekly-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.weekly-title {
+  color: #1a1a1a;
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.new-habit-btn {
+  background: #ffd966;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.new-habit-btn:hover {
+  background: #ffe699;
+  transform: translateY(-1px);
+}

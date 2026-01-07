@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import NavBar from "./Components/Navbar";
 import DailyPage from "./Components/DailyPage";
+import WeeklyPage from "./Components/WeeklyPage";
 
 export default function App() {
   const [leftPageView, setLeftPageView] = useState("Daily");
@@ -25,10 +26,7 @@ export default function App() {
             <div className="page left-page">
               <div className="page-content">
                 {leftPageView === "Daily" && <DailyPage />}
-                {leftPageView === "Weekly" && <div className="placeholder-page">
-                  <h2 className="page-title">Weekly Habits</h2>
-                  <p>Weekly view coming soon...</p>
-                </div>}
+                {leftPageView === "Weekly" && <WeeklyPage />}
               </div>
             </div>
             
