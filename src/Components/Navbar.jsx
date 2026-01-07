@@ -1,25 +1,41 @@
 import "../Style/Navbar.css";
 import { useState } from "react";
 
-export default function NavBar({ activeTab, onTabChange }) {
-  const tabs = ["Daily", "Weekly", "Notes"];
+export default function NavBar({ leftPageView, onLeftPageChange, rightPageView, onRightPageChange }) {
+  const leftTabs = ["Daily", "Weekly"];
+  const rightTabs = ["Stats", "Glance"];
 
   return (
     <div className="navbar">
+      {/* Left page controls */}
       <div className="nav-left">
-        {tabs.map((tab) => (
+        {leftTabs.map((tab) => (
           <button
             key={tab}
-            className={`nav-tab ${activeTab === tab ? "active" : ""}`}
-            onClick={() => onTabChange(tab)}
+            className={`nav-tab ${leftPageView === tab ? "active" : ""}`}
+            onClick={() => onLeftPageChange(tab)}
           >
             {tab}
           </button>
         ))}
       </div>
+      
+      {/* Center - Login/Signup */}
+      <div className="nav-center">
+        <button className="nav-auth-combined">Login / Sign Up</button>
+      </div>
+      
+      {/* Right page controls */}
       <div className="nav-right">
-        <button className="nav-auth">Login</button>
-        <button className="nav-auth primary">Sign Up</button>
+        {rightTabs.map((tab) => (
+          <button
+            key={tab}
+            className={`nav-tab ${rightPageView === tab ? "active" : ""}`}
+            onClick={() => onRightPageChange(tab)}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
     </div>
   );

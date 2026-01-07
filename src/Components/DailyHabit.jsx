@@ -1,10 +1,8 @@
 import CheckboxHabit from "./Habits/CheckboxHabit.jsx";
-import TaggedCheckboxHabit from "./Habits/TaggedCheckboxHabit.jsx";
 
 // Registry of all available habit types
 const HABIT_TYPE_COMPONENTS = {
   "checkbox": CheckboxHabit,
-  "checkbox-with-tags": TaggedCheckboxHabit,
   // "counter": CounterHabit,
   // "timer": TimerHabit,
   // Add new types here

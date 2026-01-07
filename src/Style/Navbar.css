@@ -15,9 +15,21 @@
 .nav-left, .nav-right {
   display: flex;
   gap: 8px;
+  flex: 1;
 }
 
-.nav-tab, .nav-auth {
+.nav-right {
+  justify-content: flex-end;
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-tab {
   padding: 6px 14px;
   background: #fff;
   color: #333;
@@ -28,7 +40,7 @@
   transition: all 0.2s ease;
 }
 
-.nav-tab:hover, .nav-auth:hover {
+.nav-tab:hover {
   background: #f0f0f0;
 }
 
@@ -38,8 +50,20 @@
   font-weight: 600;
 }
 
-.nav-auth.primary {
+.nav-auth-combined {
+  padding: 6px 16px;
   background: #ffd966;
+  color: #1a1a1a;
   border: none;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-auth-combined:hover {
+  background: #ffe699;
+  transform: translateY(-1px);
 }

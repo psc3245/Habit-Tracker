@@ -31,14 +31,28 @@ body {
   overflow: hidden;
 }
 
+.notebook-content {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+}
+
 .page {
   flex: 1;
   background: #fffef8;
-  border-radius: 6px 0 0 6px;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.left-page {
+  border-radius: 6px 0 0 6px;
+}
+
+.right-page {
+  border-radius: 0 6px 6px 0;
 }
 
 /* Notebook lines */
@@ -50,6 +64,7 @@ body {
     to bottom,
     transparent,
     transparent 28px,
+    rgba(0, 0, 255, 0.08) 28px,
     rgba(0, 0, 255, 0.08) 29px
   );
   pointer-events: none;
@@ -68,13 +83,6 @@ body {
   z-index: 0;
 }
 
-.notebook-content {
-  flex: 1;
-  display: flex;
-  gap: 0;
-  overflow: hidden;
-}
-
 .spine {
   width: 20px;
   flex-shrink: 0;
@@ -87,9 +95,7 @@ body {
 .page-content {
   position: relative;
   z-index: 1;
-  padding: 30px;
-  padding-left: 60px; /* Account for red margin */
-  padding-right: 40px;
+  padding: 60px 40px 30px 60px; /* Extra top padding for notebook margin */
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
@@ -111,4 +117,23 @@ body {
 
 .page-content::-webkit-scrollbar-thumb:hover {
   background: #b5a688;
+}
+
+/* Placeholder page styles */
+.placeholder-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title {
+  color: #1a1a1a;
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.placeholder-page p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.6;
 }
