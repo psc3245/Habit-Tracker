@@ -4,8 +4,10 @@ import "../Style/CreateHabitModal.css";
 export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, availableTags }) {
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
+  const [hasTags, setHasTags] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [dailyRequirement, setDailyRequirement] = useState("");
+  const [recurrence, setRecurrence] = useState("daily");
 
   if (!isOpen) return null;
 
@@ -14,14 +16,21 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
     if (habitName.trim()) {
       const habitData = {
         name: habitName.trim(),
-        type: habitType
+        type: habitType,
+        hasTags: hasTags,
+        recurrence: recurrence
       };
 
       // Add type-specific data
-      if (habitType === "checkbox-with-tags") {
+      if (hasTags) {
         habitData.tags = selectedTags;
-      } else if (habitType === "numerical") {
-        habitData.dailyRequirement = parseInt(dailyRequirement) || 0;
+      }
+      if (habitType === "counter" || habitType === "duration" || habitType === "scale") {
+        habitData.goal = parseInt(dailyRequirement) || 0;
+      }
+      if (habitType === "scale") {
+        habitData.min = 1;
+        habitData.max = 10;
       }
 
       onCreateHabit(habitData);
@@ -29,8 +38,10 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
       // Reset form
       setHabitName("");
       setHabitType("checkbox");
+      setHasTags(false);
       setSelectedTags([]);
       setDailyRequirement("");
+      setRecurrence("daily");
       onClose();
     }
   };
@@ -38,8 +49,10 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
   const handleCancel = () => {
     setHabitName("");
     setHabitType("checkbox");
+    setHasTags(false);
     setSelectedTags([]);
     setDailyRequirement("");
+    setRecurrence("daily");
     onClose();
   };
 
@@ -56,15 +69,27 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">Create New Habit</h2>
-          <select
-            value={habitType}
-            onChange={(e) => setHabitType(e.target.value)}
-            className="type-select"
-          >
-            <option value="checkbox">Simple Checkbox</option>
-            <option value="checkbox-with-tags">Checkbox with Tags</option>
-            <option value="numerical">Numerical Habit</option>
-          </select>
+          <div className="header-controls">
+            <select
+              value={habitType}
+              onChange={(e) => setHabitType(e.target.value)}
+              className="type-select"
+            >
+              <option value="checkbox">Checkbox</option>
+              <option value="counter">Counter</option>
+              <option value="duration">Duration</option>
+              <option value="scale">Scale (1-10)</option>
+            </select>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={hasTags}
+                onChange={(e) => setHasTags(e.target.checked)}
+                className="form-checkbox"
+              />
+              Has Tags
+            </label>
+          </div>
         </div>
         
         <form onSubmit={handleSubmit} className="habit-form">
@@ -82,8 +107,8 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
             />
           </div>
 
-          {/* Tags - Only for checkbox-with-tags */}
-          {habitType === "checkbox-with-tags" && (
+          {/* Tags - Only when hasTags is checked */}
+          {hasTags && (
             <div className="form-group">
               <label>Available Tags</label>
               <div className="tags-container">
@@ -102,22 +127,51 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
             </div>
           )}
 
-          {/* Daily Requirement - Only for numerical */}
-          {habitType === "numerical" && (
+          {/* Daily Requirement - For counter, duration, and scale */}
+          {(habitType === "counter" || habitType === "duration" || habitType === "scale") && (
             <div className="form-group">
-              <label htmlFor="daily-requirement">Daily Requirement</label>
-              <input
-                id="daily-requirement"
-                type="number"
-                value={dailyRequirement}
-                onChange={(e) => setDailyRequirement(e.target.value)}
-                placeholder="e.g., 8 glasses, 10000 steps"
-                className="form-input"
-                min="0"
-              />
-              <p className="form-hint">How many times or how much per day?</p>
+              <label htmlFor="daily-requirement">
+                {habitType === "counter" && "Daily Goal"}
+                {habitType === "duration" && "Goal (minutes)"}
+                {habitType === "scale" && "Not applicable for scale"}
+              </label>
+              {habitType !== "scale" && (
+                <>
+                  <input
+                    id="daily-requirement"
+                    type="number"
+                    value={dailyRequirement}
+                    onChange={(e) => setDailyRequirement(e.target.value)}
+                    placeholder={habitType === "counter" ? "e.g., 8 glasses, 10000 steps" : "e.g., 20 minutes"}
+                    className="form-input"
+                    min="0"
+                  />
+                  <p className="form-hint">
+                    {habitType === "counter" && "How many times per day?"}
+                    {habitType === "duration" && "How many minutes per day?"}
+                  </p>
+                </>
+              )}
+              {habitType === "scale" && (
+                <p className="form-hint">Scale habits use a 1-10 slider, no goal needed</p>
+              )}
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="recurrence">Pattern of Recurrence</label>
+            <select
+              value={recurrence}
+              onChange={(e) => setRecurrence(e.target.value)}
+              className="type-select"
+            >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+            </select>
+            <p className="form-hint">How often will this habit be completed?</p>
+          </div>
+
+          
 
           <div className="modal-actions">
             <button type="button" onClick={handleCancel} className="btn-cancel">

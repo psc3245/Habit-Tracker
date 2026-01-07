@@ -30,6 +30,12 @@
   gap: 16px;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .modal-title {
   color: #1a1a1a;
   font-size: 24px;
@@ -71,6 +77,22 @@
   font-weight: 600;
   color: #2c2c2c;
   font-size: 14px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: black;
+  font-weight: 500;
+}
+
+.form-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #ffd966;
 }
 
 .form-input {
