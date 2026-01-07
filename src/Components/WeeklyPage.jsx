@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Habit from "./Habit";
 import CreateHabitModal from "./CreateHabitModal";
-import "../Style/DailyPage.css";
+import "../Style/WeeklyPage.css";
 
-export default function DailyPage() {
+export default function WeeklyPage() {
   const initialHabits = [
     { id: "1", name: "Drink water", completed: false, type: "checkbox", hasTags: false },
     { id: "2", name: "Exercise", completed: false, type: "checkbox", hasTags: false },
@@ -52,15 +52,15 @@ export default function DailyPage() {
       completed: false,
       hasTags: habitData.hasTags,
       tag: habitData.hasTags ? "--" : undefined,
-      dailyRequirement: habitData.dailyRequirement
+      weeklyRequirement: habitData.weeklyRequirement
     };
     setHabits((prev) => [...prev, newHabit]);
   };
 
   return (
-    <div className="daily-page">
+    <div className="weekly-page">
       <div className="page-header">
-        <h2 className="daily-title">Daily Habits</h2>
+        <h2 className="weekly-title">Weekly Habits</h2>
         <button className="new-habit-btn" onClick={() => setIsModalOpen(true)}>
           + New Habit
         </button>
