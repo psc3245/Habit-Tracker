@@ -3,6 +3,7 @@ import "./App.css";
 import NavBar from "./Components/Navbar";
 import DailyPage from "./Components/DailyPage";
 import WeeklyPage from "./Components/WeeklyPage";
+import LoginMenu from "./Components/Login/LoginMenu.jsx"
 
 export default function App() {
   const [leftPageView, setLeftPageView] = useState("Daily");
@@ -27,6 +28,7 @@ export default function App() {
               <div className="page-content">
                 {leftPageView === "Daily" && <DailyPage />}
                 {leftPageView === "Weekly" && <WeeklyPage />}
+                {leftPageView == "Login" && <LoginMenu/>}
               </div>
             </div>
             
@@ -44,6 +46,7 @@ export default function App() {
                   <h2 className="page-title">At a Glance</h2>
                   <p>Overview coming soon...</p>
                 </div>}
+                {rightPageView == "SignUp" && <p>Sign Up Coming Soon</p>}
               </div>
             </div>
           </div>
