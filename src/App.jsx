@@ -7,6 +7,7 @@ import LoginMenu from "./Components/Login/LoginMenu.jsx"
 import SignUpMenu from "./Components/Login/SignUpMenu.jsx";
 
 export default function App() {
+  const [user, setUser] = useState(null);
   const [leftPageView, setLeftPageView] = useState("Daily");
   const [rightPageView, setRightPageView] = useState("Stats");
 

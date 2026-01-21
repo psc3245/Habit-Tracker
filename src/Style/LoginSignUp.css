@@ -42,6 +42,7 @@ select {
     background: #fff;
     transition: border-color 0.2s ease;
     box-sizing: border-box;
+    color: black;
 }
 
 .form-input:focus,
