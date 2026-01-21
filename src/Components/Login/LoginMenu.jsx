@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../Style/Login.css";
+import "../../Style/LoginSignUp.css";
 
 export function onLoginRequest({username, password}) {
     
