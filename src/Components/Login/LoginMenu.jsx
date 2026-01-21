@@ -1,12 +1,9 @@
 import { useState } from "react";
 import "../../Style/LoginSignUp.css";
 
-export function onLoginRequest({username, password}) {
-    
-}
+export function onLoginRequest({ username, password }) {}
 
 export default function LoginMenu() {
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,7 +16,7 @@ export default function LoginMenu() {
       };
 
       onLoginRequest(loginData);
-      
+
       setUsername("");
       setPassword("");
     }
@@ -33,31 +30,30 @@ export default function LoginMenu() {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="text"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
-            />
-          </div>
-          <button type="submit" className="btn-login">
-              Login
-          </button>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="text"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-input"
+          />
+        </div>
+        <button type="submit" className="btn-login">
+          Login
+        </button>
       </form>
     </div>
-  )
-
-};
+  );
+}

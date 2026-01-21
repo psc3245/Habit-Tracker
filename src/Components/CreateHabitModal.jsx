@@ -1,7 +1,12 @@
 import { useState } from "react";
 import "../Style/CreateHabitModal.css";
 
-export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, availableTags }) {
+export default function CreateHabitModal({
+  isOpen,
+  onClose,
+  onCreateHabit,
+  availableTags,
+}) {
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
   const [hasTags, setHasTags] = useState(false);
@@ -18,14 +23,18 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
         name: habitName.trim(),
         type: habitType,
         hasTags: hasTags,
-        recurrence: recurrence
+        recurrence: recurrence,
       };
 
       // Add type-specific data
       if (hasTags) {
         habitData.tags = selectedTags;
       }
-      if (habitType === "counter" || habitType === "duration" || habitType === "scale") {
+      if (
+        habitType === "counter" ||
+        habitType === "duration" ||
+        habitType === "scale"
+      ) {
         habitData.goal = parseInt(dailyRequirement) || 0;
       }
       if (habitType === "scale") {
@@ -34,7 +43,7 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
       }
 
       onCreateHabit(habitData);
-      
+
       // Reset form
       setHabitName("");
       setHabitType("checkbox");
@@ -57,10 +66,8 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
   };
 
   const toggleTag = (tag) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 
@@ -91,7 +98,7 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
             </label>
           </div>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="habit-form">
           {/* Habit Name - Always shown */}
           <div className="form-group">
@@ -112,23 +119,27 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
             <div className="form-group">
               <label>Available Tags</label>
               <div className="tags-container">
-                {availableTags.map(tag => (
+                {availableTags.map((tag) => (
                   <button
                     key={tag}
                     type="button"
-                    className={`tag-button ${selectedTags.includes(tag) ? 'selected' : ''}`}
+                    className={`tag-button ${selectedTags.includes(tag) ? "selected" : ""}`}
                     onClick={() => toggleTag(tag)}
                   >
                     {tag}
                   </button>
                 ))}
               </div>
-              <p className="form-hint">Select which tags can be used with this habit</p>
+              <p className="form-hint">
+                Select which tags can be used with this habit
+              </p>
             </div>
           )}
 
           {/* Daily Requirement - For counter, duration, and scale */}
-          {(habitType === "counter" || habitType === "duration" || habitType === "scale") && (
+          {(habitType === "counter" ||
+            habitType === "duration" ||
+            habitType === "scale") && (
             <div className="form-group">
               <label htmlFor="daily-requirement">
                 {habitType === "counter" && "Daily Goal"}
@@ -142,7 +153,11 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
                     type="number"
                     value={dailyRequirement}
                     onChange={(e) => setDailyRequirement(e.target.value)}
-                    placeholder={habitType === "counter" ? "e.g., 8 glasses, 10000 steps" : "e.g., 20 minutes"}
+                    placeholder={
+                      habitType === "counter"
+                        ? "e.g., 8 glasses, 10000 steps"
+                        : "e.g., 20 minutes"
+                    }
                     className="form-input"
                     min="0"
                   />
@@ -153,7 +168,9 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
                 </>
               )}
               {habitType === "scale" && (
-                <p className="form-hint">Scale habits use a 1-10 slider, no goal needed</p>
+                <p className="form-hint">
+                  Scale habits use a 1-10 slider, no goal needed
+                </p>
               )}
             </div>
           )}
@@ -170,8 +187,6 @@ export default function CreateHabitModal({ isOpen, onClose, onCreateHabit, avail
             </select>
             <p className="form-hint">How often will this habit be completed?</p>
           </div>
-
-          
 
           <div className="modal-actions">
             <button type="button" onClick={handleCancel} className="btn-cancel">
