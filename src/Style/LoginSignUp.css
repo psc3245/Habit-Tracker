@@ -1,68 +1,118 @@
 .login-container {
     display: flex;
-    padding: 12px;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
+    padding: 20px;
+    background: transparent;
 }
 
 .login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .form-group label {
-  font-weight: 600;
-  color: #2c2c2c;
-  font-size: 14px;
+    font-weight: 600;
+    color: #2c2c2c;
+    font-size: 14px;
 }
 
-.form-input {
+.form-input,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #fff;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+select:focus {
+    outline: none;
+    border-color: #ffd966;
+}
+
+.form-input::placeholder {
+    color: #999;
+}
+
+.form-hint {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+}
+
+.btn-login {
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    background: #ffd966;
+    color: #1a1a1a;
+    width: 100%;
+}
+
+.btn-login:hover {
+    background: #ffe699;
+    transform: translateY(-1px);
+}
+
+.dob-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #000;
+}
+
+.dob-row {
+  display: flex;
+  gap: 10px;
+}
+
+.dob-row select,
+.dob-row input {
+  flex: 1;
+  min-width: 0;
   padding: 10px 12px;
   border: 2px solid #ddd;
   border-radius: 6px;
   font-size: 15px;
   font-family: inherit;
+  color: #000;
   background: #fff;
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  text-align: left;
 }
 
-.form-input:focus {
+.dob-row input[name="year"] {
+  text-align: right;
+}
+
+.dob-row select:focus,
+.dob-row input:focus {
   outline: none;
   border-color: #ffd966;
-}
-
-.form-input::placeholder {
-  color: #999;
-}
-
-.form-hint {
-  font-size: 12px;
-  color: #666;
-  margin: 0;
-  font-style: italic;
-}
-
-.btn-login {
-  flex: 1;
-  padding: 12px 20px;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  background: #ffd966;
-  color: #1a1a1a;
-}
-
-.btn-login:hover {
-  background: #ffe699;
-  transform: translateY(-1px);
 }

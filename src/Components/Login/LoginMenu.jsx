@@ -41,7 +41,6 @@ export default function LoginMenu() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="form-input"
-              autoFocus
             />
           </div>
           <div className="form-group">
@@ -52,7 +51,6 @@ export default function LoginMenu() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-input"
-              autoFocus
             />
           </div>
           <button type="submit" className="btn-login">
