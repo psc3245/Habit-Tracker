@@ -22,7 +22,10 @@ export default function NavBar({ leftPageView, onLeftPageChange, rightPageView, 
       
       {/* Center - Login/Signup */}
       <div className="nav-center">
-        <button className="nav-auth-combined">Login / Sign Up</button>
+        <button className="nav-auth-combined"onClick={() => {
+          onLeftPageChange("Login")
+          onRightPageChange("SignUp")
+          }}>Login / Sign Up</button>
       </div>
       
       {/* Right page controls */}
