@@ -34,10 +34,10 @@ export default function SignUpMenu() {
         throw new Error(err.error || "Signup failed");
       }
 
-      const user = await res.json();
-      setUser(user);
-      console.log("Signed up user:", user);
-      return user;
+      const u = await res.json();
+      setUser(u);
+      console.log("Signed up user:", u);
+      return u;
     } catch (err) {
       console.error(err.message);
     }

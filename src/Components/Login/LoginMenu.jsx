@@ -21,10 +21,10 @@ export default function LoginMenu() {
         throw new Error(err.error || "Login failed");
       }
 
-      const user = await res.json();
-      setUser(user);
-      console.log("Logged in user:", user);
-      return user;
+      const u = await res.json();
+      setUser(u);
+      console.log("Logged in user:", u);
+      return u;
     } catch (err) {
       console.error(err.message);
     }

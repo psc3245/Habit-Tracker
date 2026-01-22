@@ -1,7 +1,14 @@
 import "../Style/Navbar.css";
 import { useState } from "react";
 
-export default function NavBar({ leftPageView, onLeftPageChange, rightPageView, onRightPageChange }) {
+export default function NavBar({
+  leftPageView,
+  onLeftPageChange,
+  rightPageView,
+  onRightPageChange,
+  user,
+  showProfile,
+}) {
   const leftTabs = ["Daily", "Weekly"];
   const rightTabs = ["Stats", "Glance"];
 
@@ -19,15 +26,20 @@ export default function NavBar({ leftPageView, onLeftPageChange, rightPageView, 
           </button>
         ))}
       </div>
-      
+
       {/* Center - Login/Signup */}
       <div className="nav-center">
-        <button className="nav-auth-combined"onClick={() => {
-          onLeftPageChange("Login")
-          onRightPageChange("SignUp")
-          }}>Login / Sign Up</button>
+        <button
+          className="nav-auth-combined"
+          onClick={() => {
+            onLeftPageChange("Login");
+            onRightPageChange("SignUp");
+          }}
+        >
+          Login / Sign Up
+        </button>
       </div>
-      
+
       {/* Right page controls */}
       <div className="nav-right">
         {rightTabs.map((tab) => (
