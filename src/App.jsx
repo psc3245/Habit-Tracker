@@ -13,6 +13,12 @@ export default function App() {
   const [leftPageView, setLeftPageView] = useState("Daily");
   const [rightPageView, setRightPageView] = useState("Stats");
 
+  const onLoginSuccess = (user) => {
+    setUser(user);
+    setLeftPageView("Profile");
+    setRightPageView("Profile");
+  };
+
   return (
     <div className="app">
       <div className="app-container">
@@ -24,10 +30,6 @@ export default function App() {
             rightPageView={rightPageView}
             onRightPageChange={setRightPageView}
             user={user}
-            onShowProfile={() => {
-              setLeftPageView("Profile");
-              setRightPageView("Profile");
-            }}
           />
 
           {/* Two-page spread */}
@@ -37,7 +39,12 @@ export default function App() {
               <div className="page-content">
                 {leftPageView === "Daily" && <DailyPage />}
                 {leftPageView === "Weekly" && <WeeklyPage />}
-                {leftPageView === "Login" && <LoginMenu setUser={setUser} />}
+                {leftPageView === "Login" && (
+                  <LoginMenu
+                    setUser={setUser}
+                    onLoginSuccess={onLoginSuccess}
+                  />
+                )}
                 {leftPageView === "Profile" && user && (
                   <ProfileLeft user={user} onLogout={() => setUser(null)} />
                 )}
@@ -62,9 +69,7 @@ export default function App() {
                     <p>Overview coming soon...</p>
                   </div>
                 )}
-                {rightPageView === "SignUp" && (
-                  <SignUpMenu setUser={setUser} />
-                )}
+                {rightPageView === "SignUp" && <SignUpMenu setUser={setUser} />}
                 {rightPageView === "Profile" && user && (
                   <ProfileRight user={user} onLogout={() => setUser(null)} />
                 )}

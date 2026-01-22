@@ -7,7 +7,6 @@ export default function NavBar({
   rightPageView,
   onRightPageChange,
   user,
-  showProfile,
 }) {
   const leftTabs = ["Daily", "Weekly"];
   const rightTabs = ["Stats", "Glance"];
@@ -29,7 +28,7 @@ export default function NavBar({
 
       {/* Center - Login/Signup */}
       <div className="nav-center">
-        <button
+        { !user && <button
           className="nav-auth-combined"
           onClick={() => {
             onLeftPageChange("Login");
@@ -37,7 +36,16 @@ export default function NavBar({
           }}
         >
           Login / Sign Up
-        </button>
+        </button>}
+        {user && <button
+        className="nav-auth-combined"
+        onClick={() => {
+            onLeftPageChange("Profile");
+            onRightPageChange("Profile");
+          }}
+        >
+          Profile
+        </button>}
       </div>
 
       {/* Right page controls */}
