@@ -3,7 +3,7 @@ import "../../Style/LoginSignUp.css";
 
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
-export default function SignUpMenu() {
+export default function SignUpMenu({onSignUpSuccess}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -11,7 +11,6 @@ export default function SignUpMenu() {
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
   const [dob, setDob] = useState("");
-  const [user, setUser] = useState(null); // track logged-in user
 
   useEffect(() => {
     if (month && day && year) {
@@ -35,7 +34,7 @@ export default function SignUpMenu() {
       }
 
       const u = await res.json();
-      setUser(u);
+      onSignUpSuccess(u);
       console.log("Signed up user:", u);
       return u;
     } catch (err) {
@@ -75,9 +74,7 @@ export default function SignUpMenu() {
 
   return (
     <div className="login-container">
-      {user ? (
-        <p>Welcome, {user.username}!</p>
-      ) : (
+      {(
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email</label>

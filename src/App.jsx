@@ -10,8 +10,8 @@ import ProfileRight from "./Components/Profile/ProfileRight.jsx";
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [leftPageView, setLeftPageView] = useState("Daily");
-  const [rightPageView, setRightPageView] = useState("Stats");
+  const [leftPageView, setLeftPageView] = useState("Login");
+  const [rightPageView, setRightPageView] = useState("SignUp");
 
   const onLoginSuccess = (user) => {
     setUser(user);
@@ -41,7 +41,6 @@ export default function App() {
                 {leftPageView === "Weekly" && <WeeklyPage />}
                 {leftPageView === "Login" && (
                   <LoginMenu
-                    setUser={setUser}
                     onLoginSuccess={onLoginSuccess}
                   />
                 )}
@@ -69,7 +68,7 @@ export default function App() {
                     <p>Overview coming soon...</p>
                   </div>
                 )}
-                {rightPageView === "SignUp" && <SignUpMenu setUser={setUser} />}
+                {rightPageView === "SignUp" && <SignUpMenu onSignUpSuccess={onLoginSuccess} />}
                 {rightPageView === "Profile" && user && (
                   <ProfileRight user={user} onLogout={() => setUser(null)} />
                 )}
