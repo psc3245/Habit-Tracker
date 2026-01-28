@@ -43,7 +43,7 @@ export default function App() {
             {/* Left page */}
             <div className="page left-page">
               <div className="page-content">
-                {leftPageView === "Daily" && <DailyPage />}
+                {leftPageView === "Daily" && <DailyPage user={user}/>}
                 {leftPageView === "Weekly" && <WeeklyPage />}
                 {leftPageView === "Login" && (
                   <LoginMenu
