@@ -2,10 +2,12 @@ import { useState } from "react";
 import "../Style/CreateHabitModal.css";
 
 export default function CreateHabitModal({
+  user,
   isOpen,
   onClose,
   onCreateHabit,
   availableTags,
+  setHabits,
 }) {
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
@@ -16,35 +18,34 @@ export default function CreateHabitModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (habitName.trim()) {
-      const habitData = {
-        name: habitName.trim(),
-        type: habitType,
-        hasTags: hasTags,
-        recurrence: recurrence,
-      };
+    if (!habitName.trim()) return;
 
-      // Add type-specific data
-      if (hasTags) {
-        habitData.tags = selectedTags;
-      }
-      if (
-        habitType === "counter" ||
-        habitType === "duration" ||
-        habitType === "scale"
-      ) {
-        habitData.goal = parseInt(dailyRequirement) || 0;
-      }
-      if (habitType === "scale") {
-        habitData.min = 1;
-        habitData.max = 10;
+    const habitData = {
+      userId: user.id,
+      name: habitName.trim(),
+      schedule: recurrence,
+      target: parseInt(dailyRequirement) || 1,
+      tags: hasTags ? selectedTags : [],
+    };
+
+    try {
+      const newHabit = await onCreateHabit(habitData);
+
+      if (newHabit) {
+        const uiHabit = {
+          id: newHabit.id,
+          name: newHabit.name,
+          completed: false,
+          type: "checkbox",
+          hasTags: (newHabit.tags ?? []).length > 0,
+          tag: (newHabit.tags ?? [])[0] ?? null,
+        };
+
+        setHabits((prev) => [...prev, uiHabit]);
       }
 
-      onCreateHabit(habitData);
-
-      // Reset form
       setHabitName("");
       setHabitType("checkbox");
       setHasTags(false);
@@ -52,6 +53,8 @@ export default function CreateHabitModal({
       setDailyRequirement("");
       setRecurrence("daily");
       onClose();
+    } catch (err) {
+      console.error("Failed to create habit:", err.message);
     }
   };
 

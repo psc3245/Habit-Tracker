@@ -1,4 +1,3 @@
-
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export async function onCreateHabit(habit) {
@@ -13,13 +12,14 @@ export async function onCreateHabit(habit) {
         target: habit.target,
         // type: habit.type, ???
         tags: habit.tags,
-        createdAt: habit.createdAt,
+        createdAt: habit.createdAt ?? new Date().toISOString(),
       }),
     });
 
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || "Create habit failed");
+      const errText = await res.text();
+      console.error("Backend error:", errText);
+      throw new Error("Create habit failed");
     }
 
     const h = await res.json();
@@ -28,7 +28,26 @@ export async function onCreateHabit(habit) {
   } catch (err) {
     console.error(err.message);
   }
-};
+}
+
+export async function getHabitsByUserId(userId) {
+  try {
+    const res = await fetch(`${backend_base_url}/users/${userId}/habits`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Fetch habits failed");
+    }
+    const habits = await res.json();
+    return habits;
+  } catch (err) {
+    console.error(err.message);
+    return [];
+  }
+}
 
 export async function onDeleteHabit(habitId) {
   try {
@@ -45,4 +64,4 @@ export async function onDeleteHabit(habitId) {
     console.error(err.message);
     return false;
   }
-};
+}

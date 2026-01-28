@@ -3,7 +3,7 @@ import Habit from "./Habit";
 import CreateHabitModal from "./CreateHabitModal";
 import "../Style/DailyPage.css";
 
-export default function DailyPage({ user, onCreateHabit }) {
+export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   const mapHabit = (habit) => {
     return {
       id: habit.id,
@@ -64,7 +64,7 @@ export default function DailyPage({ user, onCreateHabit }) {
     }
 
     async function loadHabits() {
-      // TODO: fetch habits, map to a better format
+      setHabits((await getHabitsByUserId(user.id)).map(mapHabit));
     }
 
     loadHabits();
@@ -99,19 +99,6 @@ export default function DailyPage({ user, onCreateHabit }) {
     }
   };
 
-  const createHabit = (habitData) => {
-    const newHabit = {
-      id: Date.now().toString(),
-      name: habitData.name,
-      type: habitData.type,
-      completed: false,
-      hasTags: habitData.hasTags,
-      tag: habitData.hasTags ? "--" : undefined,
-      dailyRequirement: habitData.dailyRequirement,
-    };
-    setHabits((prev) => [...prev, newHabit]);
-  };
-
   return (
     <div className="daily-page">
       <div className="page-header">
@@ -135,10 +122,12 @@ export default function DailyPage({ user, onCreateHabit }) {
       ))}
 
       <CreateHabitModal
+      user={user}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onCreateHabit={createHabit}
+        onCreateHabit={onCreateHabit}
         availableTags={availableTags}
+        setHabits={setHabits}
       />
     </div>
   );

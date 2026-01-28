@@ -44,7 +44,7 @@ export default function App() {
             {/* Left page */}
             <div className="page left-page">
               <div className="page-content">
-                {leftPageView === "Daily" && <DailyPage user={user} onCreateHabit={ HabitHelper.onCreateHabit }/>}
+                {leftPageView === "Daily" && <DailyPage user={user} onCreateHabit={ HabitHelper.onCreateHabit } getHabitsByUserId={ HabitHelper.getHabitsByUserId }/>}
                 {leftPageView === "Weekly" && <WeeklyPage />}
                 {leftPageView === "Login" && (
                   <LoginMenu
