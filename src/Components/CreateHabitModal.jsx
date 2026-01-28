@@ -38,6 +38,8 @@ export default function CreateHabitModal({
 
     try {
       const newHabit = await onCreateHabit(habitData);
+      console.log("Created habit raw:", newHabit);
+console.log("Name field:", newHabit.name);
 
       console.log(newHabit.name);
 

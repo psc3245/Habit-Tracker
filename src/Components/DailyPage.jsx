@@ -15,21 +15,21 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
 
   const initialHabits = [
     {
-      id: "1",
+      id: "10000000000",
       name: "Drink water",
       completed: false,
       type: "checkbox",
       hasTags: false,
     },
     {
-      id: "2",
+      id: "200000000000",
       name: "Exercise",
       completed: false,
       type: "checkbox",
       hasTags: false,
     },
     {
-      id: "3",
+      id: "30000000000",
       name: "Read",
       completed: false,
       type: "checkbox",
@@ -37,7 +37,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       tag: "Morning",
     },
     {
-      id: "4",
+      id: "40000000000",
       name: "Meditate",
       completed: false,
       type: "checkbox",
@@ -45,7 +45,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       tag: "Evening",
     },
     {
-      id: "5",
+      id: "5000000000",
       name: "Sleep 8h",
       completed: false,
       type: "checkbox",
@@ -107,7 +107,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       </div>
       {habits.map((habit) => (
         <Habit
-          key={habit.id ?? Date.now().toString()}
+          key={habit.id}
           name={habit.name ?? "Unnamed Habit"}
           completed={habit.completed}
           type={habit.type}
