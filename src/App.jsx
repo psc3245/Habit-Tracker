@@ -19,6 +19,12 @@ export default function App() {
     setRightPageView("Profile");
   };
 
+  const onLogout = () => {
+    setUser(null);
+    setLeftPageView("Login");
+    setRightPageView("SignUp");
+  }
+
   return (
     <div className="app">
       <div className="app-container">
@@ -45,7 +51,7 @@ export default function App() {
                   />
                 )}
                 {leftPageView === "Profile" && user && (
-                  <ProfileLeft user={user} onLogout={() => setUser(null)} />
+                  <ProfileLeft user={user} onLogout={onLogout} />
                 )}
               </div>
             </div>
@@ -70,7 +76,7 @@ export default function App() {
                 )}
                 {rightPageView === "SignUp" && <SignUpMenu onSignUpSuccess={onLoginSuccess} />}
                 {rightPageView === "Profile" && user && (
-                  <ProfileRight user={user} onLogout={() => setUser(null)} />
+                  <ProfileRight user={user} onLogout={onLogout} />
                 )}
               </div>
             </div>
