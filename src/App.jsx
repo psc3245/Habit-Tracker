@@ -7,6 +7,7 @@ import LoginMenu from "./Components/Login/LoginMenu.jsx";
 import SignUpMenu from "./Components/Login/SignUpMenu.jsx";
 import ProfileLeft from "./Components/Profile/ProfileLeft.jsx";
 import ProfileRight from "./Components/Profile/ProfileRight.jsx";
+import * as HabitHelper from "./Helpers/HabitHelper.js";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -43,7 +44,7 @@ export default function App() {
             {/* Left page */}
             <div className="page left-page">
               <div className="page-content">
-                {leftPageView === "Daily" && <DailyPage user={user}/>}
+                {leftPageView === "Daily" && <DailyPage user={user} onCreateHabit={ HabitHelper.onCreateHabit }/>}
                 {leftPageView === "Weekly" && <WeeklyPage />}
                 {leftPageView === "Login" && (
                   <LoginMenu

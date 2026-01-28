@@ -3,7 +3,7 @@ import Habit from "./Habit";
 import CreateHabitModal from "./CreateHabitModal";
 import "../Style/DailyPage.css";
 
-export default function DailyPage({ user }) {
+export default function DailyPage({ user, onCreateHabit }) {
   const mapHabit = (habit) => {
     return {
       id: habit.id,
