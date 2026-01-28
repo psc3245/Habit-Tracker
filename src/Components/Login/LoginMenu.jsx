@@ -3,10 +3,9 @@ import "../../Style/LoginSignUp.css";
 
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
-export default function LoginMenu() {
+export default function LoginMenu({onLoginSuccess}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null); // tracked logged-in user
 
   const onLoginRequest = async ({ username, password }) => {
     try {
@@ -21,10 +20,10 @@ export default function LoginMenu() {
         throw new Error(err.error || "Login failed");
       }
 
-      const user = await res.json();
-      setUser(user);
-      console.log("Logged in user:", user);
-      return user;
+      const u = await res.json();
+      onLoginSuccess(u);
+      console.log("Logged in user:", u);
+      return u;
     } catch (err) {
       console.error(err.message);
     }
@@ -46,9 +45,7 @@ export default function LoginMenu() {
 
   return (
     <div className="login-container">
-      {user ? (
-        <p>Welcome, {user.username}</p>
-      ) : (
+      {(
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="username">Username</label>
