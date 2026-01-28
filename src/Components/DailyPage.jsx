@@ -4,16 +4,14 @@ import CreateHabitModal from "./CreateHabitModal";
 import "../Style/DailyPage.css";
 
 export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
-  const mapHabit = (habit) => {
-    return {
-      id: habit.id,
-      name: habit.name,
-      completed: false, // later from completion history
-      type: "checkbox",
-      hasTags: habit.tags.length > 0,
-      tag: habit.tags[0] ?? null, // UI expects single tag
-    };
-  };
+  const mapHabit = (habit) => ({
+    id: habit.id,
+    name: habit.name,
+    completed: false,
+    type: "checkbox",
+    hasTags: (habit.tags ?? []).length > 0,
+    tag: (habit.tags ?? [])[0] ?? null,
+  });
 
   const initialHabits = [
     {
@@ -109,8 +107,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       </div>
       {habits.map((habit) => (
         <Habit
-          key={habit.id}
-          habit={habit.name}
+          key={habit.id ?? Date.now().toString()}
+          name={habit.name ?? "Unnamed Habit"}
           completed={habit.completed}
           type={habit.type}
           hasTags={habit.hasTags}
@@ -122,7 +120,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       ))}
 
       <CreateHabitModal
-      user={user}
+        user={user}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreateHabit={onCreateHabit}

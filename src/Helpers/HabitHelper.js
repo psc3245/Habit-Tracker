@@ -23,7 +23,7 @@ export async function onCreateHabit(habit) {
     }
 
     const h = await res.json();
-    console.log(`Created habit: ${h} for userId: ${habit.userId}`);
+    console.log("Created habit:", h);
     return h;
   } catch (err) {
     console.error(err.message);

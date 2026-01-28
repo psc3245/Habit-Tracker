@@ -9,7 +9,7 @@ const HABIT_TYPE_COMPONENTS = {
 };
 
 export default function Habit({ 
-  habit, 
+  name, 
   completed, 
   type, 
   tag, 
@@ -27,7 +27,7 @@ export default function Habit({
   // Pass all relevant props to the component
   return (
     <HabitComponent
-      habit={habit}
+      name={name}
       completed={completed}
       tag={tag}
       availableTags={availableTags}

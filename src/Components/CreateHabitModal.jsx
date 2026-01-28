@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import "../Style/CreateHabitModal.css";
 
 export default function CreateHabitModal({
@@ -15,6 +16,11 @@ export default function CreateHabitModal({
   const [selectedTags, setSelectedTags] = useState([]);
   const [dailyRequirement, setDailyRequirement] = useState("");
   const [recurrence, setRecurrence] = useState("daily");
+
+  useEffect(() => {
+    if (isOpen) document.body.classList.add("modal-open");
+    else document.body.classList.remove("modal-open");
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -33,17 +39,20 @@ export default function CreateHabitModal({
     try {
       const newHabit = await onCreateHabit(habitData);
 
-      if (newHabit) {
-        const uiHabit = {
-          id: newHabit.id,
-          name: newHabit.name,
-          completed: false,
-          type: "checkbox",
-          hasTags: (newHabit.tags ?? []).length > 0,
-          tag: (newHabit.tags ?? [])[0] ?? null,
-        };
+      console.log(newHabit.name);
 
-        setHabits((prev) => [...prev, uiHabit]);
+      if (newHabit && setHabits) {
+        setHabits((prev) => [
+          ...prev,
+          {
+            id: newHabit.id,
+            name: newHabit.name,
+            completed: false,
+            type: "checkbox",
+            hasTags: (newHabit.tags ?? []).length > 0,
+            tag: (newHabit.tags ?? [])[0] ?? null,
+          },
+        ]);
       }
 
       setHabitName("");
@@ -74,9 +83,11 @@ export default function CreateHabitModal({
     );
   };
 
-  return (
+  // **Portal wrapper**
+  return createPortal(
     <div className="modal-overlay" onClick={handleCancel}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {/* Modal Header */}
         <div className="modal-header">
           <h2 className="modal-title">Create New Habit</h2>
           <div className="header-controls">
@@ -102,8 +113,9 @@ export default function CreateHabitModal({
           </div>
         </div>
 
+        {/* Modal Form */}
         <form onSubmit={handleSubmit} className="habit-form">
-          {/* Habit Name - Always shown */}
+          {/* Habit Name */}
           <div className="form-group">
             <label htmlFor="habit-name">Habit Name</label>
             <input
@@ -117,7 +129,7 @@ export default function CreateHabitModal({
             />
           </div>
 
-          {/* Tags - Only when hasTags is checked */}
+          {/* Tags */}
           {hasTags && (
             <div className="form-group">
               <label>Available Tags</label>
@@ -126,7 +138,9 @@ export default function CreateHabitModal({
                   <button
                     key={tag}
                     type="button"
-                    className={`tag-button ${selectedTags.includes(tag) ? "selected" : ""}`}
+                    className={`tag-button ${
+                      selectedTags.includes(tag) ? "selected" : ""
+                    }`}
                     onClick={() => toggleTag(tag)}
                   >
                     {tag}
@@ -139,7 +153,7 @@ export default function CreateHabitModal({
             </div>
           )}
 
-          {/* Daily Requirement - For counter, duration, and scale */}
+          {/* Daily Requirement */}
           {(habitType === "counter" ||
             habitType === "duration" ||
             habitType === "scale") && (
@@ -149,7 +163,7 @@ export default function CreateHabitModal({
                 {habitType === "duration" && "Goal (minutes)"}
                 {habitType === "scale" && "Not applicable for scale"}
               </label>
-              {habitType !== "scale" && (
+              {habitType !== "scale" ? (
                 <>
                   <input
                     id="daily-requirement"
@@ -169,8 +183,7 @@ export default function CreateHabitModal({
                     {habitType === "duration" && "How many minutes per day?"}
                   </p>
                 </>
-              )}
-              {habitType === "scale" && (
+              ) : (
                 <p className="form-hint">
                   Scale habits use a 1-10 slider, no goal needed
                 </p>
@@ -178,6 +191,7 @@ export default function CreateHabitModal({
             </div>
           )}
 
+          {/* Recurrence */}
           <div className="form-group">
             <label htmlFor="recurrence">Pattern of Recurrence</label>
             <select
@@ -191,6 +205,7 @@ export default function CreateHabitModal({
             <p className="form-hint">How often will this habit be completed?</p>
           </div>
 
+          {/* Actions */}
           <div className="modal-actions">
             <button type="button" onClick={handleCancel} className="btn-cancel">
               Cancel
@@ -201,6 +216,7 @@ export default function CreateHabitModal({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body, // <-- portal target
   );
 }
