@@ -21,6 +21,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       completed: false,
       type: "checkbox",
       hasTags: false,
+      availableTags: [],
+      selectedTag: null,
     },
     {
       id: "200000000000",
@@ -28,6 +30,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       completed: false,
       type: "checkbox",
       hasTags: false,
+      availableTags: [],
+      selectedTag: null,
     },
     {
       id: "30000000000",
@@ -35,7 +39,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       completed: false,
       type: "checkbox",
       hasTags: true,
-      tag: "Morning",
+      availableTags: ["Fiction", "Non-fiction", "Articles"],
+      selectedTag: null,
     },
     {
       id: "40000000000",
@@ -43,7 +48,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       completed: false,
       type: "checkbox",
       hasTags: true,
-      tag: "Evening",
+      availableTags: ["Morning", "Evening"],
+      selectedTag: null,
     },
     {
       id: "5000000000",
@@ -51,6 +57,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       completed: false,
       type: "checkbox",
       hasTags: false,
+      availableTags: [],
+      selectedTag: null,
     },
   ];
 
@@ -69,11 +77,6 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     loadHabits();
   }, [user]);
 
-  const [availableTags, setAvailableTags] = useState([
-    "Morning",
-    "Evening",
-    "Afternoon",
-  ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleHabit = (id) => {
@@ -95,6 +98,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
         <button className="new-habit-btn" onClick={() => setIsModalOpen(true)}>
           + New Habit
         </button>
+        <button className="daily-date" onClick={() => {}}> Today's date </button>
       </div>
       {habits.map((habit) => (
         <Habit
@@ -115,7 +119,6 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreateHabit={onCreateHabit}
-        availableTags={availableTags}
         setHabits={setHabits}
       />
     </div>
