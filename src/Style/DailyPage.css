@@ -30,3 +30,26 @@
 .daily-date {
   margin-left: 15 px;
 }
+
+.date-picker-container {
+  position: relative;
+}
+
+.daily-habit-btns {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+.daily-date.calendar-open {
+  border-radius: 6px 6px 0 0;
+  border-bottom: none;
+}
+
+.calendar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}

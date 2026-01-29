@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../Style/Calendar.css";
 
 export default function Calendar({
   selectedDate,
@@ -20,16 +21,34 @@ export default function Calendar({
     <div>
       {isOpen && (
         <div className="calendar-modal">
-          <h3>Calendar</h3>
           <div className="calendar-nav-bar">
             <button className="calendar-left-arrow"> {"<"} </button>
-            <h2>
-              {currentMonth}, {currentYear}
-            </h2>
-            <button className="calendar-right-arrow"> {">"} </button>
-            <button className="calendar-close-button" onClick={onClose}>
-              X
+            <button
+              className="calendar-month-year-button"
+              onClick={() => {
+                /* We'll add functionality later */
+              }}
+            >
+              {new Date(currentYear, currentMonth).toLocaleDateString("en-US", {
+                month: "long",
+              })}{" "}
+              {currentYear}
             </button>
+            <button className="calendar-right-arrow"> {">"} </button>
+          </div>
+          <div className="calendar-grid">
+            <p>S</p>
+            <p>M</p>
+            <p>T</p>
+            <p>W</p>
+            <p>T</p>
+            <p>F</p>
+            <p>S</p>
+            {Array.from({ length: 30 }, (_, i) => (
+              <button key={i} className="calendar-date-button">
+                {i + 1}
+              </button>
+            ))}
           </div>
         </div>
       )}
