@@ -60,7 +60,7 @@ export default function WeeklyPage() {
   return (
     <div className="weekly-page">
       <div className="page-header">
-        <h2 className="weekly-title">Weekly Habits</h2>
+        <h2 className="weekly-title">Weekly Habits (Under Construction)</h2>
         <button className="new-habit-btn" onClick={() => setIsModalOpen(true)}>
           + New Habit
         </button>
