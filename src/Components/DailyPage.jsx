@@ -4,34 +4,33 @@ import CreateHabitModal from "./CreateHabitModal";
 import "../Style/DailyPage.css";
 
 export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
-  const mapHabit = (habit) => {
-    return {
-      id: habit.id,
-      name: habit.name,
-      completed: false, // later from completion history
-      type: "checkbox",
-      hasTags: habit.tags.length > 0,
-      tag: habit.tags[0] ?? null, // UI expects single tag
-    };
-  };
+  const mapHabit = (habit) => ({
+    id: habit.id,
+    name: habit.name,
+    completed: false,
+    type: "checkbox",
+    hasTags: (habit.availableTags ?? []).length > 0,
+    availableTags: habit.availableTags ?? [],
+    selectedTag: null,
+  });
 
   const initialHabits = [
     {
-      id: "1",
+      id: "10000000000",
       name: "Drink water",
       completed: false,
       type: "checkbox",
       hasTags: false,
     },
     {
-      id: "2",
+      id: "200000000000",
       name: "Exercise",
       completed: false,
       type: "checkbox",
       hasTags: false,
     },
     {
-      id: "3",
+      id: "30000000000",
       name: "Read",
       completed: false,
       type: "checkbox",
@@ -39,7 +38,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       tag: "Morning",
     },
     {
-      id: "4",
+      id: "40000000000",
       name: "Meditate",
       completed: false,
       type: "checkbox",
@@ -47,7 +46,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       tag: "Evening",
     },
     {
-      id: "5",
+      id: "5000000000",
       name: "Sleep 8h",
       completed: false,
       type: "checkbox",
@@ -84,19 +83,9 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   };
 
   const updateHabitTag = (id, newTag) => {
-    if (newTag === "new-tag") {
-      const tagName = prompt("Enter new tag name:");
-      if (tagName && tagName.trim()) {
-        setAvailableTags((prev) => [...prev, tagName.trim()]);
-        setHabits((prev) =>
-          prev.map((h) => (h.id === id ? { ...h, tag: tagName.trim() } : h)),
-        );
-      }
-    } else {
-      setHabits((prev) =>
-        prev.map((h) => (h.id === id ? { ...h, tag: newTag } : h)),
-      );
-    }
+    setHabits((prev) =>
+      prev.map((h) => (h.id === id ? { ...h, selectedTag: newTag } : h)),
+    );
   };
 
   return (
@@ -110,19 +99,19 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       {habits.map((habit) => (
         <Habit
           key={habit.id}
-          habit={habit.name}
+          name={habit.name}
           completed={habit.completed}
           type={habit.type}
           hasTags={habit.hasTags}
-          tag={habit.tag}
-          availableTags={availableTags}
+          tag={habit.selectedTag}
+          availableTags={habit.availableTags}
           onToggle={() => toggleHabit(habit.id)}
           onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
         />
       ))}
 
       <CreateHabitModal
-      user={user}
+        user={user}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreateHabit={onCreateHabit}

@@ -27,14 +27,31 @@
   gap: 12px;
 }
 
+.habit-checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #ffd966;
+}
+
+.habit-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .habit-tag-select {
   padding: 4px 8px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  background: #fff;
-  font-size: 14px;
-  cursor: pointer;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
   color: #333;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  min-width: 100px;
 }
 
 .habit-tag-select:focus {
@@ -42,9 +59,6 @@
   border-color: #ffd966;
 }
 
-.habit-checkbox {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  accent-color: #ffd966;
+.habit-tag-select:hover {
+  border-color: #ffd966;
 }

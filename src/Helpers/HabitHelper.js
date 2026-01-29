@@ -3,15 +3,15 @@ const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 export async function onCreateHabit(habit) {
   try {
     const res = await fetch(`${backend_base_url}/habits`, {
-      method: "POST", // must be POST
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: habit.userId,
         name: habit.name,
         schedule: habit.schedule,
         target: habit.target,
-        // type: habit.type, ???
-        tags: habit.tags,
+        type: habit.type,
+        availableTags: habit.availableTags,
         createdAt: habit.createdAt ?? new Date().toISOString(),
       }),
     });
@@ -23,7 +23,7 @@ export async function onCreateHabit(habit) {
     }
 
     const h = await res.json();
-    console.log(`Created habit: ${h} for userId: ${habit.userId}`);
+    console.log("Created habit:", h);
     return h;
   } catch (err) {
     console.error(err.message);
