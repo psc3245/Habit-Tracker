@@ -4,10 +4,42 @@ body {
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+.header {
+  align-self: center;
+  text-align: center;
+  color: #1a1a1a;
+  font-size: 32px;
+  font-weight: 600;
+  padding: 6px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+.header:hover {
+  color: #666;
+}
+
+.header:focus {
+  outline: none;
+}
+
+.header:active {
+  outline: none;
+  border: none;
+}
+
+li {
+  color: black;
+}
+
 .app {
   width: 100vw;
   height: 100vh;
   padding: 20px;
+  padding-top: 5px;
   box-sizing: border-box;
 }
 

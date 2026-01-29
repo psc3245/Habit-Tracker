@@ -1,14 +1,20 @@
-import {useState, useEffect} from "react"; 
+import { useState, useEffect } from "react";
 
 export default function Info() {
   return (
     <div>
-      <h2>About This App</h2>
-      <p>This habit tracker app helps you build and maintain good habits.</p>
+      <h2>About The Creator</h2>
+      <p>
+        Hi, I'm Peter Collins, a senior at Iowa State University studying
+        Computer Science with a minor in Cyber Security. I am builidng this app
+        both as a personal project and because I wanted a habit tracking app and
+        I never found one that had all the features I wanted. Since I know how
+        to code, I figured I could just make my own!
+      </p>
       <ul>
-        <li>Create custom habits with optional tags.</li>
-        <li>Track your daily progress.</li>
-        <li>View your habit history and statistics.</li>
+        <li>LinkedIn: todo</li>
+        <li>Github: todo</li>
+        <li>Portfolio website: todo</li>
       </ul>
     </div>
   );

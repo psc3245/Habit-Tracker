@@ -31,6 +31,16 @@ export default function App() {
   return (
     <div className="app">
       <div className="app-container">
+        <button
+          className="header"
+          onClick={() => {
+            setLeftPageView("Home");
+            setRightPageView("Info");
+          }}
+        >
+          {" "}
+          HABIT TRACKER{" "}
+        </button>
         {/* Notebook inside */}
         <div className="notebook">
           <NavBar
