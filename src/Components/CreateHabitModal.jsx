@@ -7,13 +7,13 @@ export default function CreateHabitModal({
   isOpen,
   onClose,
   onCreateHabit,
-  availableTags,
   setHabits,
 }) {
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
   const [hasTags, setHasTags] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [customTags, setCustomTags] = useState([]); // Custom tags for this habit
+  const [newTagInput, setNewTagInput] = useState(""); // Input for new tag
   const [dailyRequirement, setDailyRequirement] = useState("");
   const [recurrence, setRecurrence] = useState("daily");
 
@@ -31,17 +31,15 @@ export default function CreateHabitModal({
     const habitData = {
       userId: user.id,
       name: habitName.trim(),
+      type: habitType,
       schedule: recurrence,
       target: parseInt(dailyRequirement) || 1,
-      tags: hasTags ? selectedTags : [],
+      availableTags: hasTags ? customTags : [],
     };
 
     try {
       const newHabit = await onCreateHabit(habitData);
-      console.log("Created habit raw:", newHabit);
-console.log("Name field:", newHabit.name);
-
-      console.log(newHabit.name);
+      console.log("Created habit:", newHabit);
 
       if (newHabit && setHabits) {
         setHabits((prev) => [
@@ -49,18 +47,21 @@ console.log("Name field:", newHabit.name);
           {
             id: newHabit.id,
             name: newHabit.name,
+            type: newHabit.type,
             completed: false,
-            type: "checkbox",
-            hasTags: (newHabit.tags ?? []).length > 0,
-            tag: (newHabit.tags ?? [])[0] ?? null,
+            hasTags: (newHabit.availableTags ?? []).length > 0,
+            availableTags: newHabit.availableTags ?? [],
+            selectedTag: null, // Will be set when user completes the habit
           },
         ]);
       }
 
+      // Reset form
       setHabitName("");
       setHabitType("checkbox");
       setHasTags(false);
-      setSelectedTags([]);
+      setCustomTags([]);
+      setNewTagInput("");
       setDailyRequirement("");
       setRecurrence("daily");
       onClose();
@@ -73,19 +74,32 @@ console.log("Name field:", newHabit.name);
     setHabitName("");
     setHabitType("checkbox");
     setHasTags(false);
-    setSelectedTags([]);
+    setCustomTags([]);
+    setNewTagInput("");
     setDailyRequirement("");
     setRecurrence("daily");
     onClose();
   };
 
-  const toggleTag = (tag) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
-    );
+  const addTag = () => {
+    const trimmed = newTagInput.trim();
+    if (trimmed && !customTags.includes(trimmed)) {
+      setCustomTags((prev) => [...prev, trimmed]);
+      setNewTagInput("");
+    }
   };
 
-  // **Portal wrapper**
+  const removeTag = (tagToRemove) => {
+    setCustomTags((prev) => prev.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleTagInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
   return createPortal(
     <div className="modal-overlay" onClick={handleCancel}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -131,26 +145,43 @@ console.log("Name field:", newHabit.name);
             />
           </div>
 
-          {/* Tags */}
+          {/* Custom Tags */}
           {hasTags && (
             <div className="form-group">
-              <label>Available Tags</label>
-              <div className="tags-container">
-                {availableTags.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    className={`tag-button ${
-                      selectedTags.includes(tag) ? "selected" : ""
-                    }`}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag}
-                  </button>
+              <label>Custom Tags for this Habit</label>
+              <div className="tags-list">
+                {customTags.map((tag) => (
+                  <div key={tag} className="tag-item">
+                    <span>{tag}</span>
+                    <button
+                      type="button"
+                      className="remove-tag-btn"
+                      onClick={() => removeTag(tag)}
+                    >
+                      ×
+                    </button>
+                  </div>
                 ))}
+                <div className="add-tag-container">
+                  <input
+                    type="text"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                    onKeyDown={handleTagInputKeyDown}
+                    placeholder="Add tag..."
+                    className="tag-input"
+                  />
+                  <button
+                    type="button"
+                    className="add-tag-btn"
+                    onClick={addTag}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
               <p className="form-hint">
-                Select which tags can be used with this habit
+                Add custom tags for this habit (e.g., easy/medium/hard)
               </p>
             </div>
           )}
@@ -219,6 +250,6 @@ console.log("Name field:", newHabit.name);
         </form>
       </div>
     </div>,
-    document.body, // <-- portal target
+    document.body,
   );
 }
