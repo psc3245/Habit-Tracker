@@ -17,6 +17,47 @@ export default function Calendar({
     setCurrentYear((selectedDate || new Date()).getFullYear());
   }, [selectedDate]);
 
+  const renderDates = () => {
+    let daysInMonth = 30;
+    const monthsWith31Days = [0, 2, 4, 6, 7, 9, 11];
+
+    if (monthsWith31Days.includes(currentMonth)) {
+      daysInMonth = 31;
+    } else if (currentMonth === 1) {
+      const isLeapYear =
+        (currentYear % 4 === 0 && currentYear % 100 !== 0) ||
+        currentYear % 400 === 0;
+      daysInMonth = isLeapYear ? 29 : 28;
+    }
+
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+    return Array.from({ length: firstDayOfMonth + daysInMonth }, (_, i) => {
+      if (i < firstDayOfMonth) {
+        return (
+          <button
+            key={`empty-${i}`}
+            className="calendar-date-button empty"
+            disabled
+          ></button>
+        );
+      } else {
+        const day = i - firstDayOfMonth + 1;
+        return (
+          <button
+            key={day}
+            className="calendar-date-button"
+            onClick={() =>
+              onDateSelect(new Date(currentYear, currentMonth, day))
+            }
+          >
+            {day}
+          </button>
+        );
+      }
+    });
+  };
+
   return (
     <div>
       {isOpen && (
@@ -44,11 +85,7 @@ export default function Calendar({
             <p>T</p>
             <p>F</p>
             <p>S</p>
-            {Array.from({ length: 30 }, (_, i) => (
-              <button key={i} className="calendar-date-button">
-                {i + 1}
-              </button>
-            ))}
+            {renderDates()}
           </div>
         </div>
       )}

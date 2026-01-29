@@ -121,3 +121,8 @@ h3 {
 .calendar-month-year-button:hover {
   color: #666;
 }
+
+.calendar-date-button.empty {
+  visibility: hidden;
+  cursor: default;
+}

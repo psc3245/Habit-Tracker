@@ -12,9 +12,9 @@ export default function Info() {
         to code, I figured I could just make my own!
       </p>
       <ul>
-        <li>LinkedIn: todo</li>
-        <li>Github: todo</li>
-        <li>Portfolio website: todo</li>
+        <li>LinkedIn: https://linkedin.com/in/psc3245</li>
+        <li>Github: https://github.com/psc3245</li>
+        <li>Portfolio website: i don't got one yet...</li>
       </ul>
     </div>
   );
