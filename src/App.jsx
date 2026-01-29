@@ -8,11 +8,13 @@ import SignUpMenu from "./Components/Login/SignUpMenu.jsx";
 import ProfileLeft from "./Components/Profile/ProfileLeft.jsx";
 import ProfileRight from "./Components/Profile/ProfileRight.jsx";
 import * as HabitHelper from "./Helpers/HabitHelper.js";
+import Home from "./Components/HomePage/Home.jsx";
+import Info from "./Components/HomePage/Info.jsx";
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [leftPageView, setLeftPageView] = useState("Login");
-  const [rightPageView, setRightPageView] = useState("SignUp");
+  const [leftPageView, setLeftPageView] = useState("Home");
+  const [rightPageView, setRightPageView] = useState("Info");
 
   const onLoginSuccess = (user) => {
     setUser(user);
@@ -24,11 +26,21 @@ export default function App() {
     setUser(null);
     setLeftPageView("Login");
     setRightPageView("SignUp");
-  }
+  };
 
   return (
     <div className="app">
       <div className="app-container">
+        <button
+          className="header"
+          onClick={() => {
+            setLeftPageView("Home");
+            setRightPageView("Info");
+          }}
+        >
+          {" "}
+          HABIT TRACKER{" "}
+        </button>
         {/* Notebook inside */}
         <div className="notebook">
           <NavBar
@@ -44,12 +56,17 @@ export default function App() {
             {/* Left page */}
             <div className="page left-page">
               <div className="page-content">
-                {leftPageView === "Daily" && <DailyPage user={user} onCreateHabit={ HabitHelper.onCreateHabit } getHabitsByUserId={ HabitHelper.getHabitsByUserId }/>}
+                {leftPageView === "Home" && <Home user={user} />}{" "}
+                {leftPageView === "Daily" && (
+                  <DailyPage
+                    user={user}
+                    onCreateHabit={HabitHelper.onCreateHabit}
+                    getHabitsByUserId={HabitHelper.getHabitsByUserId}
+                  />
+                )}
                 {leftPageView === "Weekly" && <WeeklyPage />}
                 {leftPageView === "Login" && (
-                  <LoginMenu
-                    onLoginSuccess={onLoginSuccess}
-                  />
+                  <LoginMenu onLoginSuccess={onLoginSuccess} />
                 )}
                 {leftPageView === "Profile" && user && (
                   <ProfileLeft user={user} onLogout={onLogout} />
@@ -63,6 +80,7 @@ export default function App() {
             {/* Right page */}
             <div className="page right-page">
               <div className="page-content">
+                {rightPageView === "Info" && <Info user={user} />}
                 {rightPageView === "Stats" && (
                   <div className="placeholder-page">
                     <h2 className="page-title">Statistics</h2>
@@ -75,7 +93,9 @@ export default function App() {
                     <p>Overview coming soon...</p>
                   </div>
                 )}
-                {rightPageView === "SignUp" && <SignUpMenu onSignUpSuccess={onLoginSuccess} />}
+                {rightPageView === "SignUp" && (
+                  <SignUpMenu onSignUpSuccess={onLoginSuccess} />
+                )}
                 {rightPageView === "Profile" && user && (
                   <ProfileRight user={user} onLogout={onLogout} />
                 )}
