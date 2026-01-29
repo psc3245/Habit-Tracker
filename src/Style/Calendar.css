@@ -1,0 +1,128 @@
+h3 {
+    color: black;
+}
+
+.calendar-modal {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: #fffef8;
+  border: 2px solid #c8b89a;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  min-width: 320px;
+}
+
+.calendar-modal h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.calendar-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+    margin-top: 5px;
+
+  border-bottom: 2px solid #ddd;
+  position: relative;
+}
+
+.calendar-nav-bar h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex: 1;
+  text-align: center;
+}
+
+.calendar-left-arrow,
+.calendar-right-arrow {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 12px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.calendar-left-arrow:hover,
+.calendar-right-arrow:hover {
+  color: #1a1a1a;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-grid p {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.calendar-date-button {
+  background: #f5f5f5;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-date-button:hover {
+  background: #ffd966;
+  transform: scale(1.05);
+}
+
+.calendar-date-button.selected {
+  background: #ffd966;
+  font-weight: 600;
+}
+
+.calendar-date-button.today {
+  border: 2px solid #ffd966;
+}
+
+.calendar-month-year-button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s ease;
+}
+
+.calendar-month-year-button:hover {
+  color: #666;
+}
+
+.calendar-date-button.empty {
+  visibility: hidden;
+  cursor: default;
+}

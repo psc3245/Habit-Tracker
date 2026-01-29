@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Habit from "./Habit";
 import CreateHabitModal from "./CreateHabitModal";
 import "../Style/DailyPage.css";
+import Calendar from "./Calendar";
 
 export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   const mapHabit = (habit) => ({
@@ -78,6 +79,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   }, [user]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const toggleHabit = (id) => {
     setHabits((prev) =>
@@ -95,10 +98,40 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     <div className="daily-page">
       <div className="page-header">
         <h2 className="daily-title">Daily Habits</h2>
-        <button className="new-habit-btn" onClick={() => setIsModalOpen(true)}>
-          + New Habit
-        </button>
-        <button className="daily-date" onClick={() => {}}> Today's date </button>
+        <div className="daily-habit-btns">
+          <button
+            className="new-habit-btn"
+            onClick={() => {
+              setIsModalOpen(true);
+              setIsCalendarOpen(false);
+            }}
+          >
+            + New Habit
+          </button>
+          <div className="date-picker-container">
+            <button
+              className="daily-date"
+              onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+            >
+              {selectedDate.toLocaleDateString()}
+            </button>
+            <Calendar
+              selectedDate={selectedDate}
+              onDateSelect={(date) => {
+                setSelectedDate(date);
+                setIsCalendarOpen(false);
+              }}
+              isOpen={isCalendarOpen}
+              onClose={() => setIsCalendarOpen(false)}
+            />
+          </div>
+        </div>
+        {isCalendarOpen && (
+          <div
+            className="calendar-backdrop"
+            onClick={() => setIsCalendarOpen(false)}
+          />
+        )}
       </div>
       {habits.map((habit) => (
         <Habit
