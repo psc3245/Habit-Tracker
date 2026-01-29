@@ -9,8 +9,9 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     name: habit.name,
     completed: false,
     type: "checkbox",
-    hasTags: (habit.tags ?? []).length > 0,
-    tag: (habit.tags ?? [])[0] ?? null,
+    hasTags: (habit.availableTags ?? []).length > 0,
+    availableTags: habit.availableTags ?? [],
+    selectedTag: null,
   });
 
   const initialHabits = [
@@ -82,19 +83,9 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   };
 
   const updateHabitTag = (id, newTag) => {
-    if (newTag === "new-tag") {
-      const tagName = prompt("Enter new tag name:");
-      if (tagName && tagName.trim()) {
-        setAvailableTags((prev) => [...prev, tagName.trim()]);
-        setHabits((prev) =>
-          prev.map((h) => (h.id === id ? { ...h, tag: tagName.trim() } : h)),
-        );
-      }
-    } else {
-      setHabits((prev) =>
-        prev.map((h) => (h.id === id ? { ...h, tag: newTag } : h)),
-      );
-    }
+    setHabits((prev) =>
+      prev.map((h) => (h.id === id ? { ...h, selectedTag: newTag } : h)),
+    );
   };
 
   return (
@@ -108,12 +99,12 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       {habits.map((habit) => (
         <Habit
           key={habit.id}
-          name={habit.name ?? "Unnamed Habit"}
+          name={habit.name}
           completed={habit.completed}
           type={habit.type}
           hasTags={habit.hasTags}
-          tag={habit.tag}
-          availableTags={availableTags}
+          tag={habit.selectedTag}
+          availableTags={habit.availableTags}
           onToggle={() => toggleHabit(habit.id)}
           onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
         />
