@@ -1,8 +1,14 @@
 import CheckboxHabit from "./Habits/CheckboxHabit.jsx";
+import CounterHabit from "./Habits/CounterHabit.jsx";
+import DurationHabit from "./Habits/DurationHabit.jsx";
+import ScaleHabit from "./Habits/ScaleHabit.jsx";
 
 // Registry of all available habit types
 const HABIT_TYPE_COMPONENTS = {
   "checkbox": CheckboxHabit,
+  "counter": CounterHabit,
+  "duration": DurationHabit,
+  "scale": ScaleHabit,
   // "counter": CounterHabit,
   // "timer": TimerHabit,
   // Add new types here
