@@ -85,11 +85,24 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
 
   const toggleHabit = async (id) => {
     const habit = habits.find((h) => h.id === id);
-    if (!habit) return;
+    if (!habit || !user) return;
 
-    CompletionHelper.updateCompletion(habit.id, selectedTag, value);
+    if (!habit.completed) {
+      await CompletionHelper.createCompletion(
+        habit.id,
+        user.id,
+        selectedDate,
+        habit.selectedTag || null,
+        habit.value || null,
+      );
+    } else {
+      await CompletionHelper.deleteCompletionByHabitAndDate(
+        user.id,
+        habit.id,
+        selectedDate,
+      );
+    }
 
-    // Update local state
     setHabits((prev) =>
       prev.map((h) => (h.id === id ? { ...h, completed: !h.completed } : h)),
     );
@@ -190,19 +203,21 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
           />
         )}
       </div>
-      {habits.map((habit) => (
-        <Habit
-          key={habit.id}
-          name={habit.name}
-          completed={habit.completed}
-          type={habit.type}
-          hasTags={habit.hasTags}
-          tag={habit.selectedTag}
-          availableTags={habit.availableTags}
-          onToggle={() => toggleHabit(habit.id)}
-          onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
-        />
-      ))}
+      {habits
+        .filter((habit) => new Date(habit.createdAt) <= selectedDate)
+        .map((habit) => (
+          <Habit
+            key={habit.id}
+            name={habit.name}
+            completed={habit.completed}
+            type={habit.type}
+            hasTags={habit.hasTags}
+            tag={habit.selectedTag}
+            availableTags={habit.availableTags}
+            onToggle={() => toggleHabit(habit.id)}
+            onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
+          />
+        ))}
 
       <CreateHabitModal
         user={user}

@@ -1,5 +1,12 @@
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
+const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
 export async function createCompletion(
   habitId,
   userId,
@@ -14,7 +21,7 @@ export async function createCompletion(
       body: JSON.stringify({
         habitId,
         userId,
-        date: date.toISOString(),
+        date: formatDate(date),
         selectedTag,
         value,
       }),
@@ -35,12 +42,7 @@ export async function createCompletion(
 }
 
 export async function getCompletionsByUserIdAndDate(userId, date) {
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+  
 
   try {
     const res = await fetch(
@@ -89,5 +91,29 @@ export async function updateCompletion(completionId, selectedTag, value) {
     return update;
   } catch (err) {
     console.error(err.message);
+  }
+}
+
+export async function deleteCompletionByHabitAndDate(userId, habitId, date) {
+  try {
+    const res = await fetch(
+      `${backend_base_url}/completions/${userId}/${habitId}?date=${formatDate(date)}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Delete completion failed");
+    }
+
+    const result = await res.json();
+    console.log("Deleted completion:", result);
+    return result;
+  } catch (err) {
+    console.error(err.message);
+    return false;
   }
 }
