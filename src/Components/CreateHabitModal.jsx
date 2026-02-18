@@ -38,35 +38,35 @@ export default function CreateHabitModal({
     };
 
     try {
+      console.log("Submitting habit data:", habitData); // ADD THIS
       const newHabit = await onCreateHabit(habitData);
-      console.log("Created habit:", newHabit);
+      console.log("Received newHabit:", newHabit); // ADD THIS
 
-      if (newHabit && setHabits) {
-        setHabits((prev) => [
-          ...prev,
-          {
-            id: newHabit.id,
-            name: newHabit.name,
-            type: newHabit.type,
-            completed: false,
-            hasTags: (newHabit.availableTags ?? []).length > 0,
-            availableTags: newHabit.availableTags ?? [],
-            selectedTag: null, // Will be set when user completes the habit
-          },
-        ]);
+      if (!newHabit) {
+        console.error("onCreateHabit returned null/undefined!");
+        alert("Failed to create habit - check console for details");
+        return;
       }
 
-      // Reset form
-      setHabitName("");
-      setHabitType("checkbox");
-      setHasTags(false);
-      setCustomTags([]);
-      setNewTagInput("");
-      setDailyRequirement("");
-      setRecurrence("daily");
+      setHabits((prev) => [
+        ...prev,
+        {
+          id: newHabit.id,
+          name: newHabit.name,
+          type: newHabit.type,
+          completed: false,
+          hasTags: (newHabit.availableTags ?? []).length > 0,
+          availableTags: newHabit.availableTags ?? [],
+          selectedTag: null,
+          createdAt: newHabit.createdAt,
+        },
+      ]);
+
+
       onClose();
     } catch (err) {
-      console.error("Failed to create habit:", err.message);
+      console.error("Failed to create habit:", err);
+      alert("Error: " + err.message); 
     }
   };
 

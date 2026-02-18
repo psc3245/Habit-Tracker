@@ -27,6 +27,7 @@ export async function onCreateHabit(habit) {
     return h;
   } catch (err) {
     console.error(err.message);
+    throw err;
   }
 }
 

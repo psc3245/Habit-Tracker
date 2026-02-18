@@ -66,6 +66,40 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
 
   const [habits, setHabits] = useState([]);
 
+  const [pendingCompletions, setPendingCompletions] = useState({});
+
+  const syncPendingCompletions = async () => {
+    const entries = Object.entries(pendingCompletions);
+
+    console.log("Syncing pending completions:", pendingCompletions);
+    console.log("Entries to sync:", entries);
+
+    for (const [habitId, update] of entries) {
+      console.log("Processing habitId:", habitId, "update:", update);
+
+      if (update.action === "create") {
+        const result = await CompletionHelper.createCompletion(
+          Number(habitId),
+          user.id,
+          selectedDate,
+          update.selectedTag || null,
+          update.value || null,
+        );
+        console.log("Create completion result:", result);
+      } else if (update.action === "delete") {
+        const result = await CompletionHelper.deleteCompletionByHabitAndDate(
+          user.id,
+          Number(habitId),
+          selectedDate,
+        );
+        console.log("Delete completion result:", result);
+      }
+    }
+
+    console.log("Clearing pending completions");
+    setPendingCompletions({});
+  };
+
   useEffect(() => {
     if (!user) {
       setHabits(initialHabits);
@@ -84,23 +118,41 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const toggleHabit = async (id) => {
+    console.log("toggleHabit called with id:", id);
+
     const habit = habits.find((h) => h.id === id);
-    if (!habit || !user) return;
+    console.log("Found habit:", habit);
+
+    if (!habit || !user) {
+      console.log("Exiting - no habit or no user");
+      return;
+    }
 
     if (!habit.completed) {
-      await CompletionHelper.createCompletion(
-        habit.id,
-        user.id,
-        selectedDate,
-        habit.selectedTag || null,
-        habit.value || null,
-      );
+      console.log("Adding to pending completions - CREATE");
+      setPendingCompletions((prev) => {
+        const updated = {
+          ...prev,
+          [habit.id]: {
+            action: "create",
+            selectedTag: habit.selectedTag || null,
+            value: habit.value || null,
+            selectedDate: selectedDate,
+          },
+        };
+        console.log("Updated pendingCompletions:", updated);
+        return updated;
+      });
     } else {
-      await CompletionHelper.deleteCompletionByHabitAndDate(
-        user.id,
-        habit.id,
-        selectedDate,
-      );
+      console.log("Adding to pending completions - DELETE");
+      setPendingCompletions((prev) => {
+        const updated = {
+          ...prev,
+          [habit.id]: { action: "delete" },
+        };
+        console.log("Updated pendingCompletions:", updated);
+        return updated;
+      });
     }
 
     setHabits((prev) =>
@@ -115,9 +167,16 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   };
 
   useEffect(() => {
+    return () => {
+      syncPendingCompletions();
+    };
+  }, []);
+
+  useEffect(() => {
     if (!user) return;
 
     async function loadCompletionsForDate() {
+      await syncPendingCompletions();
       const completions = await CompletionHelper.getCompletionsByUserIdAndDate(
         user.id,
         selectedDate,
@@ -203,8 +262,18 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
           />
         )}
       </div>
+      {console.log("All habits:", habits)}
+      {console.log("Selected date:", selectedDate)}
       {habits
-        .filter((habit) => new Date(habit.createdAt) <= selectedDate)
+        .filter((habit) => {
+          const habitDate = new Date(habit.createdAt);
+          habitDate.setHours(0, 0, 0, 0);
+
+          const compareDate = new Date(selectedDate);
+          compareDate.setHours(0, 0, 0, 0);
+
+          return habitDate <= compareDate;
+        })
         .map((habit) => (
           <Habit
             key={habit.id}
