@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../Style/HabitTypes.css";
 
 export default function DurationHabit({
@@ -13,6 +13,10 @@ export default function DurationHabit({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value.toString());
+
+  useEffect(() => {
+    setTempValue(value.toString());
+  }, [value]);
 
   const handleSave = () => {
     const numValue = parseInt(tempValue) || 0;
@@ -31,6 +35,21 @@ export default function DurationHabit({
     <div className="habit-container">
       <span className="habit-name">{name}</span>
       <div className="habit-controls">
+        {hasTags && availableTags && availableTags.length > 0 && (
+          <select 
+            value={tag || ""} 
+            onChange={(e) => onTagChange(e.target.value)}
+            className="habit-tag-select"
+          >
+            <option value="">Select tag...</option>
+            {availableTags.map((availableTag) => (
+              <option key={availableTag} value={availableTag}>
+                {availableTag}
+              </option>
+            ))}
+          </select>
+        )}
+
         {isEditing ? (
           <div className="duration-edit">
             <input
@@ -50,28 +69,17 @@ export default function DurationHabit({
             </button>
           </div>
         ) : (
-          <>
-            {target && (
-              <div className="counter-progress">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-                <span className="progress-text">
-                  {value}/{target} min
-                </span>
-              </div>
-            )}
-            {!target && <span className="counter-display">{value} min</span>}
+          <div className="duration-display-group">
+            <span className="duration-value">
+              {value} / {target} min
+            </span>
             <button
               className="duration-edit-btn"
               onClick={() => setIsEditing(true)}
             >
               Edit
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
