@@ -38,9 +38,7 @@ export default function CreateHabitModal({
     };
 
     try {
-      console.log("Submitting habit data:", habitData); // ADD THIS
       const newHabit = await onCreateHabit(habitData);
-      console.log("Received newHabit:", newHabit); // ADD THIS
 
       if (!newHabit) {
         console.error("onCreateHabit returned null/undefined!");

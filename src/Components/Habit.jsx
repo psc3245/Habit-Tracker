@@ -19,6 +19,7 @@ export default function Habit({
   completed, 
   type, 
   tag, 
+  hasTags,
   availableTags, 
   onToggle, 
   onTagChange,
@@ -35,6 +36,7 @@ export default function Habit({
     <HabitComponent
       name={name}
       completed={completed}
+      hasTags={hasTags}
       tag={tag}
       availableTags={availableTags}
       onToggle={onToggle}

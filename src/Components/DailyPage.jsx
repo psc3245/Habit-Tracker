@@ -10,10 +10,13 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     id: habit.id,
     name: habit.name,
     completed: false,
-    type: "checkbox",
+    type: habit.type || "checkbox",
+    target: habit.target || 1,
+    value: habit.value || 0,
     hasTags: (habit.availableTags ?? []).length > 0,
     availableTags: habit.availableTags ?? [],
     selectedTag: null,
+    createdAt: habit.createdAt,
   });
 
   const initialHabits = [
@@ -71,32 +74,24 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   const syncPendingCompletions = async () => {
     const entries = Object.entries(pendingCompletions);
 
-    console.log("Syncing pending completions:", pendingCompletions);
-    console.log("Entries to sync:", entries);
-
     for (const [habitId, update] of entries) {
-      console.log("Processing habitId:", habitId, "update:", update);
-
       if (update.action === "create") {
-        const result = await CompletionHelper.createCompletion(
+        await CompletionHelper.createCompletion(
           Number(habitId),
           user.id,
-          selectedDate,
+          update.date,
           update.selectedTag || null,
           update.value || null,
         );
-        console.log("Create completion result:", result);
       } else if (update.action === "delete") {
-        const result = await CompletionHelper.deleteCompletionByHabitAndDate(
+        await CompletionHelper.deleteCompletionByHabitAndDate(
           user.id,
           Number(habitId),
-          selectedDate,
+          update.date,
         );
-        console.log("Delete completion result:", result);
       }
     }
 
-    console.log("Clearing pending completions");
     setPendingCompletions({});
   };
 
@@ -107,52 +102,45 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     }
 
     async function loadHabits() {
-      setHabits((await getHabitsByUserId(user.id)).map(mapHabit));
+      const backendHabits = await getHabitsByUserId(user.id);
+      setHabits(backendHabits.map(mapHabit));
     }
 
     loadHabits();
-  }, [user]);
+  }, [user?.id]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  });
 
   const toggleHabit = async (id) => {
-    console.log("toggleHabit called with id:", id);
-
     const habit = habits.find((h) => h.id === id);
-    console.log("Found habit:", habit);
+    if (!habit || !user) return;
 
-    if (!habit || !user) {
-      console.log("Exiting - no habit or no user");
-      return;
-    }
+    const dateAtToggle = new Date(selectedDate);
 
     if (!habit.completed) {
-      console.log("Adding to pending completions - CREATE");
-      setPendingCompletions((prev) => {
-        const updated = {
-          ...prev,
-          [habit.id]: {
-            action: "create",
-            selectedTag: habit.selectedTag || null,
-            value: habit.value || null,
-            selectedDate: selectedDate,
-          },
-        };
-        console.log("Updated pendingCompletions:", updated);
-        return updated;
-      });
+      setPendingCompletions((prev) => ({
+        ...prev,
+        [habit.id]: {
+          action: "create",
+          selectedTag: habit.selectedTag || null,
+          value: habit.value || null,
+          date: dateAtToggle,
+        },
+      }));
     } else {
-      console.log("Adding to pending completions - DELETE");
-      setPendingCompletions((prev) => {
-        const updated = {
-          ...prev,
-          [habit.id]: { action: "delete" },
-        };
-        console.log("Updated pendingCompletions:", updated);
-        return updated;
-      });
+      setPendingCompletions((prev) => ({
+        ...prev,
+        [habit.id]: {
+          action: "delete",
+          date: dateAtToggle,
+        },
+      }));
     }
 
     setHabits((prev) =>
@@ -187,41 +175,62 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
         completionMap[c.habitId] = c;
       });
 
-      const updatedHabits = habits.map((habit) => {
-        const completion = completionMap[habit.id];
+      setHabits((currentHabits) => {
+        return currentHabits.map((habit) => {
+          const completion = completionMap[habit.id];
 
-        if (completion) {
-          let isCompleted = false;
+          if (completion) {
+            let isCompleted = false;
 
-          if (habit.type === "checkbox") {
-            isCompleted = true;
-          } else if (habit.type === "counter" || habit.type === "duration") {
-            isCompleted = (completion.value || 0) >= habit.target;
-          } else if (habit.type === "scale") {
-            isCompleted = completion.value != null;
+            if (habit.type === "checkbox") {
+              isCompleted = true;
+            } else if (habit.type === "counter" || habit.type === "duration") {
+              isCompleted = (completion.value ?? 0) >= habit.target;
+            } else if (habit.type === "scale") {
+              isCompleted = completion.value != null;
+            }
+
+            return {
+              ...habit,
+              completed: isCompleted,
+              value: completion.value,
+              selectedTag: completion.selectedTag,
+            };
           }
 
           return {
             ...habit,
-            completed: isCompleted,
-            value: completion.value,
-            selectedTag: completion.selectedTag,
+            completed: false,
+            value: null,
+            selectedTag: null,
           };
-        }
-
-        return {
-          ...habit,
-          completed: false,
-          value: null,
-          selectedTag: null,
-        };
+        });
       });
-
-      setHabits(updatedHabits);
     }
 
     loadCompletionsForDate();
-  }, [selectedDate, user]);
+  }, [selectedDate, user?.id, habits.length]);
+
+  const updateHabitValue = (id, newValue) => {
+    const habit = habits.find((h) => h.id === id);
+    if (!habit || !user) return;
+
+    const dateAtChange = new Date(selectedDate);
+
+    setPendingCompletions((prev) => ({
+      ...prev,
+      [habit.id]: {
+        action: "create",
+        selectedTag: habit.selectedTag || null,
+        value: newValue,
+        date: dateAtChange,
+      },
+    }));
+
+    setHabits((prev) =>
+      prev.map((h) => (h.id === id ? { ...h, value: newValue } : h)),
+    );
+  };
 
   return (
     <div className="daily-page">
@@ -262,8 +271,6 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
           />
         )}
       </div>
-      {console.log("All habits:", habits)}
-      {console.log("Selected date:", selectedDate)}
       {habits
         .filter((habit) => {
           const habitDate = new Date(habit.createdAt);
@@ -283,8 +290,11 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
             hasTags={habit.hasTags}
             tag={habit.selectedTag}
             availableTags={habit.availableTags}
+            value={habit.value || 0}
+            target={habit.target || 1}
             onToggle={() => toggleHabit(habit.id)}
             onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
+            onValueChange={(newValue) => updateHabitValue(habit.id, newValue)}
           />
         ))}
 

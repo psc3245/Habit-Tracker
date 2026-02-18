@@ -1,7 +1,16 @@
 import { useState } from "react";
 import "../../Style/HabitTypes.css";
 
-export default function DurationHabit({ habit, value = 0, goal, onValueChange }) {
+export default function DurationHabit({
+  name,
+  value = 0,
+  target,
+  hasTags,
+  tag,
+  availableTags,
+  onValueChange,
+  onTagChange,
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value.toString());
 
@@ -16,11 +25,11 @@ export default function DurationHabit({ habit, value = 0, goal, onValueChange })
     setIsEditing(false);
   };
 
-  const progress = goal ? Math.min((value / goal) * 100, 100) : 0;
+  const progress = target ? Math.min((value / target) * 100, 100) : 0;
 
   return (
     <div className="habit-container">
-      <span className="habit-name">{habit}</span>
+      <span className="habit-name">{name}</span>
       <div className="habit-controls">
         {isEditing ? (
           <div className="duration-edit">
@@ -33,23 +42,35 @@ export default function DurationHabit({ habit, value = 0, goal, onValueChange })
               min="0"
             />
             <span className="duration-unit">min</span>
-            <button className="duration-save-btn" onClick={handleSave}>✓</button>
-            <button className="duration-cancel-btn" onClick={handleCancel}>✕</button>
+            <button className="duration-save-btn" onClick={handleSave}>
+              ✓
+            </button>
+            <button className="duration-cancel-btn" onClick={handleCancel}>
+              ✕
+            </button>
           </div>
         ) : (
           <>
-            {goal && (
+            {target && (
               <div className="counter-progress">
                 <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${progress}%` }}
+                  ></div>
                 </div>
-                <span className="progress-text">{value}/{goal} min</span>
+                <span className="progress-text">
+                  {value}/{target} min
+                </span>
               </div>
             )}
-            {!goal && (
-              <span className="counter-display">{value} min</span>
-            )}
-            <button className="duration-edit-btn" onClick={() => setIsEditing(true)}>Edit</button>
+            {!target && <span className="counter-display">{value} min</span>}
+            <button
+              className="duration-edit-btn"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
           </>
         )}
       </div>

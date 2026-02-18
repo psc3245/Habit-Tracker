@@ -34,7 +34,6 @@ export async function createCompletion(
     }
 
     const completion = await res.json();
-    console.log("Created completion:", completion);
     return completion;
   } catch (err) {
     console.error(err.message);
@@ -43,7 +42,6 @@ export async function createCompletion(
 
 export async function getCompletionsByUserIdAndDate(userId, date) {
   
-
   try {
     const res = await fetch(
       `${backend_base_url}/completions?userId=${userId}&date=${formatDate(date)}`,
@@ -58,9 +56,6 @@ export async function getCompletionsByUserIdAndDate(userId, date) {
     }
 
     const completions = await res.json();
-    completions.forEach((element) => {
-      console.log(element);
-    });
     return completions;
   } catch (err) {
     console.error(err.message);
@@ -87,7 +82,6 @@ export async function updateCompletion(completionId, selectedTag, value) {
     }
 
     const update = await res.json();
-    console.log(update);
     return update;
   } catch (err) {
     console.error(err.message);
@@ -110,7 +104,6 @@ export async function deleteCompletionByHabitAndDate(userId, habitId, date) {
     }
 
     const result = await res.json();
-    console.log("Deleted completion:", result);
     return result;
   } catch (err) {
     console.error(err.message);

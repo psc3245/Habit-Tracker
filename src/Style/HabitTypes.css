@@ -62,3 +62,47 @@
 .habit-tag-select:hover {
   border-color: #ffd966;
 }
+
+.counter-display-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.counter-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  min-width: 60px;
+  text-align: center;
+}
+
+.counter-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.counter-btn {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.counter-btn:hover {
+  border-color: #ffd966;
+  background: #fffef8;
+}
+
+.counter-btn:active {
+  transform: scale(0.95);
+}
