@@ -6,18 +6,30 @@ import Calendar from "./Calendar";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 
 export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
-  const mapHabit = (habit) => ({
-    id: habit.id,
-    name: habit.name,
-    completed: false,
-    type: habit.type || "checkbox",
-    target: habit.target || 1,
-    value: habit.value || 0,
-    hasTags: (habit.availableTags ?? []).length > 0,
-    availableTags: habit.availableTags ?? [],
-    selectedTag: null,
-    createdAt: habit.createdAt,
-  });
+  const mapHabit = (habit) => {
+    const defaultVal =
+      habit.type === "slider"
+        ? Math.floor(((habit.sliderMin || 1) + (habit.target || 10)) / 2)
+        : 0;
+
+    return {
+      id: habit.id,
+      name: habit.name,
+      completed: false,
+      type: habit.type || "checkbox",
+      target: habit.target || 1,
+      value: defaultVal,
+      defaultValue: defaultVal,
+      hasTags: (habit.availableTags ?? []).length > 0,
+      availableTags: habit.availableTags ?? [],
+      selectedTag: null,
+      createdAt: habit.createdAt,
+      sliderMin: habit.sliderMin,
+      colorLow: habit.colorLow,
+      colorMid: habit.colorMid,
+      colorHigh: habit.colorHigh,
+    };
+  };
 
   const initialHabits = [
     {
@@ -103,7 +115,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
 
     async function loadHabits() {
       const backendHabits = await getHabitsByUserId(user.id);
-      setHabits(backendHabits.map(mapHabit));
+      const mapped = backendHabits.map(mapHabit);
+      setHabits(mapped);
     }
 
     loadHabits();
@@ -186,7 +199,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
               isCompleted = true;
             } else if (habit.type === "counter" || habit.type === "duration") {
               isCompleted = (completion.value ?? 0) >= habit.target;
-            } else if (habit.type === "scale") {
+            } else if (habit.type === "slider") {
               isCompleted = completion.value != null;
             }
 
@@ -197,11 +210,11 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
               selectedTag: completion.selectedTag,
             };
           }
-
+          console.log("No completion, using defaultValue:", habit.defaultValue);
           return {
             ...habit,
             completed: false,
-            value: null,
+            value: habit.defaultValue,
             selectedTag: null,
           };
         });
@@ -281,22 +294,28 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
 
           return habitDate <= compareDate;
         })
-        .map((habit) => (
-          <Habit
-            key={habit.id}
-            name={habit.name}
-            completed={habit.completed}
-            type={habit.type}
-            hasTags={habit.hasTags}
-            tag={habit.selectedTag}
-            availableTags={habit.availableTags}
-            value={habit.value || 0}
-            target={habit.target || 1}
-            onToggle={() => toggleHabit(habit.id)}
-            onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
-            onValueChange={(newValue) => updateHabitValue(habit.id, newValue)}
-          />
-        ))}
+        .map((habit) => {
+          return (
+            <Habit
+              key={habit.id}
+              name={habit.name}
+              completed={habit.completed}
+              type={habit.type}
+              hasTags={habit.hasTags}
+              tag={habit.selectedTag}
+              availableTags={habit.availableTags}
+              value={habit.value || 0}
+              target={habit.target || 1}
+              onToggle={() => toggleHabit(habit.id)}
+              onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
+              onValueChange={(newValue) => updateHabitValue(habit.id, newValue)}
+              sliderMin={habit.sliderMin}
+              colorLow={habit.colorLow}
+              colorMid={habit.colorMid}
+              colorHigh={habit.colorHigh}
+            />
+          );
+        })}
 
       <CreateHabitModal
         user={user}
