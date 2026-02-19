@@ -1,6 +1,15 @@
 import "../../Style/HabitTypes.css";
 
-export default function CounterHabit({ habit, value = 0, goal, onValueChange }) {
+export default function CounterHabit({ 
+  name, 
+  value = 0, 
+  target,
+  hasTags,
+  tag,
+  availableTags,
+  onValueChange,
+  onTagChange
+}) {
   const increment = () => {
     onValueChange(value + 1);
   };
@@ -11,26 +20,33 @@ export default function CounterHabit({ habit, value = 0, goal, onValueChange }) 
     }
   };
 
-  const progress = goal ? Math.min((value / goal) * 100, 100) : 0;
+  const progress = target ? Math.min((value / target) * 100, 100) : 0;
 
   return (
     <div className="habit-container">
-      <span className="habit-name">{habit}</span>
+      <span className="habit-name">{name}</span>
       <div className="habit-controls">
-        {goal && (
-          <div className="counter-progress">
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-            </div>
-            <span className="progress-text">{value}/{goal}</span>
+        {hasTags && availableTags && availableTags.length > 0 && (
+          <select 
+            value={tag || ""} 
+            onChange={(e) => onTagChange(e.target.value)}
+            className="habit-tag-select"
+          >
+            <option value="">Select tag...</option>
+            {availableTags.map((availableTag) => (
+              <option key={availableTag} value={availableTag}>
+                {availableTag}
+              </option>
+            ))}
+          </select>
+        )}
+        
+        <div className="counter-display-group">
+          <span className="counter-value">{value} / {target}</span>
+          <div className="counter-buttons">
+            <button className="counter-btn" onClick={decrement}>−</button>
+            <button className="counter-btn" onClick={increment}>+</button>
           </div>
-        )}
-        {!goal && (
-          <span className="counter-display">{value}</span>
-        )}
-        <div className="counter-buttons">
-          <button className="counter-btn" onClick={decrement}>−</button>
-          <button className="counter-btn" onClick={increment}>+</button>
         </div>
       </div>
     </div>

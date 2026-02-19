@@ -7,15 +7,35 @@ export default function Calendar({
   isOpen,
   onClose,
 }) {
-  const [currentDate, setCurrentDate] = useState(selectedDate || new Date());
-  const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
-  const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
+  const initialDate = selectedDate || new Date();
+  const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
+  const [currentYear, setCurrentYear] = useState(initialDate.getFullYear());
 
   useEffect(() => {
-    setCurrentDate(selectedDate || new Date());
-    setCurrentMonth((selectedDate || new Date()).getMonth());
-    setCurrentYear((selectedDate || new Date()).getFullYear());
-  }, [selectedDate]);
+    if (isOpen) {
+      const dateToShow = selectedDate || new Date();
+      setCurrentMonth(dateToShow.getMonth());
+      setCurrentYear(dateToShow.getFullYear());
+    }
+  }, [isOpen]);
+
+  const decrementMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const incrementMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
 
   const renderDates = () => {
     let daysInMonth = 30;
@@ -63,7 +83,9 @@ export default function Calendar({
       {isOpen && (
         <div className="calendar-modal">
           <div className="calendar-nav-bar">
-            <button className="calendar-left-arrow"> {"<"} </button>
+            <button className="calendar-left-arrow" onClick={decrementMonth}>
+              {"<"}
+            </button>
             <button
               className="calendar-month-year-button"
               onClick={() => {
@@ -75,7 +97,9 @@ export default function Calendar({
               })}{" "}
               {currentYear}
             </button>
-            <button className="calendar-right-arrow"> {">"} </button>
+            <button className="calendar-right-arrow" onClick={incrementMonth}>
+              {">"}
+            </button>
           </div>
           <div className="calendar-grid">
             <p>S</p>

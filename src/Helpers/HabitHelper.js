@@ -13,7 +13,25 @@ export async function onCreateHabit(habit) {
         type: habit.type,
         availableTags: habit.availableTags,
         createdAt: habit.createdAt ?? new Date().toISOString(),
+        sliderMin: habit.sliderMin,
+        colorLow: habit.colorLow,
+        colorMid: habit.colorMid,
+        colorHigh: habit.colorHigh,
       }),
+    });
+
+    console.log({
+      userId: habit.userId,
+      name: habit.name,
+      schedule: habit.schedule,
+      target: habit.target,
+      type: habit.type,
+      availableTags: habit.availableTags,
+      createdAt: habit.createdAt ?? new Date().toISOString(),
+      sliderMin: habit.sliderMin,
+      colorLow: habit.colorLow,
+      colorMid: habit.colorMid,
+      colorHigh: habit.colorHigh,
     });
 
     if (!res.ok) {
@@ -23,10 +41,10 @@ export async function onCreateHabit(habit) {
     }
 
     const h = await res.json();
-    console.log("Created habit:", h);
     return h;
   } catch (err) {
     console.error(err.message);
+    throw err;
   }
 }
 
@@ -42,6 +60,7 @@ export async function getHabitsByUserId(userId) {
       throw new Error(err.error || "Fetch habits failed");
     }
     const habits = await res.json();
+    console.log(habits);
     return habits;
   } catch (err) {
     console.error(err.message);
