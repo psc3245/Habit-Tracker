@@ -323,6 +323,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
         onClose={() => setIsModalOpen(false)}
         onCreateHabit={onCreateHabit}
         setHabits={setHabits}
+        selectedDate={selectedDate}
       />
     </div>
   );

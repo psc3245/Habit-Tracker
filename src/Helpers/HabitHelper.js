@@ -8,7 +8,6 @@ export async function onCreateHabit(habit) {
       body: JSON.stringify({
         userId: habit.userId,
         name: habit.name,
-        schedule: habit.schedule,
         target: habit.target,
         type: habit.type,
         availableTags: habit.availableTags,
@@ -17,13 +16,13 @@ export async function onCreateHabit(habit) {
         colorLow: habit.colorLow,
         colorMid: habit.colorMid,
         colorHigh: habit.colorHigh,
+        recurrence: habit.recurrence,
       }),
     });
 
     console.log({
       userId: habit.userId,
       name: habit.name,
-      schedule: habit.schedule,
       target: habit.target,
       type: habit.type,
       availableTags: habit.availableTags,
@@ -32,6 +31,7 @@ export async function onCreateHabit(habit) {
       colorLow: habit.colorLow,
       colorMid: habit.colorMid,
       colorHigh: habit.colorHigh,
+      recurrence: habit.recurrence,
     });
 
     if (!res.ok) {

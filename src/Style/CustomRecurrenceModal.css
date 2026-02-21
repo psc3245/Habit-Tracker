@@ -1,0 +1,63 @@
+.custom-recurrence-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  backdrop-filter: blur(2px);
+}
+
+.custom-recurrence-content {
+  background: #fffef8;
+  border-radius: 12px;
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 2px solid #c8b89a;
+}
+
+.custom-recurrence-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.day-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.day-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-btn:hover {
+  border-color: #ffd966;
+  background: #fffef8;
+}
+
+.day-btn.active {
+  background: #ffd966;
+  border-color: #ffd966;
+  color: #1a1a1a;
+}
