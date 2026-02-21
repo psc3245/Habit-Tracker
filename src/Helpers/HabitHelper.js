@@ -2,36 +2,40 @@ const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export async function onCreateHabit(habit) {
   try {
+    const createdAt = new Date();
+    createdAt.setHours(0, 0, 0, 0);
+    const createdAtISO = createdAt.toISOString();
+
     const res = await fetch(`${backend_base_url}/habits`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: habit.userId,
         name: habit.name,
-        schedule: habit.schedule,
         target: habit.target,
         type: habit.type,
         availableTags: habit.availableTags,
-        createdAt: habit.createdAt ?? new Date().toISOString(),
+        createdAt: createdAtISO,
         sliderMin: habit.sliderMin,
         colorLow: habit.colorLow,
         colorMid: habit.colorMid,
         colorHigh: habit.colorHigh,
+        recurrence: habit.recurrence,
       }),
     });
 
     console.log({
       userId: habit.userId,
       name: habit.name,
-      schedule: habit.schedule,
       target: habit.target,
       type: habit.type,
       availableTags: habit.availableTags,
-      createdAt: habit.createdAt ?? new Date().toISOString(),
+      createdAt: createdAtISO,
       sliderMin: habit.sliderMin,
       colorLow: habit.colorLow,
       colorMid: habit.colorMid,
       colorHigh: habit.colorHigh,
+      recurrence: habit.recurrence,
     });
 
     if (!res.ok) {

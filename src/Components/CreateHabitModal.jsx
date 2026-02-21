@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "../Style/CreateHabitModal.css";
+import CustomRecurrenceModal from "../Components/CustomRecurrenceModal.jsx";
 
 export default function CreateHabitModal({
   user,
@@ -8,6 +9,7 @@ export default function CreateHabitModal({
   onClose,
   onCreateHabit,
   setHabits,
+  selectedDate,
 }) {
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
@@ -15,7 +17,10 @@ export default function CreateHabitModal({
   const [customTags, setCustomTags] = useState([]);
   const [newTagInput, setNewTagInput] = useState("");
   const [dailyRequirement, setDailyRequirement] = useState("");
-  const [recurrence, setRecurrence] = useState("daily");
+  const [selectedRecurrence, setSelectedRecurrence] = useState("daily");
+  const [interval, setInterval] = useState(1);
+  const [recurrenceDays, setRecurrenceDays] = useState([0, 1, 2, 3, 4, 5, 6]);
+  const [toggleCustomRecurrence, setToggleCustomRecurrence] = useState(false);
   const [sliderMin, setSliderMin] = useState("1");
   const [sliderMax, setSliderMax] = useState("10");
   const [colorLow, setColorLow] = useState("#ff6b6b");
@@ -46,7 +51,10 @@ export default function CreateHabitModal({
       userId: user.id,
       name: habitName.trim(),
       type: habitType,
-      schedule: recurrence,
+      recurrence: {
+        interval: interval,
+        days: recurrenceDays,
+      },
       target:
         habitType === "slider"
           ? parseInt(sliderMax)
@@ -73,6 +81,7 @@ export default function CreateHabitModal({
           id: newHabit.id,
           name: newHabit.name,
           type: newHabit.type,
+          recurrence: newHabit.recurrence,
           completed: false,
           target: newHabit.target,
           value:
@@ -108,7 +117,9 @@ export default function CreateHabitModal({
     setCustomTags([]);
     setNewTagInput("");
     setDailyRequirement("");
-    setRecurrence("daily");
+    setSelectedRecurrence("daily");
+    setInterval(1);
+    setRecurrenceDays([0, 1, 2, 3, 4, 5, 6]);
     onClose();
   };
 
@@ -132,265 +143,340 @@ export default function CreateHabitModal({
   };
 
   return createPortal(
-    <div className="modal-overlay" onClick={handleCancel}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
-          <h2 className="modal-title">Create New Habit</h2>
-          <div className="header-controls">
-            <select
-              value={habitType}
-              onChange={(e) => setHabitType(e.target.value)}
-              className="type-select"
-            >
-              <option value="checkbox">Checkbox</option>
-              <option value="counter">Counter</option>
-              <option value="duration">Duration</option>
-              <option value="slider">Slider</option>
-            </select>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={hasTags}
-                onChange={(e) => setHasTags(e.target.checked)}
-                className="form-checkbox"
-              />
-              Has Tags
-            </label>
+    <>
+      {toggleCustomRecurrence && (
+        <CustomRecurrenceModal
+          habitName={habitName}
+          interval={interval}
+          setInterval={setInterval}
+          recurrenceDays={recurrenceDays}
+          setRecurrenceDays={setRecurrenceDays}
+          handleCancel={() => {
+            setToggleCustomRecurrence(false);
+          }}
+          handleSubmit={(inter, days) => {
+            setToggleCustomRecurrence(false);
+          }}
+        />
+      )}
+      <div className="modal-overlay" onClick={handleCancel}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          {/* Modal Header */}
+          <div className="modal-header">
+            <h2 className="modal-title">Create New Habit</h2>
+            <div className="header-controls">
+              <select
+                value={habitType}
+                onChange={(e) => setHabitType(e.target.value)}
+                className="type-select"
+              >
+                <option value="checkbox">Checkbox</option>
+                <option value="counter">Counter</option>
+                <option value="duration">Duration</option>
+                <option value="slider">Slider</option>
+              </select>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={hasTags}
+                  onChange={(e) => setHasTags(e.target.checked)}
+                  className="form-checkbox"
+                />
+                Has Tags
+              </label>
+            </div>
           </div>
-        </div>
 
-        {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="habit-form">
-          {/* Habit Name */}
-          <div className="form-group">
-            <label htmlFor="habit-name">Habit Name</label>
-            <input
-              id="habit-name"
-              type="text"
-              value={habitName}
-              onChange={(e) => setHabitName(e.target.value)}
-              placeholder="e.g., Drink 8 glasses of water"
-              className="form-input"
-              autoFocus
-            />
-          </div>
-
-          {/* Custom Tags */}
-          {hasTags && (
+          {/* Modal Form */}
+          <form onSubmit={handleSubmit} className="habit-form">
+            {/* Habit Name */}
             <div className="form-group">
-              <label>Custom Tags for this Habit</label>
-              <div className="tags-list">
-                {customTags.map((tag) => (
-                  <div key={tag} className="tag-item">
-                    <span>{tag}</span>
+              <label htmlFor="habit-name">Habit Name</label>
+              <input
+                id="habit-name"
+                type="text"
+                value={habitName}
+                onChange={(e) => setHabitName(e.target.value)}
+                placeholder="e.g., Drink 8 glasses of water"
+                className="form-input"
+                autoFocus
+              />
+            </div>
+
+            {/* Custom Tags */}
+            {hasTags && (
+              <div className="form-group">
+                <label>Custom Tags for this Habit</label>
+                <div className="tags-list">
+                  {customTags.map((tag) => (
+                    <div key={tag} className="tag-item">
+                      <span>{tag}</span>
+                      <button
+                        type="button"
+                        className="remove-tag-btn"
+                        onClick={() => removeTag(tag)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                  <div className="add-tag-container">
+                    <input
+                      type="text"
+                      value={newTagInput}
+                      onChange={(e) => setNewTagInput(e.target.value)}
+                      onKeyDown={handleTagInputKeyDown}
+                      placeholder="Add tag..."
+                      className="tag-input"
+                    />
                     <button
                       type="button"
-                      className="remove-tag-btn"
-                      onClick={() => removeTag(tag)}
+                      className="add-tag-btn"
+                      onClick={addTag}
                     >
-                      ×
+                      +
                     </button>
                   </div>
-                ))}
-                <div className="add-tag-container">
-                  <input
-                    type="text"
-                    value={newTagInput}
-                    onChange={(e) => setNewTagInput(e.target.value)}
-                    onKeyDown={handleTagInputKeyDown}
-                    placeholder="Add tag..."
-                    className="tag-input"
-                  />
-                  <button
-                    type="button"
-                    className="add-tag-btn"
-                    onClick={addTag}
-                  >
-                    +
-                  </button>
                 </div>
+                <p className="form-hint">
+                  Add custom tags for this habit (e.g., easy/medium/hard)
+                </p>
               </div>
-              <p className="form-hint">
-                Add custom tags for this habit (e.g., easy/medium/hard)
-              </p>
-            </div>
-          )}
+            )}
 
-          {/* Daily Requirement for Counter/Duration */}
-          {(habitType === "counter" || habitType === "duration") && (
+            {/* Daily Requirement for Counter/Duration */}
+            {(habitType === "counter" || habitType === "duration") && (
+              <div className="form-group">
+                <label htmlFor="daily-requirement">
+                  {habitType === "counter" && "Daily Goal"}
+                  {habitType === "duration" && "Goal (minutes)"}
+                </label>
+                <input
+                  id="daily-requirement"
+                  type="number"
+                  value={dailyRequirement}
+                  onChange={(e) => setDailyRequirement(e.target.value)}
+                  placeholder={
+                    habitType === "counter"
+                      ? "e.g., 8 glasses, 10000 steps"
+                      : "e.g., 20 minutes"
+                  }
+                  className="form-input"
+                  min="0"
+                />
+                <p className="form-hint">
+                  {habitType === "counter" && "How many times per day?"}
+                  {habitType === "duration" && "How many minutes per day?"}
+                </p>
+              </div>
+            )}
+
+            {/* Slider Configuration */}
+            {habitType === "slider" && (
+              <>
+                <div className="form-group">
+                  <label>Rating Range</label>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "12px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <label
+                        htmlFor="slider-min"
+                        style={{ fontSize: "12px", color: "#666" }}
+                      >
+                        Min
+                      </label>
+                      <input
+                        id="slider-min"
+                        type="number"
+                        value={sliderMin}
+                        onChange={(e) => setSliderMin(e.target.value)}
+                        onBlur={(e) => {
+                          const newMin = parseInt(e.target.value);
+                          const currentMax = parseInt(sliderMax);
+                          if (newMin >= currentMax) {
+                            setSliderMin((currentMax - 1).toString());
+                          }
+                        }}
+                        className="form-input"
+                        min="1"
+                        max="99"
+                      />
+                    </div>
+                    <span style={{ paddingTop: "20px" }}>to</span>
+                    <div style={{ flex: 1 }}>
+                      <label
+                        htmlFor="slider-max"
+                        style={{ fontSize: "12px", color: "#666" }}
+                      >
+                        Max
+                      </label>
+                      <input
+                        id="slider-max"
+                        type="number"
+                        value={sliderMax}
+                        onChange={(e) => setSliderMax(e.target.value)}
+                        onBlur={(e) => {
+                          const newMax = parseInt(e.target.value);
+                          const currentMin = parseInt(sliderMin);
+                          if (newMax <= currentMin) {
+                            setSliderMax((currentMin + 1).toString());
+                          }
+                        }}
+                        className="form-input"
+                        min="2"
+                        max="100"
+                      />
+                    </div>
+                  </div>
+                  <p className="form-hint">
+                    Set the minimum (1-99) and maximum (2-100) values for your
+                    rating scale
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label>Gradient Colors</label>
+                  <div style={{ display: "flex", gap: "12px" }}>
+                    <select
+                      id="color-low"
+                      value={colorLow}
+                      onChange={(e) => setColorLow(e.target.value)}
+                      className="type-select"
+                    >
+                      {colorOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      id="color-mid"
+                      value={colorMid}
+                      onChange={(e) => setColorMid(e.target.value)}
+                      className="type-select"
+                    >
+                      {colorOptions
+                        .filter(
+                          (opt) =>
+                            opt.value !== colorLow && opt.value !== colorHigh,
+                        )
+                        .map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                    </select>
+                    <select
+                      id="color-high"
+                      value={colorHigh}
+                      onChange={(e) => setColorHigh(e.target.value)}
+                      className="type-select"
+                    >
+                      {colorOptions
+                        .filter(
+                          (opt) =>
+                            opt.value !== colorLow && opt.value !== colorMid,
+                        )
+                        .map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  <p className="form-hint">
+                    Choose colors for low, medium, and high values
+                  </p>
+                </div>
+              </>
+            )}
+
+            {/* Recurrence */}
             <div className="form-group">
-              <label htmlFor="daily-requirement">
-                {habitType === "counter" && "Daily Goal"}
-                {habitType === "duration" && "Goal (minutes)"}
-              </label>
-              <input
-                id="daily-requirement"
-                type="number"
-                value={dailyRequirement}
-                onChange={(e) => setDailyRequirement(e.target.value)}
-                placeholder={
-                  habitType === "counter"
-                    ? "e.g., 8 glasses, 10000 steps"
-                    : "e.g., 20 minutes"
-                }
-                className="form-input"
-                min="0"
-              />
+              <label htmlFor="recurrence">Pattern of Recurrence</label>
+              <select
+                value={selectedRecurrence}
+                onChange={(e) => {
+                  setSelectedRecurrence(e.target.value);
+                  if (e.target.value === "daily") {
+                    setInterval(1);
+                    setRecurrenceDays([0, 1, 2, 3, 4, 5, 6]);
+                  }
+                  if (e.target.value === "weekly") {
+                    setInterval(1);
+                    setRecurrenceDays([selectedDate.getDay()]);
+                  }
+                  if (e.target.value === "custom") {
+                    setToggleCustomRecurrence(true);
+                  }
+                }}
+                className="type-select"
+              >
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="custom">Custom</option>
+              </select>
               <p className="form-hint">
-                {habitType === "counter" && "How many times per day?"}
-                {habitType === "duration" && "How many minutes per day?"}
+                How often will this habit be completed?
               </p>
+              <div className="modal-actions">
+                {selectedRecurrence === "custom" && (
+                  <div className="custom-schedule-preview">
+                    <button
+                      type="button"
+                      onClick={() => setToggleCustomRecurrence(true)}
+                      className="btn-edit"
+                    >
+                      <span className="btn-edit-label">
+                        Current Schedule ✏️
+                      </span>
+                    </button>
+                    <div className="custom-schedule-details">
+                      <p className="form-hint">
+                        Recurring every{" "}
+                        {interval === 1 ? "week " : `${interval} weeks `}
+                        on the following{" "}
+                        {recurrenceDays.length === 1 ? "day" : "days"}
+                      </p>
+                      <div className="custom-schedule-days">
+                        {recurrenceDays.map((day) => (
+                          <p key={day} className="schedule-day">
+                            {
+                              ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+                                day
+                              ]
+                            }
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
 
-          {/* Slider Configuration */}
-          {habitType === "slider" && (
-            <>
-              <div className="form-group">
-                <label>Rating Range</label>
-                <div
-                  style={{ display: "flex", gap: "12px", alignItems: "center" }}
-                >
-                  <div style={{ flex: 1 }}>
-                    <label
-                      htmlFor="slider-min"
-                      style={{ fontSize: "12px", color: "#666" }}
-                    >
-                      Min
-                    </label>
-                    <input
-                      id="slider-min"
-                      type="number"
-                      value={sliderMin}
-                      onChange={(e) => setSliderMin(e.target.value)}
-                      onBlur={(e) => {
-                        const newMin = parseInt(e.target.value);
-                        const currentMax = parseInt(sliderMax);
-                        if (newMin >= currentMax) {
-                          setSliderMin((currentMax - 1).toString());
-                        }
-                      }}
-                      className="form-input"
-                      min="1"
-                      max="99"
-                    />
-                  </div>
-                  <span style={{ paddingTop: "20px" }}>to</span>
-                  <div style={{ flex: 1 }}>
-                    <label
-                      htmlFor="slider-max"
-                      style={{ fontSize: "12px", color: "#666" }}
-                    >
-                      Max
-                    </label>
-                    <input
-                      id="slider-max"
-                      type="number"
-                      value={sliderMax}
-                      onChange={(e) => setSliderMax(e.target.value)}
-                      onBlur={(e) => {
-                        const newMax = parseInt(e.target.value);
-                        const currentMin = parseInt(sliderMin);
-                        if (newMax <= currentMin) {
-                          setSliderMax((currentMin + 1).toString());
-                        }
-                      }}
-                      className="form-input"
-                      min="2"
-                      max="100"
-                    />
-                  </div>
-                </div>
-                <p className="form-hint">
-                  Set the minimum (1-99) and maximum (2-100) values for your
-                  rating scale
-                </p>
-              </div>
-
-              <div className="form-group">
-                <label>Gradient Colors</label>
-                <div style={{ display: "flex", gap: "12px" }}>
-                  <select
-                    id="color-low"
-                    value={colorLow}
-                    onChange={(e) => setColorLow(e.target.value)}
-                    className="type-select"
-                  >
-                    {colorOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    id="color-mid"
-                    value={colorMid}
-                    onChange={(e) => setColorMid(e.target.value)}
-                    className="type-select"
-                  >
-                    {colorOptions
-                      .filter(
-                        (opt) =>
-                          opt.value !== colorLow && opt.value !== colorHigh,
-                      )
-                      .map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                  </select>
-                  <select
-                    id="color-high"
-                    value={colorHigh}
-                    onChange={(e) => setColorHigh(e.target.value)}
-                    className="type-select"
-                  >
-                    {colorOptions
-                      .filter(
-                        (opt) =>
-                          opt.value !== colorLow && opt.value !== colorMid,
-                      )
-                      .map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <p className="form-hint">
-                  Choose colors for low, medium, and high values
-                </p>
-              </div>
-            </>
-          )}
-
-          {/* Recurrence */}
-          <div className="form-group">
-            <label htmlFor="recurrence">Pattern of Recurrence</label>
-            <select
-              value={recurrence}
-              onChange={(e) => setRecurrence(e.target.value)}
-              className="type-select"
-            >
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-            <p className="form-hint">How often will this habit be completed?</p>
-          </div>
-
-          {/* Actions */}
-          <div className="modal-actions">
-            <button type="button" onClick={handleCancel} className="btn-cancel">
-              Cancel
-            </button>
-            <button type="submit" className="btn-create">
-              Create Habit
-            </button>
-          </div>
-        </form>
+            {/* Actions */}
+            <div className="modal-actions">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="btn-cancel"
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn-create">
+                Create Habit
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>,
+    </>,
     document.body,
   );
 }
