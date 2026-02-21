@@ -18,6 +18,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
       completed: false,
       type: habit.type || "checkbox",
       target: habit.target || 1,
+      recurrence: habit.recurrence,
       value: defaultVal,
       defaultValue: defaultVal,
       hasTags: (habit.availableTags ?? []).length > 0,
@@ -245,6 +246,25 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     );
   };
 
+  const isHabitScheduledForDate = (habit, date) => {
+    const habitDate = new Date(habit.createdAt);
+    habitDate.setHours(0, 0, 0, 0);
+
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+
+    if (habitDate > compareDate) return false;
+    if (!habit.recurrence) return true;
+
+    const dayCheck = habit.recurrence.days.includes(date.getDay());
+    const weeksSinceCreation = Math.floor(
+      (compareDate - habitDate) / (7 * 24 * 60 * 60 * 1000),
+    );
+    const intervalCheck = weeksSinceCreation % habit.recurrence.interval === 0;
+
+    return dayCheck && intervalCheck;
+  };
+
   return (
     <div className="daily-page">
       <div className="page-header">
@@ -285,15 +305,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
         )}
       </div>
       {habits
-        .filter((habit) => {
-          const habitDate = new Date(habit.createdAt);
-          habitDate.setHours(0, 0, 0, 0);
-
-          const compareDate = new Date(selectedDate);
-          compareDate.setHours(0, 0, 0, 0);
-
-          return habitDate <= compareDate;
-        })
+        .filter((habit) => isHabitScheduledForDate(habit, selectedDate))
         .map((habit) => {
           return (
             <Habit
