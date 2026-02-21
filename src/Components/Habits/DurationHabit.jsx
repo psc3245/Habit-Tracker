@@ -10,7 +10,16 @@ export default function DurationHabit({
   availableTags,
   onValueChange,
   onTagChange,
+  onEdit,
 }) {
+  const habitInfo = {
+    name,
+    value,
+    target,
+    hasTags,
+    tag,
+    availableTags,
+  };
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value.toString());
 
@@ -35,9 +44,12 @@ export default function DurationHabit({
     <div className="habit-container">
       <span className="habit-name">{name}</span>
       <div className="habit-controls">
+        <button className="btn-edit" onClick={() => onEdit(habitInfo)}>
+          Edit
+        </button>
         {hasTags && availableTags && availableTags.length > 0 && (
-          <select 
-            value={tag || ""} 
+          <select
+            value={tag || ""}
             onChange={(e) => onTagChange(e.target.value)}
             className="habit-tag-select"
           >

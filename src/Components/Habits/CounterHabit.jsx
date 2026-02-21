@@ -1,15 +1,24 @@
 import "../../Style/HabitTypes.css";
 
-export default function CounterHabit({ 
-  name, 
-  value = 0, 
+export default function CounterHabit({
+  name,
+  value = 0,
   target,
   hasTags,
   tag,
   availableTags,
   onValueChange,
-  onTagChange
+  onTagChange,
+  onEdit,
 }) {
+  const habitInfo = {
+    name,
+    value,
+    target,
+    hasTags,
+    tag,
+    availableTags,
+  };
   const increment = () => {
     onValueChange(value + 1);
   };
@@ -26,9 +35,12 @@ export default function CounterHabit({
     <div className="habit-container">
       <span className="habit-name">{name}</span>
       <div className="habit-controls">
+        <button className="btn-edit" onClick={() => onEdit(habitInfo)}>
+          Edit
+        </button>
         {hasTags && availableTags && availableTags.length > 0 && (
-          <select 
-            value={tag || ""} 
+          <select
+            value={tag || ""}
             onChange={(e) => onTagChange(e.target.value)}
             className="habit-tag-select"
           >
@@ -40,12 +52,18 @@ export default function CounterHabit({
             ))}
           </select>
         )}
-        
+
         <div className="counter-display-group">
-          <span className="counter-value">{value} / {target}</span>
+          <span className="counter-value">
+            {value} / {target}
+          </span>
           <div className="counter-buttons">
-            <button className="counter-btn" onClick={decrement}>−</button>
-            <button className="counter-btn" onClick={increment}>+</button>
+            <button className="counter-btn" onClick={decrement}>
+              −
+            </button>
+            <button className="counter-btn" onClick={increment}>
+              +
+            </button>
           </div>
         </div>
       </div>

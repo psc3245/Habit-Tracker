@@ -265,6 +265,10 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     return dayCheck && intervalCheck;
   };
 
+  const onEdit = (habitInfo) => {
+    console.log(habitInfo);
+  }
+
   return (
     <div className="daily-page">
       <div className="page-header">
@@ -325,6 +329,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
               colorLow={habit.colorLow}
               colorMid={habit.colorMid}
               colorHigh={habit.colorHigh}
+              onEdit = {onEdit}
             />
           );
         })}

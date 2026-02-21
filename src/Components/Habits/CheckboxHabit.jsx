@@ -8,11 +8,23 @@ export default function CheckboxHabit({
   tag,
   availableTags,
   onTagChange,
+  onEdit,
 }) {
+  const habitInfo = {
+    name,
+    completed,
+    hasTags,
+    tag,
+    availableTags,
+  };
   return (
     <div className="habit-container">
       <span className="habit-name">{name}</span>
+
       <div className="habit-controls">
+        <button className="btn-edit" onClick={() => onEdit(habitInfo)}>
+          Edit
+        </button>
         {hasTags && availableTags && availableTags.length > 0 && (
           <select
             value={tag || ""}
