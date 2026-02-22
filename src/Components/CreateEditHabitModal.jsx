@@ -1,22 +1,25 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "../Style/CreateHabitModal.css";
-import CustomRecurrenceModal from "../Components/CustomRecurrenceModal.jsx";
+import CustomRecurrenceModal from "./CustomRecurrenceModal.jsx";
 
-export default function CreateHabitModal({
+export default function CreateEditHabitModal({
   user,
   isOpen,
   onClose,
   onCreateHabit,
   setHabits,
   selectedDate,
+  habitInfo,
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [habitId, setHabitId] = useState("");
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
   const [hasTags, setHasTags] = useState(false);
   const [customTags, setCustomTags] = useState([]);
   const [newTagInput, setNewTagInput] = useState("");
-  const [dailyRequirement, setDailyRequirement] = useState("");
+  const [target, setTarget] = useState("");
   const [selectedRecurrence, setSelectedRecurrence] = useState("daily");
   const [interval, setInterval] = useState(1);
   const [recurrenceDays, setRecurrenceDays] = useState([0, 1, 2, 3, 4, 5, 6]);
@@ -26,6 +29,24 @@ export default function CreateHabitModal({
   const [colorLow, setColorLow] = useState("#ff6b6b");
   const [colorMid, setColorMid] = useState("#ffd966");
   const [colorHigh, setColorHigh] = useState("#51cf66");
+
+  if (habitInfo) {
+    setHabitId(habitInfo.key);
+    setHabitName(habitInfo.name);
+    setHabitType(habitInfo.habitType);
+    setHasTags(habitInfo.hasTags);
+    setCustomTags(habitInfo.availableTags);
+    if (habitInfo.habitType !== "checkbox") {
+      setTarget(habitInfo.target);
+      if (habitInfo.habitType === "slider") {
+        setSliderMin(habitInfo.sliderMin)
+        setSliderMax(habitInfo.sliderMax);
+        setColorLow(habitInfo.colorLow);
+        setColorMid(habitInfo.colorMid);
+        setColorHigh(habitInfo.colorHigh);
+      }
+    }
+  }
 
   const colorOptions = [
     { value: "#ff6b6b", label: "Red" },
@@ -58,7 +79,7 @@ export default function CreateHabitModal({
       target:
         habitType === "slider"
           ? parseInt(sliderMax)
-          : parseInt(dailyRequirement) || 1,
+          : parseInt(target) || 1,
       availableTags: hasTags ? customTags : [],
       sliderMin: habitType === "slider" ? parseInt(sliderMin) : undefined,
       colorLow: habitType === "slider" ? colorLow : undefined,
@@ -116,7 +137,7 @@ export default function CreateHabitModal({
     setHasTags(false);
     setCustomTags([]);
     setNewTagInput("");
-    setDailyRequirement("");
+    setTarget("");
     setSelectedRecurrence("daily");
     setInterval(1);
     setRecurrenceDays([0, 1, 2, 3, 4, 5, 6]);
@@ -254,8 +275,8 @@ export default function CreateHabitModal({
                 <input
                   id="daily-requirement"
                   type="number"
-                  value={dailyRequirement}
-                  onChange={(e) => setDailyRequirement(e.target.value)}
+                  value={target}
+                  onChange={(e) => setTarget(e.target.value)}
                   placeholder={
                     habitType === "counter"
                       ? "e.g., 8 glasses, 10000 steps"

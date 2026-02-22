@@ -1,6 +1,7 @@
 import "../../Style/HabitTypes.css";
 
 export default function SliderHabit({
+  key,
   name,
   value = 5,
   target,
@@ -16,15 +17,15 @@ export default function SliderHabit({
   onEdit,
 }) {
   const habitInfo = {
+    key,
     name,
-    value,
+    habitType : "slider",
     target,
     sliderMin,
     colorLow,
     colorMid,
     colorHigh,
     hasTags,
-    tag,
     availableTags,
   };
   const min = sliderMin || 1;

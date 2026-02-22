@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../../Style/HabitTypes.css";
 
 export default function DurationHabit({
+  key,
   name,
   value = 0,
   target,
@@ -13,11 +14,11 @@ export default function DurationHabit({
   onEdit,
 }) {
   const habitInfo = {
+    key,
     name,
-    value,
+    habitType : "duration",
     target,
     hasTags,
-    tag,
     availableTags,
   };
   const [isEditing, setIsEditing] = useState(false);

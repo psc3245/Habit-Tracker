@@ -1,6 +1,7 @@
 import "../../Style/HabitTypes.css";
 
 export default function CheckboxHabit({
+  key,
   name,
   completed,
   onToggle,
@@ -11,10 +12,11 @@ export default function CheckboxHabit({
   onEdit,
 }) {
   const habitInfo = {
+    key,
     name,
+    habitType : "checkbox",
     completed,
     hasTags,
-    tag,
     availableTags,
   };
   return (

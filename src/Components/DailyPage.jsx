@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Habit from "./Habit";
-import CreateHabitModal from "./CreateHabitModal";
+import CreateEditHabitModal from "./CreateEditHabitModal";
 import "../Style/DailyPage.css";
 import Calendar from "./Calendar";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
@@ -334,7 +334,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
           );
         })}
 
-      <CreateHabitModal
+      <CreateEditHabitModal
         user={user}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
