@@ -1,6 +1,7 @@
 import "../../Style/HabitTypes.css";
 
 export default function CheckboxHabit({
+  id,
   name,
   completed,
   onToggle,
@@ -8,11 +9,27 @@ export default function CheckboxHabit({
   tag,
   availableTags,
   onTagChange,
+  onEdit,
+  recurrence,
 }) {
+  const habitInfo = {
+    id,
+    name,
+    habitType : "checkbox",
+    completed,
+    hasTags,
+    availableTags,
+  recurrence,
+
+  };
   return (
     <div className="habit-container">
       <span className="habit-name">{name}</span>
+
       <div className="habit-controls">
+        <button className="btn-edit" onClick={() => onEdit(habitInfo)}>
+          Edit
+        </button>
         {hasTags && availableTags && availableTags.length > 0 && (
           <select
             value={tag || ""}

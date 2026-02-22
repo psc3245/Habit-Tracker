@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Habit from "./Habit";
-import CreateHabitModal from "./CreateHabitModal";
+import CreateHabitModal from "./CreateEditHabitModal";
 import "../Style/WeeklyPage.css";
 
 export default function WeeklyPage() {

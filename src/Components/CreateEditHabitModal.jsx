@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "../Style/CreateHabitModal.css";
-import CustomRecurrenceModal from "../Components/CustomRecurrenceModal.jsx";
+import CustomRecurrenceModal from "./CustomRecurrenceModal.jsx";
 
-export default function CreateHabitModal({
+export default function CreateEditHabitModal({
   user,
   isOpen,
   onClose,
   onCreateHabit,
+  onUpdateHabit,
   setHabits,
   selectedDate,
+  habitInfo,
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [habitId, setHabitId] = useState("");
   const [habitName, setHabitName] = useState("");
   const [habitType, setHabitType] = useState("checkbox");
   const [hasTags, setHasTags] = useState(false);
   const [customTags, setCustomTags] = useState([]);
   const [newTagInput, setNewTagInput] = useState("");
-  const [dailyRequirement, setDailyRequirement] = useState("");
+  const [target, setTarget] = useState("");
   const [selectedRecurrence, setSelectedRecurrence] = useState("daily");
   const [interval, setInterval] = useState(1);
   const [recurrenceDays, setRecurrenceDays] = useState([0, 1, 2, 3, 4, 5, 6]);
@@ -26,6 +30,38 @@ export default function CreateHabitModal({
   const [colorLow, setColorLow] = useState("#ff6b6b");
   const [colorMid, setColorMid] = useState("#ffd966");
   const [colorHigh, setColorHigh] = useState("#51cf66");
+
+  useEffect(() => {
+    if (!habitInfo) return;
+
+    setIsEditing(true);
+    setHabitId(habitInfo.id);
+    setHabitName(habitInfo.name);
+    setHabitType(habitInfo.habitType);
+    setHasTags(habitInfo.hasTags);
+    setCustomTags(habitInfo.availableTags);
+    setInterval(habitInfo.recurrence.interval);
+    setRecurrenceDays(habitInfo.recurrence.days);
+    if (habitInfo.recurrence.interval === 1) {
+      if (habitInfo.recurrence.days.length === 1) {
+        setSelectedRecurrence("weekly");
+      } else if (habitInfo.recurrence.days.length === 7) {
+        setSelectedRecurrence("daily");
+      } else setSelectedRecurrence("custom");
+    } else {
+      setSelectedRecurrence("custom");
+    }
+    if (habitInfo.habitType !== "checkbox") {
+      setTarget(habitInfo.target);
+      if (habitInfo.habitType === "slider") {
+        setSliderMin(habitInfo.sliderMin);
+        setSliderMax(habitInfo.sliderMax);
+        setColorLow(habitInfo.colorLow);
+        setColorMid(habitInfo.colorMid);
+        setColorHigh(habitInfo.colorHigh);
+      }
+    }
+  }, [habitInfo]);
 
   const colorOptions = [
     { value: "#ff6b6b", label: "Red" },
@@ -56,9 +92,7 @@ export default function CreateHabitModal({
         days: recurrenceDays,
       },
       target:
-        habitType === "slider"
-          ? parseInt(sliderMax)
-          : parseInt(dailyRequirement) || 1,
+        habitType === "slider" ? parseInt(sliderMax) : parseInt(target) || 1,
       availableTags: hasTags ? customTags : [],
       sliderMin: habitType === "slider" ? parseInt(sliderMin) : undefined,
       colorLow: habitType === "slider" ? colorLow : undefined,
@@ -67,41 +101,91 @@ export default function CreateHabitModal({
     };
 
     try {
-      const newHabit = await onCreateHabit(habitData);
+      if (!isEditing) {
+        const newHabit = await onCreateHabit(habitData);
 
-      if (!newHabit) {
-        console.error("onCreateHabit returned null/undefined!");
-        alert("Failed to create habit - check console for details");
-        return;
+        if (!newHabit) {
+          console.error("onCreateHabit returned null/undefined!");
+          alert("Failed to create habit - check console for details");
+          return;
+        }
+
+        setHabits((prev) => [
+          ...prev,
+          {
+            id: newHabit.id,
+            name: newHabit.name,
+            type: newHabit.type,
+            recurrence: newHabit.recurrence,
+            completed: false,
+            target: newHabit.target,
+            value:
+              newHabit.type === "slider"
+                ? Math.floor(((newHabit.sliderMin || 1) + newHabit.target) / 2)
+                : 0,
+            defaultValue:
+              newHabit.type === "slider"
+                ? Math.floor(((newHabit.sliderMin || 1) + newHabit.target) / 2)
+                : 0,
+            hasTags: (newHabit.availableTags ?? []).length > 0,
+            availableTags: newHabit.availableTags ?? [],
+            selectedTag: null,
+            createdAt: newHabit.createdAt,
+            sliderMin: newHabit.sliderMin,
+            colorLow: newHabit.colorLow,
+            colorMid: newHabit.colorMid,
+            colorHigh: newHabit.colorHigh,
+          },
+        ]);
       }
+      if (isEditing) {
+        const updatedHabit = await onUpdateHabit(habitData, habitId);
 
-      setHabits((prev) => [
-        ...prev,
-        {
-          id: newHabit.id,
-          name: newHabit.name,
-          type: newHabit.type,
-          recurrence: newHabit.recurrence,
-          completed: false,
-          target: newHabit.target,
-          value:
-            newHabit.type === "slider"
-              ? Math.floor(((newHabit.sliderMin || 1) + newHabit.target) / 2)
-              : 0,
-          defaultValue:
-            newHabit.type === "slider"
-              ? Math.floor(((newHabit.sliderMin || 1) + newHabit.target) / 2)
-              : 0,
-          hasTags: (newHabit.availableTags ?? []).length > 0,
-          availableTags: newHabit.availableTags ?? [],
-          selectedTag: null,
-          createdAt: newHabit.createdAt,
-          sliderMin: newHabit.sliderMin,
-          colorLow: newHabit.colorLow,
-          colorMid: newHabit.colorMid,
-          colorHigh: newHabit.colorHigh,
-        },
-      ]);
+        if (!updatedHabit) {
+          console.error("onUpdateHabit returned null/undefined!");
+          alert("Failed to update habit - check console for details");
+          return;
+        }
+
+        setHabits((prev) =>
+          prev.map((h) =>
+            h.id === updatedHabit.id
+              ? {
+                  id: updatedHabit.id,
+                  name: updatedHabit.name,
+                  type: updatedHabit.type,
+                  recurrence: updatedHabit.recurrence,
+                  completed: false,
+                  target: updatedHabit.target,
+                  value:
+                    updatedHabit.type === "slider"
+                      ? Math.floor(
+                          ((updatedHabit.sliderMin || 1) +
+                            updatedHabit.target) /
+                            2,
+                        )
+                      : 0,
+                  defaultValue:
+                    updatedHabit.type === "slider"
+                      ? Math.floor(
+                          ((updatedHabit.sliderMin || 1) +
+                            updatedHabit.target) /
+                            2,
+                        )
+                      : 0,
+                  hasTags: (updatedHabit.availableTags ?? []).length > 0,
+                  availableTags: updatedHabit.availableTags ?? [],
+                  selectedTag: null,
+                  createdAt: updatedHabit.createdAt,
+                  sliderMin: updatedHabit.sliderMin,
+                  colorLow: updatedHabit.colorLow,
+                  colorMid: updatedHabit.colorMid,
+                  colorHigh: updatedHabit.colorHigh,
+                }
+              : h,
+          ),
+        );
+      }
 
       onClose();
     } catch (err) {
@@ -116,10 +200,11 @@ export default function CreateHabitModal({
     setHasTags(false);
     setCustomTags([]);
     setNewTagInput("");
-    setDailyRequirement("");
+    setTarget("");
     setSelectedRecurrence("daily");
     setInterval(1);
     setRecurrenceDays([0, 1, 2, 3, 4, 5, 6]);
+    setIsEditing(false);
     onClose();
   };
 
@@ -163,7 +248,9 @@ export default function CreateHabitModal({
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           {/* Modal Header */}
           <div className="modal-header">
-            <h2 className="modal-title">Create New Habit</h2>
+            <h2 className="modal-title">
+              {isEditing ? "Edit Habit" : "Create New Habit"}
+            </h2>
             <div className="header-controls">
               <select
                 value={habitType}
@@ -254,8 +341,8 @@ export default function CreateHabitModal({
                 <input
                   id="daily-requirement"
                   type="number"
-                  value={dailyRequirement}
-                  onChange={(e) => setDailyRequirement(e.target.value)}
+                  value={target}
+                  onChange={(e) => setTarget(e.target.value)}
                   placeholder={
                     habitType === "counter"
                       ? "e.g., 8 glasses, 10000 steps"
@@ -470,7 +557,7 @@ export default function CreateHabitModal({
                 Cancel
               </button>
               <button type="submit" className="btn-create">
-                Create Habit
+                {isEditing ? "Save Changes" : "Create Habit"}
               </button>
             </div>
           </form>

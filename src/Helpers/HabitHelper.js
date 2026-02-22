@@ -24,20 +24,6 @@ export async function onCreateHabit(habit) {
       }),
     });
 
-    console.log({
-      userId: habit.userId,
-      name: habit.name,
-      target: habit.target,
-      type: habit.type,
-      availableTags: habit.availableTags,
-      createdAt: createdAtISO,
-      sliderMin: habit.sliderMin,
-      colorLow: habit.colorLow,
-      colorMid: habit.colorMid,
-      colorHigh: habit.colorHigh,
-      recurrence: habit.recurrence,
-    });
-
     if (!res.ok) {
       const errText = await res.text();
       console.error("Backend error:", errText);
@@ -69,6 +55,43 @@ export async function getHabitsByUserId(userId) {
   } catch (err) {
     console.error(err.message);
     return [];
+  }
+}
+
+export async function onUpdateHabit(habit, habitId) {
+  try {
+    const createdAt = new Date();
+    createdAt.setHours(0, 0, 0, 0);
+    const createdAtISO = createdAt.toISOString();
+
+    const res = await fetch(`${backend_base_url}/habits/${habitId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: habit.userId,
+        name: habit.name,
+        target: habit.target,
+        type: habit.type,
+        availableTags: habit.availableTags,
+        sliderMin: habit.sliderMin,
+        colorLow: habit.colorLow,
+        colorMid: habit.colorMid,
+        colorHigh: habit.colorHigh,
+        recurrence: habit.recurrence,
+      }),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Backend error:", errText);
+      throw new Error("Update habit failed");
+    }
+
+    const h = await res.json();
+    return h;
+  } catch (err) {
+    console.error(err.message);
+    throw err;
   }
 }
 

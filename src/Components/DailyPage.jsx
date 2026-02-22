@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import Habit from "./Habit";
-import CreateHabitModal from "./CreateHabitModal";
+import CreateEditHabitModal from "./CreateEditHabitModal";
 import "../Style/DailyPage.css";
 import Calendar from "./Calendar";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 
-export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
+export default function DailyPage({
+  user,
+  onCreateHabit,
+  onUpdateHabit,
+  getHabitsByUserId,
+}) {
   const mapHabit = (habit) => {
     const defaultVal =
       habit.type === "slider"
@@ -83,6 +88,8 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
   const [habits, setHabits] = useState([]);
 
   const [pendingCompletions, setPendingCompletions] = useState({});
+
+  const [habitInfo, setHabitInfo] = useState(null);
 
   const syncPendingCompletions = async () => {
     const entries = Object.entries(pendingCompletions);
@@ -265,6 +272,11 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
     return dayCheck && intervalCheck;
   };
 
+  const onEdit = (habitInfo) => {
+    setHabitInfo(habitInfo);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="daily-page">
       <div className="page-header">
@@ -310,6 +322,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
           return (
             <Habit
               key={habit.id}
+              id={habit.id}
               name={habit.name}
               completed={habit.completed}
               type={habit.type}
@@ -318,6 +331,7 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
               availableTags={habit.availableTags}
               value={habit.value || 0}
               target={habit.target || 1}
+              recurrence={habit.recurrence}
               onToggle={() => toggleHabit(habit.id)}
               onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
               onValueChange={(newValue) => updateHabitValue(habit.id, newValue)}
@@ -325,17 +339,20 @@ export default function DailyPage({ user, onCreateHabit, getHabitsByUserId }) {
               colorLow={habit.colorLow}
               colorMid={habit.colorMid}
               colorHigh={habit.colorHigh}
+              onEdit={onEdit}
             />
           );
         })}
 
-      <CreateHabitModal
+      <CreateEditHabitModal
         user={user}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreateHabit={onCreateHabit}
+        onUpdateHabit={onUpdateHabit}
         setHabits={setHabits}
         selectedDate={selectedDate}
+        habitInfo={habitInfo}
       />
     </div>
   );

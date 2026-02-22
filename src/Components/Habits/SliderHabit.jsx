@@ -1,6 +1,7 @@
 import "../../Style/HabitTypes.css";
 
 export default function SliderHabit({
+  id,
   name,
   value = 5,
   target,
@@ -13,7 +14,22 @@ export default function SliderHabit({
   availableTags,
   onValueChange,
   onTagChange,
+  onEdit,
+  recurrence,
 }) {
+  const habitInfo = {
+    id,
+    name,
+    habitType: "slider",
+    target,
+    sliderMin,
+    colorLow,
+    colorMid,
+    colorHigh,
+    hasTags,
+    availableTags,
+    recurrence,
+  };
   const min = sliderMin || 1;
   const max = target || 10;
 
@@ -32,6 +48,9 @@ export default function SliderHabit({
     <div className="habit-container">
       <span className="habit-name">{name}</span>
       <div className="habit-controls">
+        <button className="btn-edit" onClick={() => onEdit(habitInfo)}>
+          Edit
+        </button>
         {hasTags && availableTags && availableTags.length > 0 && (
           <select
             value={tag || ""}

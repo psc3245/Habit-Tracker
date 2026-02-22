@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../../Style/HabitTypes.css";
 
 export default function DurationHabit({
+  id,
   name,
   value = 0,
   target,
@@ -10,7 +11,20 @@ export default function DurationHabit({
   availableTags,
   onValueChange,
   onTagChange,
+  onEdit,
+  recurrence,
+
 }) {
+  const habitInfo = {
+    id,
+    name,
+    habitType : "duration",
+    target,
+    hasTags,
+    availableTags,
+  recurrence,
+
+  };
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value.toString());
 
@@ -35,9 +49,12 @@ export default function DurationHabit({
     <div className="habit-container">
       <span className="habit-name">{name}</span>
       <div className="habit-controls">
+        <button className="btn-edit" onClick={() => onEdit(habitInfo)}>
+          Edit
+        </button>
         {hasTags && availableTags && availableTags.length > 0 && (
-          <select 
-            value={tag || ""} 
+          <select
+            value={tag || ""}
             onChange={(e) => onTagChange(e.target.value)}
             className="habit-tag-select"
           >

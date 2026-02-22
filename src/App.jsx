@@ -61,6 +61,7 @@ export default function App() {
                   <DailyPage
                     user={user}
                     onCreateHabit={HabitHelper.onCreateHabit}
+                    onUpdateHabit={HabitHelper.onUpdateHabit}
                     getHabitsByUserId={HabitHelper.getHabitsByUserId}
                   />
                 )}
