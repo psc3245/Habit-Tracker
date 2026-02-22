@@ -1,7 +1,7 @@
 import "../../Style/HabitTypes.css";
 
 export default function CounterHabit({
-  key,
+  id,
   name,
   value = 0,
   target,
@@ -11,14 +11,18 @@ export default function CounterHabit({
   onValueChange,
   onTagChange,
   onEdit,
+  recurrence,
+
 }) {
   const habitInfo = {
-    key,
+    id,
     name,
     habitType : "counter",
     target,
     hasTags,
     availableTags,
+  recurrence,
+
   };
   const increment = () => {
     onValueChange(value + 1);

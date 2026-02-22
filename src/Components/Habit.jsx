@@ -27,6 +27,7 @@ export default function Habit({
   colorMid,
   colorHigh,
   onEdit,
+  recurrence,
   ...otherProps
 }) {
   const HabitComponent =
@@ -49,6 +50,7 @@ export default function Habit({
       colorMid={colorMid}
       colorHigh={colorHigh}
       onEdit = {onEdit}
+      recurrence = {recurrence}
       {...otherProps}
     />
   );

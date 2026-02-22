@@ -1,7 +1,7 @@
 import "../../Style/HabitTypes.css";
 
 export default function SliderHabit({
-  key,
+  id,
   name,
   value = 5,
   target,
@@ -15,11 +15,12 @@ export default function SliderHabit({
   onValueChange,
   onTagChange,
   onEdit,
+  recurrence,
 }) {
   const habitInfo = {
-    key,
+    id,
     name,
-    habitType : "slider",
+    habitType: "slider",
     target,
     sliderMin,
     colorLow,
@@ -27,6 +28,7 @@ export default function SliderHabit({
     colorHigh,
     hasTags,
     availableTags,
+    recurrence,
   };
   const min = sliderMin || 1;
   const max = target || 10;
