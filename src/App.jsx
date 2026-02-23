@@ -6,6 +6,7 @@ import LoginMenu from "./Components/Login/LoginMenu.jsx";
 import SignUpMenu from "./Components/Login/SignUpMenu.jsx";
 import ProfileLeft from "./Components/Profile/ProfileLeft.jsx";
 import ProfileRight from "./Components/Profile/ProfileRight.jsx";
+import AtAGlance from "./Components/AtAGlance.jsx";
 import * as HabitHelper from "./Helpers/HabitHelper.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Info from "./Components/HomePage/Info.jsx";
@@ -88,8 +89,8 @@ export default function App() {
                 )}
                 {rightPageView === "Glance" && (
                   <div className="placeholder-page">
-                    <h2 className="page-title">At a Glance</h2>
-                    <p>Overview coming soon...</p>
+                    <AtAGlance
+                    user={user}/>
                   </div>
                 )}
                 {rightPageView === "SignUp" && (

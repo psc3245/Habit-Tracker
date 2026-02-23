@@ -46,7 +46,7 @@ export default function HabitsPage({
       hasTags: false,
       availableTags: [],
       selectedTag: null,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(2026, 0, 1, 12, 0).toISOString(),
       recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
@@ -57,7 +57,7 @@ export default function HabitsPage({
       hasTags: false,
       availableTags: [],
       selectedTag: null,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(2026, 0, 1, 12, 0).toISOString(),
       recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
@@ -68,7 +68,7 @@ export default function HabitsPage({
       hasTags: true,
       availableTags: ["Fiction", "Non-fiction", "Articles"],
       selectedTag: null,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(2026, 0, 1, 12, 0).toISOString(),
       recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
@@ -79,7 +79,7 @@ export default function HabitsPage({
       hasTags: true,
       availableTags: ["Morning", "Evening"],
       selectedTag: null,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(2026, 0, 1, 12, 0).toISOString(),
       recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
@@ -90,7 +90,7 @@ export default function HabitsPage({
       hasTags: false,
       availableTags: [],
       selectedTag: null,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(2026, 0, 1, 12, 0).toISOString(),
       recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
   ];
@@ -329,7 +329,14 @@ export default function HabitsPage({
               isOpen={isCalendarOpen}
               onClose={() => setIsCalendarOpen(false)}
             />
+            
           </div>
+          <button
+              className="daily-date"
+              onClick={() => setSelectedDate(new Date())}
+            >
+              Today
+            </button>
         </div>
         {isCalendarOpen && (
           <div

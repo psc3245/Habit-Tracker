@@ -1,11 +1,11 @@
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
 const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 export async function createCompletion(
   habitId,
@@ -41,7 +41,6 @@ export async function createCompletion(
 }
 
 export async function getCompletionsByUserIdAndDate(userId, date) {
-  
   try {
     const res = await fetch(
       `${backend_base_url}/completions?userId=${userId}&date=${formatDate(date)}`,
@@ -63,16 +62,38 @@ export async function getCompletionsByUserIdAndDate(userId, date) {
   }
 }
 
-export async function updateCompletion(completionId, selectedTag, value) {
+export async function getCompletionsByUserIdAndDateRange(
+  userId,
+  startDate,
+  endDate,
+) {
   try {
     const res = await fetch(
-      `${backend_base_url}/completions/${completionId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selectedTag: selectedTag, value: value }),
-      },
+      `${backend_base_url}/completions/range?userId=${userId}&startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`,
+      { method: "GET", headers: { "Content-Type": "application/json" } },
     );
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(
+        err.error ||
+          `Fetch completions failed for userId ${userId} and date range ${startDate.toISOString()} to ${endDate.toISOString()}`,
+      );
+    }
+    const completions = await res.json();
+    return completions;
+  } catch (err) {
+    console.error(err.message);
+    return [];
+  }
+}
+
+export async function updateCompletion(completionId, selectedTag, value) {
+  try {
+    const res = await fetch(`${backend_base_url}/completions/${completionId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ selectedTag: selectedTag, value: value }),
+    });
     if (!res.ok) {
       const err = await res.json();
       throw new Error(
@@ -95,7 +116,7 @@ export async function deleteCompletionByHabitAndDate(userId, habitId, date) {
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
 
     if (!res.ok) {
