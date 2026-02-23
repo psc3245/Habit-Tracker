@@ -8,7 +8,7 @@ export default function NavBar({
   onRightPageChange,
   user,
 }) {
-  const leftTabs = ["Daily", "Weekly"];
+  const leftTabs = ["Habits"];
   const rightTabs = ["Stats", "Glance"];
 
   return (

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import NavBar from "./Components/Navbar";
-import DailyPage from "./Components/DailyPage";
-import WeeklyPage from "./Components/WeeklyPage";
+import HabitsPage from "./Components/HabitsPage.jsx";
 import LoginMenu from "./Components/Login/LoginMenu.jsx";
 import SignUpMenu from "./Components/Login/SignUpMenu.jsx";
 import ProfileLeft from "./Components/Profile/ProfileLeft.jsx";
@@ -57,15 +56,14 @@ export default function App() {
             <div className="page left-page">
               <div className="page-content">
                 {leftPageView === "Home" && <Home user={user} />}{" "}
-                {leftPageView === "Daily" && (
-                  <DailyPage
+                {leftPageView === "Habits" && (
+                  <HabitsPage
                     user={user}
                     onCreateHabit={HabitHelper.onCreateHabit}
                     onUpdateHabit={HabitHelper.onUpdateHabit}
                     getHabitsByUserId={HabitHelper.getHabitsByUserId}
                   />
                 )}
-                {leftPageView === "Weekly" && <WeeklyPage />}
                 {leftPageView === "Login" && (
                   <LoginMenu onLoginSuccess={onLoginSuccess} />
                 )}

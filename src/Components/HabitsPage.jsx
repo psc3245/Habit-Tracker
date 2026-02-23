@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import Habit from "./Habit";
-import CreateEditHabitModal from "./CreateEditHabitModal";
-import "../Style/DailyPage.css";
-import Calendar from "./Calendar";
+import Habit from "./Habit.jsx";
+import CreateEditHabitModal from "./CreateEditHabitModal.jsx";
+import "../Style/HabitsPage.css";
+import Calendar from "./Calendar.jsx";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 
-export default function DailyPage({
+export default function HabitsPage({
   user,
   onCreateHabit,
   onUpdateHabit,
@@ -46,6 +46,8 @@ export default function DailyPage({
       hasTags: false,
       availableTags: [],
       selectedTag: null,
+      createdAt: new Date().toISOString(),
+      recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
       id: "200000000000",
@@ -55,6 +57,8 @@ export default function DailyPage({
       hasTags: false,
       availableTags: [],
       selectedTag: null,
+      createdAt: new Date().toISOString(),
+      recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
       id: "30000000000",
@@ -64,6 +68,8 @@ export default function DailyPage({
       hasTags: true,
       availableTags: ["Fiction", "Non-fiction", "Articles"],
       selectedTag: null,
+      createdAt: new Date().toISOString(),
+      recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
       id: "40000000000",
@@ -73,6 +79,8 @@ export default function DailyPage({
       hasTags: true,
       availableTags: ["Morning", "Evening"],
       selectedTag: null,
+      createdAt: new Date().toISOString(),
+      recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
     {
       id: "5000000000",
@@ -82,6 +90,8 @@ export default function DailyPage({
       hasTags: false,
       availableTags: [],
       selectedTag: null,
+      createdAt: new Date().toISOString(),
+      recurrence: { interval: 1, days: [0, 1, 2, 3, 4, 5, 6] },
     },
   ];
 
@@ -92,6 +102,8 @@ export default function DailyPage({
   const [habitInfo, setHabitInfo] = useState(null);
 
   const syncPendingCompletions = async () => {
+    if (!user) return;
+
     const entries = Object.entries(pendingCompletions);
 
     for (const [habitId, update] of entries) {
@@ -185,6 +197,8 @@ export default function DailyPage({
     if (!user) return;
 
     async function loadCompletionsForDate() {
+      if (!user) return;
+
       await syncPendingCompletions();
       const completions = await CompletionHelper.getCompletionsByUserIdAndDate(
         user.id,
@@ -273,6 +287,10 @@ export default function DailyPage({
   };
 
   const onEdit = (habitInfo) => {
+    if (!user) {
+      alert("No current user - log in first!");
+      return;
+    }
     setHabitInfo(habitInfo);
     setIsModalOpen(true);
   };
@@ -285,6 +303,10 @@ export default function DailyPage({
           <button
             className="new-habit-btn"
             onClick={() => {
+              if (!user) {
+                alert("No current user - log in first!");
+                return;
+              }
               setIsModalOpen(true);
               setIsCalendarOpen(false);
             }}
