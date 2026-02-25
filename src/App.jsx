@@ -101,7 +101,6 @@ export default function App() {
                     <AtAGlance
                       user={user}
                       selectedDate={selectedDate}
-                      setSelectedDate={setSelectedDate}
                     />
                   </div>
                 )}

@@ -3,7 +3,7 @@ import "../Style/AtAGlance.css";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
 
-export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
+export default function AtAGlance({ user, selectedDate }) {
   const [timeframe, setTimeframe] = useState("weekly");
   const [completions, setCompletions] = useState([]);
   const [habits, setHabits] = useState([]);
@@ -26,7 +26,7 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
     timeframe === "weekly"
       ? getWeekDateRange(selectedDate)
       : getMonthDateRange(selectedDate);
-  const today = new Date();
+  const today = new Date().setHours(0, 0, 0, 0);
 
   useEffect(() => {
     const getCompletions = async () => {
@@ -117,6 +117,16 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
     return [numCompletions, expected];
   };
 
+  const [expandedHabits, setExpandedHabits] = useState(new Set());
+
+  const toggleHabit = (id) => {
+    setExpandedHabits((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
   return (
     <>
       <div className="glance-page">
@@ -162,6 +172,14 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
                         {remainingCompletions} left this{" "}
                         {timeframe === "weekly" ? "week" : "month"}
                       </span>
+                      <button
+                        className="glance-habit-row-btn"
+                        onClick={() => {
+                          toggleHabit(habit.id);
+                        }}
+                      >
+                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -182,6 +200,14 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
                         {remainingCompletions} left this{" "}
                         {timeframe === "weekly" ? "week" : "month"}
                       </span>
+                      <button
+                        className="glance-habit-row-btn"
+                        onClick={() => {
+                          toggleHabit(habit.id);
+                        }}
+                      >
+                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                      </button>
                     </div>
                   </div>
                 );
@@ -213,6 +239,14 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
                         {remainingCompletions} left this{" "}
                         {timeframe === "weekly" ? "week" : "month"}
                       </span>
+                      <button
+                        className="glance-habit-row-btn"
+                        onClick={() => {
+                          toggleHabit(habit.id);
+                        }}
+                      >
+                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -233,6 +267,14 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
                         {remainingCompletions} left this{" "}
                         {timeframe === "weekly" ? "week" : "month"}
                       </span>
+                      <button
+                        className="glance-habit-row-btn"
+                        onClick={() => {
+                          toggleHabit(habit.id);
+                        }}
+                      >
+                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                      </button>
                     </div>
                   </div>
                 );
@@ -264,6 +306,14 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
                         {remainingCompletions} left this{" "}
                         {timeframe === "weekly" ? "week" : "month"}
                       </span>
+                      <button
+                        className="glance-habit-row-btn"
+                        onClick={() => {
+                          toggleHabit(habit.id);
+                        }}
+                      >
+                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -284,6 +334,14 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
                         {remainingCompletions} left this{" "}
                         {timeframe === "weekly" ? "week" : "month"}
                       </span>
+                      <button
+                        className="glance-habit-row-btn"
+                        onClick={() => {
+                          toggleHabit(habit.id);
+                        }}
+                      >
+                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                      </button>
                     </div>
                   </div>
                 );
