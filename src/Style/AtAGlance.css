@@ -1,0 +1,130 @@
+.glance-page {
+    height: 100vp;
+}
+
+.at-a-glance {
+  display: flex;
+  flex-direction: column;
+}
+
+.glance-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.glance-title {
+  color: #1a1a1a;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.glance-timeframe-select {
+  padding: 4px 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  appearance: none;
+  width: fit-content;
+  min-width: unset;
+}
+
+.glance-timeframe-select:focus {
+  outline: none;
+  border-color: #ffd966;
+}
+
+.glance-timeframe-select:hover {
+  border-color: #ffd966;
+}
+
+.glance-section {
+  margin-bottom: 24px;
+}
+
+.glance-section-title {
+  color: #555;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 0, 255, 0.08);
+}
+
+.glance-habit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  background: rgba(253, 245, 230, 0.6);
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease;
+}
+
+.glance-habit-row:hover {
+  background: rgba(253, 245, 230, 0.9);
+  border-color: #ccc;
+}
+
+.glance-habit-name {
+  font-weight: 500;
+  font-size: 16px;
+  color: #2c2c2c;
+}
+
+.glance-habit-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.glance-stats-divider {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.glance-avg, .glance-ratio {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.glance-empty {
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.glance-no-user {
+  color: #666;
+  font-size: 15px;
+}
+
+.glance-habit-row-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #333;
+  padding: 0;
+  line-height: 1;
+}
+
+.glance-habit-row-btn:focus {
+  outline: none;
+}

@@ -6,6 +6,7 @@ import LoginMenu from "./Components/Login/LoginMenu.jsx";
 import SignUpMenu from "./Components/Login/SignUpMenu.jsx";
 import ProfileLeft from "./Components/Profile/ProfileLeft.jsx";
 import ProfileRight from "./Components/Profile/ProfileRight.jsx";
+import AtAGlance from "./Components/AtAGlance.jsx";
 import * as HabitHelper from "./Helpers/HabitHelper.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Info from "./Components/HomePage/Info.jsx";
@@ -14,17 +15,24 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [leftPageView, setLeftPageView] = useState("Home");
   const [rightPageView, setRightPageView] = useState("Info");
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  });
 
   const onLoginSuccess = (user) => {
     setUser(user);
     setLeftPageView("Profile");
     setRightPageView("Profile");
+    setSelectedDate(new Date());
   };
 
   const onLogout = () => {
     setUser(null);
     setLeftPageView("Login");
     setRightPageView("SignUp");
+    setSelectedDate(new Date());
   };
 
   return (
@@ -62,6 +70,8 @@ export default function App() {
                     onCreateHabit={HabitHelper.onCreateHabit}
                     onUpdateHabit={HabitHelper.onUpdateHabit}
                     getHabitsByUserId={HabitHelper.getHabitsByUserId}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
                   />
                 )}
                 {leftPageView === "Login" && (
@@ -88,8 +98,10 @@ export default function App() {
                 )}
                 {rightPageView === "Glance" && (
                   <div className="placeholder-page">
-                    <h2 className="page-title">At a Glance</h2>
-                    <p>Overview coming soon...</p>
+                    <AtAGlance
+                      user={user}
+                      selectedDate={selectedDate}
+                    />
                   </div>
                 )}
                 {rightPageView === "SignUp" && (
