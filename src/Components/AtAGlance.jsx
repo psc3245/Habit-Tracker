@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../Style/AtAGlance.css";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
 
@@ -20,6 +21,12 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
     const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return [startOfMonth, endOfMonth];
   };
+
+  const [startDate, endDate] =
+    timeframe === "weekly"
+      ? getWeekDateRange(selectedDate)
+      : getMonthDateRange(selectedDate);
+  const today = new Date();
 
   useEffect(() => {
     const getCompletions = async () => {
@@ -105,50 +112,192 @@ export default function AtAGlance({ user, selectedDate, setSelectedDate }) {
     const numCompletions = completions.reduce((accumulator, completion) => {
       if (habit.type != "slider")
         return completion.value >= habit.target ? accumulator + 1 : accumulator;
-      else 
-        return completion.value != null ? accumulator + 1 : accumulator;
+      else return completion.value != null ? accumulator + 1 : accumulator;
     }, 0);
     return [numCompletions, expected];
   };
 
   return (
     <>
-      {user ? (
-        <>
-          <div>
-            <h2>At A Glance Page for {user.username}</h2>
-            <select
-              name="timeframe"
-              id="timeframe"
-              value={timeframe}
-              onChange={(e) => setTimeframe(e.target.value)}
-            >
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-            </select>
-          </div>
-          <div>
-            <h2>Daily Habits</h2>
-            {dailyHabits.map((h) => {
-              return (
-                <div>
-                  <h4>{h.name}</h4>
-                  <p>{h.type}</p>
-                  <div>
-                    <p>
-                      {completions.filter((c) => c.habitId === h.id).length} / 7
-                    </p>
+      <div className="glance-page">
+        {user ? (
+          <>
+            <div className="glance-header">
+              <h2 className="glance-title">{user.username}'s</h2>
+              <select
+                className="glance-timeframe-select"
+                name="timeframe"
+                id="timeframe"
+                value={timeframe}
+                onChange={(e) => setTimeframe(e.target.value)}
+              >
+                <option value="weekly">week</option>
+                <option value="monthly">month</option>
+              </select>
+              <h2 className="glance-title">at a glance: </h2>
+            </div>
+
+            <div className="glance-section">
+              <h3 className="glance-section-title">Daily Habits</h3>
+              {dailyHabits.length === 0 && (
+                <p className="glance-empty">No daily habits yet.</p>
+              )}
+              {dailyHabits.map((habit) => {
+                const habitSummary = getHabitSummary(habit, startDate, today);
+                const remainingCompletions = getExpectedCompletions(
+                  habit,
+                  today,
+                  endDate,
+                );
+                return habit.type === "checkbox" ? (
+                  <div key={habit.id} className="glance-habit-row">
+                    <span className="glance-habit-name">{habit.name}</span>
+                    <div className="glance-habit-stats">
+                      <span className="glance-ratio">
+                        completed {habitSummary["completionRatio"][0]} /{" "}
+                        {habitSummary["completionRatio"][1]} times
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-ratio">
+                        {remainingCompletions} left this{" "}
+                        {timeframe === "weekly" ? "week" : "month"}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                ) : (
+                  <div key={habit.id} className="glance-habit-row">
+                    <span className="glance-habit-name">{habit.name}</span>
+                    <div className="glance-habit-stats">
+                      <span className="glance-ratio">
+                        completed {habitSummary["completionRatio"][0]} /{" "}
+                        {habitSummary["completionRatio"][1]} times
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-avg">
+                        avg: {habitSummary["avgToTargetRatio"][0]} /{" "}
+                        {habitSummary["avgToTargetRatio"][1]}
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-ratio">
+                        {remainingCompletions} left this{" "}
+                        {timeframe === "weekly" ? "week" : "month"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="glance-section">
+              <h3 className="glance-section-title">Weekly Habits</h3>
+              {weeklyHabits.length === 0 && (
+                <p className="glance-empty">No weekly habits yet.</p>
+              )}
+              {weeklyHabits.map((habit) => {
+                const habitSummary = getHabitSummary(habit, startDate, today);
+                const remainingCompletions = getExpectedCompletions(
+                  habit,
+                  today,
+                  endDate,
+                );
+                return habit.type === "checkbox" ? (
+                  <div key={habit.id} className="glance-habit-row">
+                    <span className="glance-habit-name">{habit.name}</span>
+                    <div className="glance-habit-stats">
+                      <span className="glance-ratio">
+                        completed {habitSummary["completionRatio"][0]} /{" "}
+                        {habitSummary["completionRatio"][1]} times
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-ratio">
+                        {remainingCompletions} left this{" "}
+                        {timeframe === "weekly" ? "week" : "month"}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div key={habit.id} className="glance-habit-row">
+                    <span className="glance-habit-name">{habit.name}</span>
+                    <div className="glance-habit-stats">
+                      <span className="glance-ratio">
+                        completed {habitSummary["completionRatio"][0]} /{" "}
+                        {habitSummary["completionRatio"][1]} times
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-avg">
+                        avg: {habitSummary["avgToTargetRatio"][0]} /{" "}
+                        {habitSummary["avgToTargetRatio"][1]}
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-ratio">
+                        {remainingCompletions} left this{" "}
+                        {timeframe === "weekly" ? "week" : "month"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="glance-section">
+              <h3 className="glance-section-title">Other Habits</h3>
+              {otherHabits.length === 0 && (
+                <p className="glance-empty">No other habits yet.</p>
+              )}
+              {otherHabits.map((habit) => {
+                const habitSummary = getHabitSummary(habit, startDate, today);
+                const remainingCompletions = getExpectedCompletions(
+                  habit,
+                  today,
+                  endDate,
+                );
+                return habit.type === "checkbox" ? (
+                  <div key={habit.id} className="glance-habit-row">
+                    <span className="glance-habit-name">{habit.name}</span>
+                    <div className="glance-habit-stats">
+                      <span className="glance-ratio">
+                        completed {habitSummary["completionRatio"][0]} /{" "}
+                        {habitSummary["completionRatio"][1]} times
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-ratio">
+                        {remainingCompletions} left this{" "}
+                        {timeframe === "weekly" ? "week" : "month"}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div key={habit.id} className="glance-habit-row">
+                    <span className="glance-habit-name">{habit.name}</span>
+                    <div className="glance-habit-stats">
+                      <span className="glance-ratio">
+                        completed {habitSummary["completionRatio"][0]} /{" "}
+                        {habitSummary["completionRatio"][1]} times
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-avg">
+                        avg: {habitSummary["avgToTargetRatio"][0]} /{" "}
+                        {habitSummary["avgToTargetRatio"][1]}
+                      </span>
+                      <span className="glance-stats-divider">|</span>
+                      <span className="glance-ratio">
+                        {remainingCompletions} left this{" "}
+                        {timeframe === "weekly" ? "week" : "month"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <div>
+            <p className="glance-no-user">
+              Log in to see your habits at a glance.
+            </p>
           </div>
-        </>
-      ) : (
-        <div>
-          <p>No user id, default page</p>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
