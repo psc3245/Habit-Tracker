@@ -8,8 +8,8 @@ export default function ProfileLeft({ user, onLogout }) {
       <h2>User Profile</h2>
       <p><strong>Username:</strong> {user.username}</p>
       <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Date of Birth:</strong> {user.dob}</p>
-      <p><strong>Password: </strong> {user.pass} </p>
+      <p><strong>Date of Birth:</strong> {user.date_of_birth}</p>
+      <p><strong>Password: </strong> {user.password} </p>
       <button onClick={onLogout} className="btn-logout">Logout</button>
     </div>
   );
