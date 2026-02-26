@@ -28,7 +28,7 @@ export default function Stats({ user }) {
     const getHabits = async () => {
       if (!user) return;
       const result = await HabitHelper.getHabitsByUserId(user.id);
-      setHabits(result);
+      setHabits(result.map(HabitHelper.mapHabit));
     };
 
     getCompletions();
@@ -54,7 +54,7 @@ export default function Stats({ user }) {
 
   const findStreaks = (habit) => {
     const completionDates = new Set(
-      completions.filter((c) => c.habitId === habit.id).map((c) => c.date),
+      completions.filter((c) => c.habit_id === habit.id).map((c) => c.date),
     );
     const parts = habit.createdAt.split("T")[0].split("-");
     const curr = new Date(parts[0], parts[1] - 1, parts[2]);
@@ -116,7 +116,7 @@ export default function Stats({ user }) {
   const getCompletionStats = (habit) => {
     const expectedCompletions = getExpectedCompletions(habit, habit.createdAt);
     const totalCompletions = completions.filter(
-      (c) => c.habitId === habit.id,
+      (c) => c.habit_id === habit.id,
     ).length;
     return [totalCompletions, expectedCompletions];
   };

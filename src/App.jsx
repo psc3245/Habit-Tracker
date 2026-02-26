@@ -23,7 +23,7 @@ export default function App() {
   });
 
   const onLoginSuccess = (user) => {
-    setUser(user);
+    setUser({...user, id: user.user_id});
     setLeftPageView("Profile");
     setRightPageView("Profile");
     setSelectedDate(new Date());

@@ -4,6 +4,7 @@ import CreateEditHabitModal from "./CreateEditHabitModal.jsx";
 import "../Style/HabitsPage.css";
 import Calendar from "./Calendar.jsx";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
+import * as HabitHelper from "../Helpers/HabitHelper.js";
 
 export default function HabitsPage({
   user,
@@ -13,32 +14,6 @@ export default function HabitsPage({
   selectedDate,
   setSelectedDate,
 }) {
-  const mapHabit = (habit) => {
-    const defaultVal =
-      habit.type === "slider"
-        ? Math.floor(((habit.sliderMin || 1) + (habit.target || 10)) / 2)
-        : 0;
-
-    return {
-      id: habit.id,
-      name: habit.name,
-      completed: false,
-      type: habit.type || "checkbox",
-      target: habit.target || 1,
-      recurrence: habit.recurrence,
-      value: defaultVal,
-      defaultValue: defaultVal,
-      hasTags: (habit.availableTags ?? []).length > 0,
-      availableTags: habit.availableTags ?? [],
-      selectedTag: null,
-      createdAt: habit.createdAt,
-      sliderMin: habit.sliderMin,
-      colorLow: habit.colorLow,
-      colorMid: habit.colorMid,
-      colorHigh: habit.colorHigh,
-    };
-  };
-
   const initialHabits = [
     {
       id: "10000000000",
@@ -98,9 +73,7 @@ export default function HabitsPage({
   ];
 
   const [habits, setHabits] = useState([]);
-
   const [pendingCompletions, setPendingCompletions] = useState({});
-
   const [habitInfo, setHabitInfo] = useState(null);
 
   const syncPendingCompletions = async () => {
@@ -109,9 +82,10 @@ export default function HabitsPage({
     const entries = Object.entries(pendingCompletions);
 
     for (const [habitId, update] of entries) {
+
       if (update.action === "create") {
         await CompletionHelper.createCompletion(
-          Number(habitId),
+          habitId,
           user.id,
           update.date,
           update.selectedTag || null,
@@ -120,7 +94,7 @@ export default function HabitsPage({
       } else if (update.action === "delete") {
         await CompletionHelper.deleteCompletionByHabitAndDate(
           user.id,
-          Number(habitId),
+          habitId,
           update.date,
         );
       }
@@ -137,7 +111,7 @@ export default function HabitsPage({
 
     async function loadHabits() {
       const backendHabits = await getHabitsByUserId(user.id);
-      const mapped = backendHabits.map(mapHabit);
+      const mapped = backendHabits.map(HabitHelper.mapHabit);
       setHabits(mapped);
     }
 
@@ -204,7 +178,7 @@ export default function HabitsPage({
 
       const completionMap = {};
       completions.forEach((c) => {
-        completionMap[c.habitId] = c;
+        completionMap[c.habit_id] = c;
       });
 
       setHabits((currentHabits) => {
@@ -225,11 +199,10 @@ export default function HabitsPage({
             return {
               ...habit,
               completed: isCompleted,
-              value: completion.value,
-              selectedTag: completion.selectedTag,
+              value: Number(completion.value),
+              selectedTag: completion.selected_tag,
             };
           }
-          console.log("No completion, using defaultValue:", habit.defaultValue);
           return {
             ...habit,
             completed: false,
@@ -241,7 +214,7 @@ export default function HabitsPage({
     }
 
     loadCompletionsForDate();
-  }, [selectedDate, user?.id,]);
+  }, [selectedDate, user?.id]);
 
   const updateHabitValue = (id, newValue) => {
     const habit = habits.find((h) => h.id === id);
@@ -271,7 +244,9 @@ export default function HabitsPage({
     const compareDate = new Date(date);
     compareDate.setHours(0, 0, 0, 0);
 
-    if (habitDate > compareDate) return false;
+    if (habitDate > compareDate) {
+      return false;
+    }
     if (!habit.recurrence) return true;
 
     const dayCheck = habit.recurrence.days.includes(date.getDay());
@@ -354,7 +329,7 @@ export default function HabitsPage({
               hasTags={habit.hasTags}
               tag={habit.selectedTag}
               availableTags={habit.availableTags}
-              value={habit.value || 0}
+              value={habit.value|| 0}
               target={habit.target || 1}
               recurrence={habit.recurrence}
               onToggle={() => toggleHabit(habit.id)}

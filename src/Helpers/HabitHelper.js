@@ -1,7 +1,37 @@
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
+export function mapHabit(habit) {
+    const defaultVal =
+      habit.type === "slider"
+        ? Math.floor(((habit.slider_min || 1) + (habit.target || 10)) / 2)
+        : 0;
+
+    return {
+      id: habit.habit_id,
+      name: habit.name,
+      completed: false,
+      type: habit.type || "checkbox",
+      target: Number(habit.target) || 1,
+      recurrence: {
+        interval: Number(habit.recurrence_interval),
+        days: habit.recurrence_days.map(Number),
+      },
+      value: Number(defaultVal),
+      defaultValue: defaultVal,
+      hasTags: (habit.available_tags ?? []).length > 0,
+      availableTags: habit.available_tags ?? [],
+      selectedTag: null,
+      createdAt: habit.created_at,
+      sliderMin: habit.slider_min,
+      colorLow: habit.color_low,
+      colorMid: habit.color_mid,
+      colorHigh: habit.color_high,
+    };
+  };
+
 export async function onCreateHabit(habit) {
   try {
+    console.log(habit.createdAt);
     const createdAt = new Date(habit.createdAt);
     createdAt.setHours(0, 0, 0, 0);
     const createdAtISO = createdAt.toISOString();

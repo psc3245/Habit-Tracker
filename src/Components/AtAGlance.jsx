@@ -26,7 +26,8 @@ export default function AtAGlance({ user, selectedDate }) {
     timeframe === "weekly"
       ? getWeekDateRange(selectedDate)
       : getMonthDateRange(selectedDate);
-  const today = new Date().setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   useEffect(() => {
     const getCompletions = async () => {
@@ -46,7 +47,7 @@ export default function AtAGlance({ user, selectedDate }) {
     const getHabits = async () => {
       if (!user) return;
       const result = await HabitHelper.getHabitsByUserId(user.id);
-      setHabits(result);
+      setHabits(result.map(HabitHelper.mapHabit));
     };
 
     getCompletions();
@@ -64,7 +65,7 @@ export default function AtAGlance({ user, selectedDate }) {
   );
 
   const getHabitSummary = (habit, startDate, endDate) => {
-    const habitCompletions = completions.filter((c) => c.habitId === habit.id);
+    const habitCompletions = completions.filter((c) => c.habit_id === habit.id);
     if (habit.type === "checkbox") {
       return {
         completionRatio: [
@@ -102,7 +103,7 @@ export default function AtAGlance({ user, selectedDate }) {
     if (completions.length === 0) return [0, habit.target];
     const avgCompletion =
       completions.reduce((accumulator, completion) => {
-        return (accumulator += completion.value);
+        return (accumulator += Number(completion.value));
       }, 0) / completions.length;
     return [avgCompletion, habit.target];
   };
@@ -111,7 +112,7 @@ export default function AtAGlance({ user, selectedDate }) {
     const expected = getExpectedCompletions(habit, startDate, endDate);
     const numCompletions = completions.reduce((accumulator, completion) => {
       if (habit.type != "slider")
-        return completion.value >= habit.target ? accumulator + 1 : accumulator;
+        return Number(completion.value) >= habit.target ? accumulator + 1 : accumulator;
       else return completion.value != null ? accumulator + 1 : accumulator;
     }, 0);
     return [numCompletions, expected];
