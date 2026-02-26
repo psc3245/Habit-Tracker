@@ -91,6 +91,7 @@ export default function CreateEditHabitModal({
         interval: interval,
         days: recurrenceDays,
       },
+      createdAt: selectedDate,
       target:
         habitType === "slider" ? parseInt(sliderMax) : parseInt(target) || 1,
       availableTags: hasTags ? customTags : [],

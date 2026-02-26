@@ -2,7 +2,7 @@ const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export async function onCreateHabit(habit) {
   try {
-    const createdAt = new Date();
+    const createdAt = new Date(habit.createdAt);
     createdAt.setHours(0, 0, 0, 0);
     const createdAtISO = createdAt.toISOString();
 
@@ -60,7 +60,7 @@ export async function getHabitsByUserId(userId) {
 
 export async function onUpdateHabit(habit, habitId) {
   try {
-    const createdAt = new Date();
+    const createdAt = new Date(habit.createdAt);
     createdAt.setHours(0, 0, 0, 0);
     const createdAtISO = createdAt.toISOString();
 

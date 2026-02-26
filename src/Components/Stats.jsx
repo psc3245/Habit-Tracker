@@ -56,7 +56,8 @@ export default function Stats({ user }) {
     const completionDates = new Set(
       completions.filter((c) => c.habitId === habit.id).map((c) => c.date),
     );
-    const curr = new Date(habit.createdAt);
+    const parts = habit.createdAt.split("T")[0].split("-");
+    const curr = new Date(parts[0], parts[1] - 1, parts[2]);
     let streak = 0;
     let longestStreak = 0;
     let longestStreakStart = null;
