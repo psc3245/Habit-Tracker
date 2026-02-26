@@ -10,6 +10,7 @@ import AtAGlance from "./Components/AtAGlance.jsx";
 import * as HabitHelper from "./Helpers/HabitHelper.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Info from "./Components/HomePage/Info.jsx";
+import Stats from "./Components/Stats.jsx";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -92,8 +93,9 @@ export default function App() {
                 {rightPageView === "Info" && <Info user={user} />}
                 {rightPageView === "Stats" && (
                   <div className="placeholder-page">
-                    <h2 className="page-title">Statistics</h2>
-                    <p>Stats and analytics coming soon...</p>
+                    <Stats
+                    user={user}
+                    />
                   </div>
                 )}
                 {rightPageView === "Glance" && (
