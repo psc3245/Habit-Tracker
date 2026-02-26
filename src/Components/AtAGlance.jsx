@@ -178,7 +178,7 @@ export default function AtAGlance({ user, selectedDate }) {
                           toggleHabit(habit.id);
                         }}
                       >
-                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                        {expandedHabits.has(habit.id) ? "▼" : "▲"}
                       </button>
                     </div>
                   </div>
@@ -206,7 +206,7 @@ export default function AtAGlance({ user, selectedDate }) {
                           toggleHabit(habit.id);
                         }}
                       >
-                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                        {expandedHabits.has(habit.id) ? "▼" : "▲"}
                       </button>
                     </div>
                   </div>
@@ -245,7 +245,7 @@ export default function AtAGlance({ user, selectedDate }) {
                           toggleHabit(habit.id);
                         }}
                       >
-                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                        {expandedHabits.has(habit.id) ? "▼" : "▲"}
                       </button>
                     </div>
                   </div>
@@ -273,7 +273,7 @@ export default function AtAGlance({ user, selectedDate }) {
                           toggleHabit(habit.id);
                         }}
                       >
-                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                        {expandedHabits.has(habit.id) ? "▼" : "▲"}
                       </button>
                     </div>
                   </div>
@@ -312,7 +312,7 @@ export default function AtAGlance({ user, selectedDate }) {
                           toggleHabit(habit.id);
                         }}
                       >
-                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                        {expandedHabits.has(habit.id) ? "▼" : "▲"}
                       </button>
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function AtAGlance({ user, selectedDate }) {
                           toggleHabit(habit.id);
                         }}
                       >
-                        {expandedHabits.has(habit.id) ? "▲" : "▼"}
+                        {expandedHabits.has(habit.id) ? "▼" : "▲"}
                       </button>
                     </div>
                   </div>

@@ -147,7 +147,6 @@ export default function HabitsPage({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-
   const toggleHabit = async (id) => {
     const habit = habits.find((h) => h.id === id);
     if (!habit || !user) return;
@@ -242,7 +241,7 @@ export default function HabitsPage({
     }
 
     loadCompletionsForDate();
-  }, [selectedDate, user?.id, habits.length]);
+  }, [selectedDate, user?.id,]);
 
   const updateHabitValue = (id, newValue) => {
     const habit = habits.find((h) => h.id === id);
@@ -327,14 +326,13 @@ export default function HabitsPage({
               isOpen={isCalendarOpen}
               onClose={() => setIsCalendarOpen(false)}
             />
-            
           </div>
           <button
-              className="daily-date"
-              onClick={() => setSelectedDate(new Date())}
-            >
-              Today
-            </button>
+            className="daily-date"
+            onClick={() => setSelectedDate(new Date())}
+          >
+            Today
+          </button>
         </div>
         {isCalendarOpen && (
           <div
@@ -374,7 +372,10 @@ export default function HabitsPage({
       <CreateEditHabitModal
         user={user}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setHabitInfo(null);
+        }}
         onCreateHabit={onCreateHabit}
         onUpdateHabit={onUpdateHabit}
         setHabits={setHabits}

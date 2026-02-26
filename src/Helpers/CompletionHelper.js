@@ -62,6 +62,27 @@ export async function getCompletionsByUserIdAndDate(userId, date) {
   }
 }
 
+export async function getCompletionsByUserId(userId) {
+  try {
+    const res = await fetch(
+      `${backend_base_url}/completions/user?id=${userId}`,
+      {method: "GET", headers: { "Content-Type": "application/json" } },
+    );
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(
+        err.error ||
+          `Fetch completions failed for userId ${userId} and ${date.toISOString()}`,
+      );
+    }
+    const completions = await res.json();
+    return completions;
+  } catch (err) {
+    console.error(err.message);
+    return [];
+  }
+}
+
 export async function getCompletionsByUserIdAndDateRange(
   userId,
   startDate,
