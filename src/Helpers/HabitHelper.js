@@ -3,7 +3,7 @@ const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 export function mapHabit(habit) {
     const defaultVal =
       habit.type === "slider"
-        ? Math.floor(((habit.slider_min || 1) + (habit.target || 10)) / 2)
+        ? Math.floor(((Number(habit.slider_min) || 1) + (Number(habit.target) || 10)) / 2)
         : 0;
 
     return {
