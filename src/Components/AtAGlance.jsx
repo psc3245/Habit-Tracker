@@ -134,7 +134,7 @@ export default function AtAGlance({ user, selectedDate }) {
         {user ? (
           <>
             <div className="glance-header">
-              <h2 className="glance-title">{user.username}'s</h2>
+              <h2 className="glance-title">{user.first_name}'s</h2>
               <select
                 className="glance-timeframe-select"
                 name="timeframe"
