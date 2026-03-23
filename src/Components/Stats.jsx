@@ -147,7 +147,7 @@ export default function Stats({ user }) {
     <div className="stats-page">
       {user ? (
         <div>
-          <h2 className="stats-title">{user.username}'s habit statistics</h2>
+          <h2 className="stats-title">{user.first_name}'s habit statistics: </h2>
           <div className="stats-list">
             {Object.values(completionStats).map((stat) => (
               <div key={stat.habit.id} className="stats-habit-card">

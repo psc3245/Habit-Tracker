@@ -31,7 +31,6 @@ export function mapHabit(habit) {
 
 export async function onCreateHabit(habit) {
   try {
-    console.log(habit.createdAt);
     const createdAt = new Date(habit.createdAt);
     createdAt.setHours(0, 0, 0, 0);
     const createdAtISO = createdAt.toISOString();
@@ -80,7 +79,6 @@ export async function getHabitsByUserId(userId) {
       throw new Error(err.error || "Fetch habits failed");
     }
     const habits = await res.json();
-    console.log(habits);
     return habits;
   } catch (err) {
     console.error(err.message);

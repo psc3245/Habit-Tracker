@@ -3,7 +3,9 @@ import "../../Style/LoginSignUp.css";
 
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
-export default function SignUpMenu({onSignUpSuccess}) {
+export default function SignUpMenu({ onSignUpSuccess }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -25,7 +27,7 @@ export default function SignUpMenu({onSignUpSuccess}) {
       const res = await fetch(`${backend_base_url}/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, pass: password, dob }),
+        body: JSON.stringify({ username, email, pass: password, dob, firstName, lastName }),
       });
 
       if (!res.ok) {
@@ -51,6 +53,8 @@ export default function SignUpMenu({onSignUpSuccess}) {
       password,
       email,
       dob,
+      firstName,
+      lastName,
     });
 
     setUsername("");
@@ -60,6 +64,8 @@ export default function SignUpMenu({onSignUpSuccess}) {
     setDay("");
     setYear("");
     setDob("");
+    setFirstName("");
+    setLastName("");
   };
 
   const handleCancel = () => {
@@ -70,80 +76,118 @@ export default function SignUpMenu({onSignUpSuccess}) {
     setDay("");
     setYear("");
     setDob("");
+    setFirstName("");
+    setLastName("");
   };
 
   return (
-    <div className="login-container">
-      {(
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="form-group form-group-row">
+          <div className="form-group-half">
+            <label htmlFor="firstName">First Name</label>
             <input
-              id="email"
+              id="firstName"
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               className="form-input"
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="username-signup">Username</label>
+          <div className="form-group-half">
+            <label htmlFor="lastName">Last Name</label>
             <input
-              id="username-signup"
+              id="lastName"
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               className="form-input"
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password-signup">Password</label>
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="username-signup">Username</label>
+          <input
+            id="username-signup"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password-signup">Password</label>
+          <input
+            id="password-signup"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-input"
+          />
+        </div>
+        <div className="form-group dob-group">
+          <label>Date of Birth</label>
+          <div className="dob-row">
+            <select value={month} onChange={(e) => setMonth(e.target.value)}>
+              <option value="">Month</option>
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((m, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {m}
+                </option>
+              ))}
+            </select>
+
+            <select value={day} onChange={(e) => setDay(e.target.value)}>
+              <option value="">Day</option>
+              {Array.from({ length: 31 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+
             <input
-              id="password-signup"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
+              type="number"
+              value={year}
+              placeholder="YYYY"
+              onChange={(e) => {
+                let val = e.target.value.slice(0, 4);
+                setYear(val);
+              }}
             />
           </div>
-          <div className="form-group dob-group">
-            <label>Date of Birth</label>
-            <div className="dob-row">
-              <select value={month} onChange={(e) => setMonth(e.target.value)}>
-                <option value="">Month</option>
-                {[
-                  "January","February","March","April","May","June",
-                  "July","August","September","October","November","December"
-                ].map((m, i) => (
-                  <option key={i + 1} value={i + 1}>{m}</option>
-                ))}
-              </select>
+        </div>
 
-              <select value={day} onChange={(e) => setDay(e.target.value)}>
-                <option value="">Day</option>
-                {Array.from({ length: 31 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>{i + 1}</option>
-                ))}
-              </select>
-
-              <input
-                type="number"
-                value={year}
-                placeholder="YYYY"
-                onChange={(e) => {
-                  let val = e.target.value.slice(0, 4);
-                  setYear(val);
-                }}
-              />
-            </div>
-          </div>
-
-          <button type="submit" className="btn-login">Sign Up</button>
-          {/* <button type="button" className="btn-cancel" onClick={handleCancel}>
+        <button type="submit" className="btn-login">
+          Sign Up
+        </button>
+        {/* <button type="button" className="btn-cancel" onClick={handleCancel}>
             Cancel
           </button> */}
-        </form>
-      )}
+      </form>
     </div>
   );
 }
