@@ -23,7 +23,7 @@ export default function App() {
   });
 
   const onLoginSuccess = (user) => {
-    setUser({...user, id: user.user_id});
+    setUser({ ...user, id: user.user_id });
     setLeftPageView("Profile");
     setRightPageView("Profile");
     setSelectedDate(new Date());
@@ -93,17 +93,12 @@ export default function App() {
                 {rightPageView === "Info" && <Info user={user} />}
                 {rightPageView === "Stats" && (
                   <div className="placeholder-page">
-                    <Stats
-                    user={user}
-                    />
+                    <Stats user={user} />
                   </div>
                 )}
                 {rightPageView === "Glance" && (
                   <div className="placeholder-page">
-                    <AtAGlance
-                      user={user}
-                      selectedDate={selectedDate}
-                    />
+                    <AtAGlance user={user} selectedDate={selectedDate} />
                   </div>
                 )}
                 {rightPageView === "SignUp" && (

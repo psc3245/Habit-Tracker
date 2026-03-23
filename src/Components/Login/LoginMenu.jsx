@@ -44,7 +44,7 @@ export default function LoginMenu({ onLoginSuccess }) {
   };
 
   return (
-    <div className="login-container">
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height:"85%"}}>
       {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">

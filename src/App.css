@@ -87,7 +87,6 @@ li {
   border-radius: 0 6px 6px 0;
 }
 
-/* Notebook lines */
 .page::before {
   content: "";
   position: absolute;
@@ -103,7 +102,6 @@ li {
   z-index: 0;
 }
 
-/* Red margin line */
 .page::after {
   content: "";
   position: absolute;
@@ -123,17 +121,16 @@ li {
   box-shadow: inset -2px 0 4px rgba(0,0,0,0.1);
 }
 
-/* Page content */
 .page-content {
   position: relative;
   z-index: 1;
-  padding: 60px 40px 30px 60px; /* Extra top padding for notebook margin */
+  padding: 40px 40px 30px 40px;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
+  margin-left: 5px;
 }
 
-/* Custom scrollbar */
 .page-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -151,7 +148,6 @@ li {
   background: #b5a688;
 }
 
-/* Placeholder page styles */
 .placeholder-page {
   display: flex;
   flex-direction: column;
