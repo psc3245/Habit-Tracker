@@ -13,6 +13,7 @@ export default function CreateEditHabitModal({
   setHabits,
   selectedDate,
   habitInfo,
+  handleDeleteHabit,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [habitId, setHabitId] = useState("");
@@ -304,9 +305,20 @@ export default function CreateEditHabitModal({
               <>
                 <div className="form-group">
                   <label>Rating Range</label>
-                  <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "12px",
+                      alignItems: "center",
+                    }}
+                  >
                     <div style={{ flex: 1 }}>
-                      <label htmlFor="slider-min" style={{ fontSize: "12px", color: "#666" }}>Min</label>
+                      <label
+                        htmlFor="slider-min"
+                        style={{ fontSize: "12px", color: "#666" }}
+                      >
+                        Min
+                      </label>
                       <input
                         id="slider-min"
                         type="number"
@@ -315,7 +327,8 @@ export default function CreateEditHabitModal({
                         onBlur={(e) => {
                           const newMin = parseInt(e.target.value);
                           const currentMax = parseInt(sliderMax);
-                          if (newMin >= currentMax) setSliderMin((currentMax - 1).toString());
+                          if (newMin >= currentMax)
+                            setSliderMin((currentMax - 1).toString());
                         }}
                         className="form-input"
                         min="1"
@@ -324,7 +337,12 @@ export default function CreateEditHabitModal({
                     </div>
                     <span style={{ paddingTop: "20px" }}>to</span>
                     <div style={{ flex: 1 }}>
-                      <label htmlFor="slider-max" style={{ fontSize: "12px", color: "#666" }}>Max</label>
+                      <label
+                        htmlFor="slider-max"
+                        style={{ fontSize: "12px", color: "#666" }}
+                      >
+                        Max
+                      </label>
                       <input
                         id="slider-max"
                         type="number"
@@ -333,7 +351,8 @@ export default function CreateEditHabitModal({
                         onBlur={(e) => {
                           const newMax = parseInt(e.target.value);
                           const currentMin = parseInt(sliderMin);
-                          if (newMax <= currentMin) setSliderMax((currentMin + 1).toString());
+                          if (newMax <= currentMin)
+                            setSliderMax((currentMin + 1).toString());
                         }}
                         className="form-input"
                         min="2"
@@ -341,23 +360,65 @@ export default function CreateEditHabitModal({
                       />
                     </div>
                   </div>
-                  <p className="form-hint">Set the minimum (1-99) and maximum (2-100) values for your rating scale</p>
+                  <p className="form-hint">
+                    Set the minimum (1-99) and maximum (2-100) values for your
+                    rating scale
+                  </p>
                 </div>
 
                 <div className="form-group">
                   <label>Gradient Colors</label>
                   <div style={{ display: "flex", gap: "12px" }}>
-                    <select id="color-low" value={colorLow} onChange={(e) => setColorLow(e.target.value)} className="type-select">
-                      {colorOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                    <select
+                      id="color-low"
+                      value={colorLow}
+                      onChange={(e) => setColorLow(e.target.value)}
+                      className="type-select"
+                    >
+                      {colorOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
                     </select>
-                    <select id="color-mid" value={colorMid} onChange={(e) => setColorMid(e.target.value)} className="type-select">
-                      {colorOptions.filter((opt) => opt.value !== colorLow && opt.value !== colorHigh).map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                    <select
+                      id="color-mid"
+                      value={colorMid}
+                      onChange={(e) => setColorMid(e.target.value)}
+                      className="type-select"
+                    >
+                      {colorOptions
+                        .filter(
+                          (opt) =>
+                            opt.value !== colorLow && opt.value !== colorHigh,
+                        )
+                        .map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
                     </select>
-                    <select id="color-high" value={colorHigh} onChange={(e) => setColorHigh(e.target.value)} className="type-select">
-                      {colorOptions.filter((opt) => opt.value !== colorLow && opt.value !== colorMid).map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                    <select
+                      id="color-high"
+                      value={colorHigh}
+                      onChange={(e) => setColorHigh(e.target.value)}
+                      className="type-select"
+                    >
+                      {colorOptions
+                        .filter(
+                          (opt) =>
+                            opt.value !== colorLow && opt.value !== colorMid,
+                        )
+                        .map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
                     </select>
                   </div>
-                  <p className="form-hint">Choose colors for low, medium, and high values</p>
+                  <p className="form-hint">
+                    Choose colors for low, medium, and high values
+                  </p>
                 </div>
               </>
             )}
@@ -386,22 +447,36 @@ export default function CreateEditHabitModal({
                 <option value="weekly">Weekly</option>
                 <option value="custom">Custom</option>
               </select>
-              <p className="form-hint">How often will this habit be completed?</p>
+              <p className="form-hint">
+                How often will this habit be completed?
+              </p>
               <div className="modal-actions">
                 {selectedRecurrence === "custom" && (
                   <div className="custom-schedule-preview">
-                    <button type="button" onClick={() => setToggleCustomRecurrence(true)} className="btn-edit">
-                      <span className="btn-edit-label">Current Schedule ✏️</span>
+                    <button
+                      type="button"
+                      onClick={() => setToggleCustomRecurrence(true)}
+                      className="btn-edit"
+                    >
+                      <span className="btn-edit-label">
+                        Current Schedule ✏️
+                      </span>
                     </button>
                     <div className="custom-schedule-details">
                       <p className="form-hint">
-                        Recurring every {interval === 1 ? "week " : `${interval} weeks `}
-                        on the following {recurrenceDays.length === 1 ? "day" : "days"}
+                        Recurring every{" "}
+                        {interval === 1 ? "week " : `${interval} weeks `}
+                        on the following{" "}
+                        {recurrenceDays.length === 1 ? "day" : "days"}
                       </p>
                       <div className="custom-schedule-days">
                         {recurrenceDays.map((day) => (
                           <p key={day} className="schedule-day">
-                            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day]}
+                            {
+                              ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+                                day
+                              ]
+                            }
                           </p>
                         ))}
                       </div>
@@ -412,8 +487,33 @@ export default function CreateEditHabitModal({
             </div>
 
             <div className="modal-actions">
-              <button type="button" onClick={handleCancel} className="btn-cancel">Cancel</button>
-              <button type="submit" className="btn-create">{isEditing ? "Save Changes" : "Create Habit"}</button>
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="btn-cancel"
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn-create">
+                {isEditing ? "Save Changes" : "Create Habit"}
+              </button>
+            </div>
+            <div className="modal-actions">
+              {isEditing ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleDeleteHabit(habitId);
+                    setHabits(prev => prev.filter(h => h.id !== habitId));
+                    onClose();
+                  }}
+                  className="btn-delete"
+                >
+                  Delete Habit
+                </button>
+              ) : (
+                <></>
+              )}
             </div>
           </form>
         </div>

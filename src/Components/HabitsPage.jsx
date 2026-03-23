@@ -356,6 +356,7 @@ export default function HabitsPage({
         setHabits={setHabits}
         selectedDate={selectedDate}
         habitInfo={habitInfo}
+        handleDeleteHabit={HabitHelper.onDeleteHabit}
       />
     </div>
   );

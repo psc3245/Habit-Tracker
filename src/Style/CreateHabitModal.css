@@ -336,3 +336,18 @@
 .btn-edit:focus {
   outline: none;
 }
+
+.btn-delete {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background-color: red;
+}
+.btn-delete:hover {
+  background-color: #666;
+}
