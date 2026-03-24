@@ -1,10 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../Style/UserInfoUpdate.css";
 
-export default function RequiredUserUpdate({
-  user,
-  setUser,
-}) {
+export default function UserInfoUpdate({ user, setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -15,8 +12,7 @@ export default function RequiredUserUpdate({
   const [year, setYear] = useState("");
   const [dob, setDob] = useState("");
 
-  const handleSubmit = (userData) => {
-  };
+  const handleSubmit = (userData) => {};
 
   useEffect(() => {
     if (month && day && year) {
@@ -27,23 +23,25 @@ export default function RequiredUserUpdate({
   }, [month, day, year]);
 
   return (
-    <div>
+    <div className="user-update-div">
       <form onSubmit={handleSubmit} className="user-update-form">
-          <div className="form-group">
-            <label htmlFor="firstName"></label>
-            <input
-              id="firstName"
-              type="text"
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="firstName">First Name</label>
+          <input
+            className="form-input"
+            id="firstName"
+            type="text"
+            value={firstName}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
+          />
+        </div>
 
         <div className="form-group">
-          <label htmlFor="lastName"></label>
+          <label htmlFor="lastName">Last Name</label>
           <input
+            className="form-input"
             id="lastName"
             type="text"
             value={lastName}
@@ -53,10 +51,10 @@ export default function RequiredUserUpdate({
           />
         </div>
 
-
         <div className="form-group">
-          <label htmlFor="username"></label>
+          <label htmlFor="username">Username</label>
           <input
+            className="form-input"
             id="username"
             type="text"
             value={username}
@@ -66,10 +64,10 @@ export default function RequiredUserUpdate({
           />
         </div>
 
-
         <div className="form-group">
-          <label htmlFor="email"></label>
+          <label htmlFor="email">Email</label>
           <input
+            className="form-input"
             id="email"
             type="text"
             value={email}

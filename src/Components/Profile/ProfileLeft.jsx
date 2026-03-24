@@ -1,16 +1,13 @@
 import "../../Style/Profile.css";
+import UserInfoUpdate from "../UserInfoUpdate.jsx";
 
-export default function ProfileLeft({ user, onLogout }) {
+export default function ProfileLeft({ user, setUser, onLogout }) {
   if (!user) return null;
 
   return (
     <div className="profile-container">
-      <h2>User Profile</h2>
-      <p><strong>Username:</strong> {user.username}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Date of Birth:</strong> {user.date_of_birth}</p>
-      <p><strong>Password: </strong> {user.password} </p>
-      <button onClick={onLogout} className="btn-logout">Logout</button>
+      <h2>Profile Page for {user.username}</h2>
+      {/* <UserInfoUpdate user={user} setUser={setUser}/> */}
     </div>
   );
 }

@@ -79,7 +79,7 @@ export default function App() {
                   <LoginMenu onLoginSuccess={onLoginSuccess} />
                 )}
                 {leftPageView === "Profile" && user && (
-                  <ProfileLeft user={user} onLogout={onLogout} />
+                  <ProfileLeft user={user} setUser={setUser} onLogout={onLogout} />
                 )}
               </div>
             </div>
