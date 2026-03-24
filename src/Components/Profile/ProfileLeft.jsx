@@ -7,7 +7,7 @@ export default function ProfileLeft({ user, setUser, onLogout }) {
   return (
     <div className="profile-container">
       <h2>Profile Page for {user.username}</h2>
-      {/* <UserInfoUpdate user={user} setUser={setUser}/> */}
+      <UserInfoUpdate user={user} setUser={setUser}/>
     </div>
   );
 }
