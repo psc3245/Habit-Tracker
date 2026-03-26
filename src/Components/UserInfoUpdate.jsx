@@ -4,7 +4,6 @@ import * as UserHelper from "../Helpers/UserHelper.js";
 
 export default function UserInfoUpdate({ user, setUser }) {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
