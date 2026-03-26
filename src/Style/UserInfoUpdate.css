@@ -1,0 +1,126 @@
+.user-update-div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+}
+
+.user-update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.user-update-div .form-group {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-update-div .form-input {
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: transparent;
+    color: #1a1a1a;
+    box-sizing: border-box;
+    width: 100%;
+    transition: border-color 0.2s ease;
+}
+.user-update-div .form-input:hover {
+    border: 2px solid #1a1a1a;
+}
+
+
+.user-update-form-label {
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.user-update-div .form-input:focus {
+    outline: none;
+    border-color: #ffd966;
+}
+
+.dob-group {
+    align-items: center;
+}
+
+.dob-row {
+    display: flex;
+    gap: 8px;
+}
+
+.user-update-div .dob-row select,
+.user-update-div .dob-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #1a1a1a;
+    background: transparent;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+    border-radius: 10px;
+}
+
+.user-update-div .dob-row select:hover,
+.user-update-div .dob-row input:hover {
+    border: 2px solid #1a1a1a;
+}
+
+
+.user-update-div .dob-row select:focus,
+.user-update-div .dob-row input:focus {
+    outline: none;
+    border-color: #ffd966;
+}
+
+.user-update-div .modal-actions {
+    grid-column: 1 / -1;
+}
+
+.btn-submit,
+.btn-reset {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+}
+
+.btn-submit {
+    background: #ffd966;
+    border-color: #ffd966;
+}
+
+.btn-reset {
+    background-color: lightgray;
+    color: red;
+}
+
+.btn-submit:hover,
+.btn-reset:hover {
+    background-color: #ffe699;
+    border: white;
+}
+
+.btn-reset:hover {
+    background: red;
+    border-color: red;
+    color: #1a1a1a;
+}
+
+.btn-submit:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

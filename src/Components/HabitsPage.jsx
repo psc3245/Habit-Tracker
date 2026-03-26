@@ -272,7 +272,7 @@ export default function HabitsPage({
   return (
     <div className="daily-page">
       <div className="page-header">
-        <h2 className="daily-title">{user.first_name}'s Daily Habits</h2>
+        <h2 className="daily-title">{user ? user.first_name : ""} {user ? "'s " : ""} Daily Habits</h2>
         <div className="daily-habit-btns">
           <button
             className="new-habit-btn"

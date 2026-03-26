@@ -1,62 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../Style/UserInfoUpdate.css";
+import * as UserHelper from "../Helpers/UserHelper.js";
+import ResetPasswordModal from "./ResetPasswordModal.jsx";
 
-export default function RequiredUserUpdate({
-  user,
-  setUser,
-}) {
+export default function UserInfoUpdate({ user, setUser }) {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
-  const [dob, setDob] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
 
-  const handleSubmit = (userData) => {
+  const dob =
+    month && day && year
+      ? `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`
+      : "";
+
+  const handleSubmit = async () => {
+    const updated = await UserHelper.updateUser({
+      userId: user.id,
+      username,
+      firstName,
+      lastName,
+      email,
+      dob,
+    });
+    if (updated) setUser({ ...updated, id: updated.user_id });
   };
 
   useEffect(() => {
-    if (month && day && year) {
-      const m = month.toString().padStart(2, "0");
-      const d = day.toString().padStart(2, "0");
-      setDob(`${year}-${m}-${d}`);
+    setUsername(user.username);
+    setFirstName(user.first_name);
+    setLastName(user.last_name);
+    setEmail(user.email);
+    if (user.date_of_birth) {
+      const [year, month, day] = user.date_of_birth.split("T")[0].split("-");
+      setMonth(parseInt(month));
+      setDay(parseInt(day));
+      setYear(year);
     }
-  }, [month, day, year]);
+  }, [user]);
+
+  const hasChanges = !UserHelper.compareNewAndOldInfo(user, {
+    username,
+    firstName,
+    lastName,
+    email,
+    dob,
+  });
 
   return (
-    <div>
+    <div className="user-update-div">
       <form onSubmit={handleSubmit} className="user-update-form">
-          <div className="form-group">
-            <label htmlFor="firstName"></label>
-            <input
-              id="firstName"
-              type="text"
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-            />
-          </div>
-
         <div className="form-group">
-          <label htmlFor="lastName"></label>
+          <p className="user-update-form-label">
+            <strong> Username </strong>
+          </p>
           <input
-            id="lastName"
-            type="text"
-            value={lastName}
-            onChange={(e) => {
-              setLastName(e.target.value);
-            }}
-          />
-        </div>
-
-
-        <div className="form-group">
-          <label htmlFor="username"></label>
-          <input
+            className="form-input"
             id="username"
             type="text"
             value={username}
@@ -66,10 +71,13 @@ export default function RequiredUserUpdate({
           />
         </div>
 
-
         <div className="form-group">
-          <label htmlFor="email"></label>
+          <p className="user-update-form-label">
+            <strong> Email </strong>
+          </p>
+
           <input
+            className="form-input"
             id="email"
             type="text"
             value={email}
@@ -79,8 +87,37 @@ export default function RequiredUserUpdate({
           />
         </div>
 
+        <div className="form-group">
+          <p className="user-update-form-label">
+            <strong> Name </strong>
+          </p>
+          <div className="dob-row">
+            <input
+              className="form-input"
+              id="firstName"
+              type="text"
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+            />
+            <input
+              className="form-input"
+              id="lastName"
+              type="text"
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+
         <div className="form-group dob-group">
-          <label>Date of Birth</label>
+          <p className="user-update-form-label">
+            <strong> Date of Birth </strong>
+          </p>
+
           <div className="dob-row">
             <select value={month} onChange={(e) => setMonth(e.target.value)}>
               <option value="">Month</option>
@@ -126,11 +163,43 @@ export default function RequiredUserUpdate({
         </div>
 
         <div className="modal-actions">
-          <button type="button" onClick={handleSubmit} className="btn-submit">
-            Enter
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="btn-submit"
+            disabled={!hasChanges}
+          >
+            Save Changes
           </button>
         </div>
       </form>
+
+      {successMessage && <p className="reset-success">{successMessage}</p>}
+
+      <button
+        type="button"
+        className="btn-reset"
+        disabled={isResetting}
+        onClick={() => setIsModalOpen(true)}
+      >
+        {" "}
+        <strong>RESET PASSWORD</strong>{" "}
+      </button>
+      {isModalOpen && (
+        <ResetPasswordModal
+          user={user}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => {
+            setIsModalOpen(false);
+            setIsResetting(true);
+            setSuccessMessage("Password reset successfully!");
+            setTimeout(() => {
+              setSuccessMessage("");
+              setIsResetting(false);
+            }, 3000);
+          }}
+        />
+      )}
     </div>
   );
 }
