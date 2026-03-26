@@ -68,22 +68,20 @@ export async function resetPassword(id, password, newPassword) {
     if (!current.ok) throw new Error("Failed to fetch current user");
     const existingUser = await current.json();
 
-    if (existingUser.password != password) {
-      throw new Error("Current password incorrect")
+    if (existingUser.password !== password) {
+      throw new Error("Current password incorrect");
     }
 
-    const res = await fetch(`${backend_base_url}/users/${userInfo.userId}`, {
+    const res = await fetch(`${backend_base_url}/users/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        password: newPassword
-      }),
+      body: JSON.stringify({ pass: newPassword }),
     });
 
     if (!res.ok) {
       const errText = await res.text();
       console.error("Backend error:", errText);
-      throw new Error("Update user failed");
+      throw new Error("Reset password failed");
     }
 
     return await res.json();

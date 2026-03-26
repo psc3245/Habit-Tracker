@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../Style/UserInfoUpdate.css";
 import * as UserHelper from "../Helpers/UserHelper.js";
+import ResetPasswordModal from "./ResetPasswordModal.jsx";
 
 export default function UserInfoUpdate({ user, setUser }) {
   const [username, setUsername] = useState("");
@@ -10,6 +11,9 @@ export default function UserInfoUpdate({ user, setUser }) {
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
 
   const dob =
     month && day && year
@@ -48,16 +52,6 @@ export default function UserInfoUpdate({ user, setUser }) {
     email,
     dob,
   });
-
-  useEffect(() => {
-    if (month && day && year) {
-      const m = month.toString().padStart(2, "0");
-      const d = day.toString().padStart(2, "0");
-      // setDob(`${year}-${m}-${d}`);
-    }
-  }, [month, day, year]);
-
-  const resetPassword = () => {};
 
   return (
     <div className="user-update-div">
@@ -180,10 +174,32 @@ export default function UserInfoUpdate({ user, setUser }) {
         </div>
       </form>
 
-      <button type="button" className="btn-reset" onClick={resetPassword}>
+      {successMessage && <p className="reset-success">{successMessage}</p>}
+
+      <button
+        type="button"
+        className="btn-reset"
+        disabled={isResetting}
+        onClick={() => setIsModalOpen(true)}
+      >
         {" "}
         <strong>RESET PASSWORD</strong>{" "}
       </button>
+      {isModalOpen && (
+        <ResetPasswordModal
+          user={user}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => {
+            setIsModalOpen(false);
+            setIsResetting(true);
+            setSuccessMessage("Password reset successfully!");
+            setTimeout(() => {
+              setSuccessMessage("");
+              setIsResetting(false);
+            }, 3000);
+          }}
+        />
+      )}
     </div>
   );
 }
