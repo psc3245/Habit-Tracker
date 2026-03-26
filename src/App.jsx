@@ -22,6 +22,11 @@ export default function App() {
     return today;
   });
 
+  const [displayMode, setDisplayMode] = useState("light");
+  const [leftDefaultPage, setLeftDefaultPage] = useState("profile");
+  const [rightDefaultPage, setRightDefaultPage] = useState("profile");
+  const [defaultHabitType, setDefaultHabitType] = useState("checkbox");
+
   const onLoginSuccess = (user) => {
     setUser({ ...user, id: user.user_id });
     setLeftPageView("Profile");
@@ -79,7 +84,11 @@ export default function App() {
                   <LoginMenu onLoginSuccess={onLoginSuccess} />
                 )}
                 {leftPageView === "Profile" && user && (
-                  <ProfileLeft user={user} setUser={setUser} onLogout={onLogout} />
+                  <ProfileLeft
+                    user={user}
+                    setUser={setUser}
+                    onLogout={onLogout}
+                  />
                 )}
               </div>
             </div>
@@ -105,7 +114,22 @@ export default function App() {
                   <SignUpMenu onSignUpSuccess={onLoginSuccess} />
                 )}
                 {rightPageView === "Profile" && user && (
-                  <ProfileRight user={user} onLogout={onLogout} />
+                  <ProfileRight
+  user={user}
+  onLogout={onLogout}
+  setLeftPageView={setLeftPageView}
+  setRightPageView={setRightPageView}
+  leftPageView={leftPageView}
+  rightPageView={rightPageView}
+  displayMode={displayMode}
+  setDisplayMode={setDisplayMode}
+  leftDefaultPage={leftDefaultPage}
+  setLeftDefaultPage={setLeftDefaultPage}
+  rightDefaultPage={rightDefaultPage}
+  setRightDefaultPage={setRightDefaultPage}
+  defaultHabitType={defaultHabitType}
+  setDefaultHabitType={setDefaultHabitType}
+/>
                 )}
               </div>
             </div>
