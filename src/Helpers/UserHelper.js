@@ -35,7 +35,7 @@ export function compareNewAndOldInfo(user, userInfo) {
 
 export async function updateUser(userInfo) {
   try {
-    const current = await fetch(`${backend_base_url}/users/${userInfo.id}`, {
+    const current = await fetch(`${backend_base_url}/users/${userInfo.userId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -47,13 +47,13 @@ export async function updateUser(userInfo) {
       return existingUser;
     }
 
-    const res = await fetch(`${backend_base_url}/users/${userInfo.id}`, {
+    const res = await fetch(`${backend_base_url}/users/${userInfo.userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: userInfo.username,
         email: userInfo.email,
-        dob: userInfo.dob,
+        dateOfBirth: userInfo.dob,
       }),
     });
 

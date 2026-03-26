@@ -17,15 +17,16 @@ export default function UserInfoUpdate({ user, setUser }) {
       ? `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`
       : "";
 
-  const handleSubmit = () => {
-    UserHelper.updateUser({
+  const handleSubmit = async () => {
+    const updated = await UserHelper.updateUser({
       userId: user.id,
-      username: username,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      dob: dob,
+      username,
+      firstName,
+      lastName,
+      email,
+      dob,
     });
+    if (updated) setUser({ ...updated, id: updated.user_id });
   };
 
   useEffect(() => {
