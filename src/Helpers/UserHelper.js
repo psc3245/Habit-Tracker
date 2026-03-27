@@ -90,3 +90,35 @@ export async function resetPassword(id, password, newPassword) {
     throw err;
   }
 }
+
+export async function deleteAccount(id, password) {
+    try {
+    const current = await fetch(`${backend_base_url}/users/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!current.ok) throw new Error("Failed to fetch current user");
+    const existingUser = await current.json();
+
+    if (existingUser.password !== password) {
+      throw new Error("Password incorrect");
+    }
+
+    const res = await fetch(`${backend_base_url}/users/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Backend error:", errText);
+      throw new Error("Delete Account Failed");
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error(err.message);
+    throw err;
+  }
+}

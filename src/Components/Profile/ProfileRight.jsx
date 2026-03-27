@@ -1,16 +1,40 @@
 import "../../Style/Profile.css";
+import Settings from "../Settings.jsx";
 
-export default function ProfileRight({ user, onLogout }) {
+export default function ProfileRight({
+  user,
+  onLogout,
+  setLeftPageView,
+  setRightPageView,
+  leftPageView,
+  rightPageView,
+  displayMode,
+  setDisplayMode,
+  leftDefaultPage,
+  setLeftDefaultPage,
+  rightDefaultPage,
+  setRightDefaultPage,
+  defaultHabitType,
+  setDefaultHabitType,
+}) {
   if (!user) return null;
 
   return (
-    <div className="profile-container">
-      <h2>User Profile</h2>
-      <p><strong>Username:</strong> {user.username}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Date of Birth:</strong> {user.date_of_birth}</p>
-      <p><strong>Password: </strong> {user.password} </p>
-      <button onClick={onLogout} className="btn-logout">Logout</button>
-    </div>
+    <Settings
+      user={user}
+      onLogout={onLogout}
+      setLeftPageView={setLeftPageView}
+      setRightPageView={setRightPageView}
+      leftPageView={leftPageView}
+      rightPageView={rightPageView}
+      displayMode={displayMode}
+      setDisplayMode={setDisplayMode}
+      leftDefaultPage={leftDefaultPage}
+      setLeftDefaultPage={setLeftDefaultPage}
+      rightDefaultPage={rightDefaultPage}
+      setRightDefaultPage={setRightDefaultPage}
+      defaultHabitType={defaultHabitType}
+      setDefaultHabitType={setDefaultHabitType}
+    />
   );
 }
