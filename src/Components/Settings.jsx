@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DeleteAccountModal from "./DeleteAccountModal.jsx";
 import "../Style/Settings.css";
 
 export default function Settings({
@@ -17,10 +18,7 @@ export default function Settings({
   defaultHabitType,
   setDefaultHabitType,
 }) {
-  const handleDeleteAccount = () => {
-    if (window.confirm("Are you sure? This cannot be undone.")) {
-    }
-  };
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
     <div className="settings-div">
@@ -83,7 +81,12 @@ export default function Settings({
         <button onClick={onLogout} className="btn-logout">
           Logout
         </button>
-        <button onClick={handleDeleteAccount} className="btn-delete-acc">
+        <button
+          onClick={() => {
+            setIsDeleteModalOpen(true);
+          }}
+          className="btn-delete-acc"
+        >
           <strong>DELETE ACCOUNT</strong>
         </button>
       </div>
