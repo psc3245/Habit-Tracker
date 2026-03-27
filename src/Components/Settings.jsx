@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
+import * as UserHelper from "../Helpers/UserHelper.js";
 import "../Style/Settings.css";
 
 export default function Settings({
@@ -90,6 +91,9 @@ export default function Settings({
           <strong>DELETE ACCOUNT</strong>
         </button>
       </div>
+      {isDeleteModalOpen && <DeleteAccountModal user={user} onClose={() => {
+        setIsDeleteModalOpen(false)
+      }} handleDeleteAccount={UserHelper.deleteAccount} onLogout={onLogout}/>}
     </div>
   );
 }
