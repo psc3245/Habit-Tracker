@@ -19,7 +19,7 @@ export default function NavBar({
           <button
             key={tab}
             className={`nav-tab ${leftPageView === tab ? "active" : ""}`}
-            onClick={() => onLeftPageChange(tab)}
+            onClick={() => onLeftPageChange(tab.toLowerCase())}
           >
             {tab}
           </button>
@@ -31,8 +31,8 @@ export default function NavBar({
         { !user && <button
           className="nav-auth-combined"
           onClick={() => {
-            onLeftPageChange("Login");
-            onRightPageChange("SignUp");
+            onLeftPageChange("login");
+            onRightPageChange("signup");
           }}
         >
           Login / Sign Up
@@ -40,8 +40,8 @@ export default function NavBar({
         {user && <button
         className="nav-auth-combined"
         onClick={() => {
-            onLeftPageChange("Profile");
-            onRightPageChange("Profile");
+            onLeftPageChange("profile");
+            onRightPageChange("profile");
           }}
         >
           Profile
@@ -54,7 +54,7 @@ export default function NavBar({
           <button
             key={tab}
             className={`nav-tab ${rightPageView === tab ? "active" : ""}`}
-            onClick={() => onRightPageChange(tab)}
+            onClick={() => onRightPageChange(tab.toLowerCase())}
           >
             {tab}
           </button>

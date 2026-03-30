@@ -11,11 +11,12 @@ import * as HabitHelper from "./Helpers/HabitHelper.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Info from "./Components/HomePage/Info.jsx";
 import Stats from "./Components/Stats.jsx";
+import * as SettingsHelper from "./Helpers/SettingsHelper.js";
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [leftPageView, setLeftPageView] = useState("Home");
-  const [rightPageView, setRightPageView] = useState("Info");
+  const [leftPageView, setLeftPageView] = useState("home");
+  const [rightPageView, setRightPageView] = useState("info");
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -27,11 +28,17 @@ export default function App() {
   const [rightDefaultPage, setRightDefaultPage] = useState("profile");
   const [defaultHabitType, setDefaultHabitType] = useState("checkbox");
 
-  const onLoginSuccess = (user) => {
+  const onLoginSuccess = async (user) => {
     setUser({ ...user, id: user.user_id });
-    setLeftPageView("Profile");
-    setRightPageView("Profile");
+    const settings = await SettingsHelper.loadSettingsForUser(user.user_id);
+    setDisplayMode(settings.display_mode);
+    setLeftDefaultPage(settings.left_default_page);
+    setRightDefaultPage(settings.right_default_page);
+    setDefaultHabitType(settings.default_habit_type);
+    setLeftPageView(settings.left_default_page);
+    setRightPageView(settings.right_default_page);
     setSelectedDate(new Date());
+    console.log(settings);
   };
 
   const onLogout = () => {
@@ -47,8 +54,8 @@ export default function App() {
         <button
           className="header"
           onClick={() => {
-            setLeftPageView("Home");
-            setRightPageView("Info");
+            setLeftPageView("home");
+            setRightPageView("info");
           }}
         >
           {" "}
@@ -69,8 +76,8 @@ export default function App() {
             {/* Left page */}
             <div className="page left-page">
               <div className="page-content">
-                {leftPageView === "Home" && <Home user={user} />}{" "}
-                {leftPageView === "Habits" && (
+                {leftPageView === "home" && <Home user={user} />}{" "}
+                {leftPageView === "habits" && (
                   <HabitsPage
                     user={user}
                     onCreateHabit={HabitHelper.onCreateHabit}
@@ -80,10 +87,10 @@ export default function App() {
                     setSelectedDate={setSelectedDate}
                   />
                 )}
-                {leftPageView === "Login" && (
+                {leftPageView === "login" && (
                   <LoginMenu onLoginSuccess={onLoginSuccess} />
                 )}
-                {leftPageView === "Profile" && user && (
+                {leftPageView === "profile" && user && (
                   <ProfileLeft
                     user={user}
                     setUser={setUser}
@@ -99,37 +106,37 @@ export default function App() {
             {/* Right page */}
             <div className="page right-page">
               <div className="page-content">
-                {rightPageView === "Info" && <Info user={user} />}
-                {rightPageView === "Stats" && (
+                {rightPageView === "info" && <Info user={user} />}
+                {rightPageView === "stats" && (
                   <div className="placeholder-page">
                     <Stats user={user} />
                   </div>
                 )}
-                {rightPageView === "Glance" && (
+                {rightPageView === "glance" && (
                   <div className="placeholder-page">
                     <AtAGlance user={user} selectedDate={selectedDate} />
                   </div>
                 )}
-                {rightPageView === "SignUp" && (
+                {rightPageView === "signup" && (
                   <SignUpMenu onSignUpSuccess={onLoginSuccess} />
                 )}
-                {rightPageView === "Profile" && user && (
+                {rightPageView === "profile" && user && (
                   <ProfileRight
-  user={user}
-  onLogout={onLogout}
-  setLeftPageView={setLeftPageView}
-  setRightPageView={setRightPageView}
-  leftPageView={leftPageView}
-  rightPageView={rightPageView}
-  displayMode={displayMode}
-  setDisplayMode={setDisplayMode}
-  leftDefaultPage={leftDefaultPage}
-  setLeftDefaultPage={setLeftDefaultPage}
-  rightDefaultPage={rightDefaultPage}
-  setRightDefaultPage={setRightDefaultPage}
-  defaultHabitType={defaultHabitType}
-  setDefaultHabitType={setDefaultHabitType}
-/>
+                    user={user}
+                    onLogout={onLogout}
+                    setLeftPageView={setLeftPageView}
+                    setRightPageView={setRightPageView}
+                    leftPageView={leftPageView}
+                    rightPageView={rightPageView}
+                    displayMode={displayMode}
+                    setDisplayMode={setDisplayMode}
+                    leftDefaultPage={leftDefaultPage}
+                    setLeftDefaultPage={setLeftDefaultPage}
+                    rightDefaultPage={rightDefaultPage}
+                    setRightDefaultPage={setRightDefaultPage}
+                    defaultHabitType={defaultHabitType}
+                    setDefaultHabitType={setDefaultHabitType}
+                  />
                 )}
               </div>
             </div>
