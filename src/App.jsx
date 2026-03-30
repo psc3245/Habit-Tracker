@@ -43,8 +43,8 @@ export default function App() {
 
   const onLogout = () => {
     setUser(null);
-    setLeftPageView("Login");
-    setRightPageView("SignUp");
+    setLeftPageView("login");
+    setRightPageView("signup");
     setSelectedDate(new Date());
   };
 

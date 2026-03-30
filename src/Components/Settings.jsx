@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
 import * as UserHelper from "../Helpers/UserHelper.js";
+import * as SettingsHelper from "../Helpers/SettingsHelper.js";
 import "../Style/Settings.css";
 
 export default function Settings({
@@ -26,14 +27,14 @@ export default function Settings({
       <h2 className="settings-title">Settings</h2>
 
       <div className="settings-section">
-        <p className="settings-label">Display Mode</p>
+        <p className="settings-label">Display Mode <i>(Coming Soon)</i></p>
         <select
           className="settings-select"
           value={displayMode}
           onChange={(e) => setDisplayMode(e.target.value)}
         >
           <option value="light">Light Mode</option>
-          <option value="dark">Dark Mode</option>
+          {/* <option value="dark">Dark Mode</option> */}
         </select>
       </div>
 
@@ -79,6 +80,19 @@ export default function Settings({
       </div>
 
       <div className="settings-account">
+        <button
+          onClick={() => {
+            SettingsHelper.updateSettings(user.id, {
+              display_mode: displayMode,
+              left_default_page: leftDefaultPage,
+              right_default_page: rightDefaultPage,
+              default_habit_type: defaultHabitType,
+            });
+          }}
+          className="btn-logout"
+        >
+          Save Settings
+        </button>
         <button onClick={onLogout} className="btn-logout">
           Logout
         </button>
@@ -91,9 +105,16 @@ export default function Settings({
           <strong>DELETE ACCOUNT</strong>
         </button>
       </div>
-      {isDeleteModalOpen && <DeleteAccountModal user={user} onClose={() => {
-        setIsDeleteModalOpen(false)
-      }} handleDeleteAccount={UserHelper.deleteAccount} onLogout={onLogout}/>}
+      {isDeleteModalOpen && (
+        <DeleteAccountModal
+          user={user}
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          handleDeleteAccount={UserHelper.deleteAccount}
+          onLogout={onLogout}
+        />
+      )}
     </div>
   );
 }
