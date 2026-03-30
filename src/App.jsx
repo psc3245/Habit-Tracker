@@ -85,6 +85,7 @@ export default function App() {
                     getHabitsByUserId={HabitHelper.getHabitsByUserId}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
+                    defaultHabitType={defaultHabitType}
                   />
                 )}
                 {leftPageView === "login" && (

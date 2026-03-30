@@ -14,6 +14,7 @@ export default function CreateEditHabitModal({
   selectedDate,
   habitInfo,
   handleDeleteHabit,
+  defaultHabitType,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [habitId, setHabitId] = useState("");
@@ -32,6 +33,10 @@ export default function CreateEditHabitModal({
   const [colorLow, setColorLow] = useState("#ff6b6b");
   const [colorMid, setColorMid] = useState("#ffd966");
   const [colorHigh, setColorHigh] = useState("#51cf66");
+
+  useEffect(() => {
+    if (!isEditing) setHabitType(defaultHabitType);
+  }, [isEditing]);
 
   useEffect(() => {
     if (!habitInfo) return;

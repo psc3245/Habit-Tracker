@@ -13,6 +13,7 @@ export default function HabitsPage({
   getHabitsByUserId,
   selectedDate,
   setSelectedDate,
+  defaultHabitType,
 }) {
   console.log(user);
 
@@ -359,6 +360,7 @@ export default function HabitsPage({
         selectedDate={selectedDate}
         habitInfo={habitInfo}
         handleDeleteHabit={HabitHelper.onDeleteHabit}
+        defaultHabitType={defaultHabitType}
       />
     </div>
   );
