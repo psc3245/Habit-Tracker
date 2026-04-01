@@ -20,7 +20,6 @@ export default function Stats({ user }) {
   useEffect(() => {
     const getCompletions = async () => {
       if (!user) return;
-
       const result = await CompletionHelper.getCompletionsByUserId(user.id);
       setCompletions(result);
     };
@@ -48,7 +47,6 @@ export default function Stats({ user }) {
       }
       curr.setDate(curr.getDate() + 1);
     }
-
     return expected;
   };
 
@@ -70,8 +68,6 @@ export default function Stats({ user }) {
         completionDates.has(formatDate(curr)) &&
         streak > 0
       ) {
-        // we should complete it today, we did complete it today, and we are on a streak
-        // = continue streak
         streak += 1;
         streakEnd = new Date(curr);
       } else if (
@@ -79,8 +75,6 @@ export default function Stats({ user }) {
         !completionDates.has(formatDate(curr)) &&
         streak > 0
       ) {
-        // we should complete it today, we did not complete it today, and we are on a streak
-        // = end streak
         streak = 0;
         streakEnd = new Date(curr);
         streakStart = null;
@@ -89,13 +83,9 @@ export default function Stats({ user }) {
         completionDates.has(formatDate(curr)) &&
         streak === 0
       ) {
-        // we should complete it today, we did complete it today, but we are not on a streak
-        // = start a new one
         streakStart = new Date(curr);
         streakEnd = new Date(curr);
         streak += 1;
-      } else if (!habit.recurrence.days.includes(curr.getDay())) {
-        // habit should not be completed today, so no need to check if we need to change strak status
       }
       if (longestStreak <= streak) {
         longestStreak = streak;
@@ -143,79 +133,89 @@ export default function Stats({ user }) {
     });
   };
 
-  return (
-    <div className="stats-page">
-      {user ? (
-        <div>
-          <h2 className="stats-title">{user.first_name}'s habit statistics: </h2>
-          <div className="stats-list">
-            {Object.values(completionStats).map((stat) => (
-              <div key={stat.habit.id} className="stats-habit-card">
+  if (!user) {
+    return (
+      <div className="stats-page">
+        <h2 className="stats-title">Statistics</h2>
+        <div className="stats-no-user-div">
+          <p className="stats-no-user">Log in to see your habit statistics.</p>
+          <div className="stats-placeholder-list">
+            {["Morning Routine", "Exercise", "Reading"].map((name) => (
+              <div key={name} className="stats-habit-card stats-habit-card--placeholder">
                 <div className="stats-card-header">
-                  <span className="stats-habit-name">{stat.habit.name}</span>
-                  <button
-                    className="stat-card-toggle-btn"
-                    onClick={() => toggleHabit(stat.habit.id)}
-                  >
-                    {expandedHabits.has(stat.habit.id) ? "▲" : "▼"}
-                  </button>
+                  <span className="stats-habit-name stats-placeholder-text">{name}</span>
+                  <button className="stat-card-toggle-btn" disabled>▼</button>
                 </div>
-                {expandedHabits.has(stat.habit.id) && (
-                  <div className="stat-detail-card-expanded">
-                    <div className="stats-detail-row">
-                      <span className="stats-detail">
-                        {stat.completionStats[0]} completed since{" "}
-                        {new Date(stat.habit.createdAt).toLocaleDateString()}
-                      </span>
-                      <span className="stats-divider">|</span>
-                      <span className="stats-detail">
-                        {stat.completionStats[1] > 0
-                          ? (
-                              100.0 *
-                              (stat.completionStats[0] /
-                                stat.completionStats[1])
-                            ).toFixed(1)
-                          : 0}
-                        % completion rate
-                      </span>
-                    </div>
-                    <div className="stats-detail-row">
-                      <span className="stats-detail">
-                        Longest streak: {stat.streakStats.longestStreak} days
-                      </span>
-                      <span className="stats-divider">|</span>
-                      <span className="stats-detail">
-                        {stat.streakStats.longestStreakStart?.toLocaleDateString()}{" "}
-                        –{" "}
-                        {stat.streakStats.longestStreakEnd?.toLocaleDateString()}
-                      </span>
-                    </div>
-                    {stat.streakStats.currentStreak !== 0 ? (
-                      <div className="stats-streak">
-                        <span className="stats-detail">
-                          Current streak: {stat.streakStats.currentStreak} days
-                        </span>
-                        <span className="stats-detail">
-                          Since:{" "}
-                          {stat.streakStats.currentStreakStart?.toLocaleDateString()}
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="stats-detail">
-                        Not currently on a streak
-                      </span>
-                    )}
-                  </div>
-                )}
               </div>
             ))}
           </div>
         </div>
-      ) : (
-        <div>
-          <p className="stats-no-user">Log in to see your stats!</p>
-        </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="stats-page">
+      <h2 className="stats-title">{user.first_name}'s Statistics</h2>
+      <div className="stats-list">
+        {Object.values(completionStats).map((stat) => (
+          <div key={stat.habit.id} className="stats-habit-card">
+            <div className="stats-card-header">
+              <span className="stats-habit-name">{stat.habit.name}</span>
+              <button
+                className="stat-card-toggle-btn"
+                onClick={() => toggleHabit(stat.habit.id)}
+              >
+                {expandedHabits.has(stat.habit.id) ? "▲" : "▼"}
+              </button>
+            </div>
+            {expandedHabits.has(stat.habit.id) && (
+              <div className="stat-detail-card-expanded">
+                <div className="stats-detail-row">
+                  <span className="stats-detail">
+                    {stat.completionStats[0]} completed since{" "}
+                    {new Date(stat.habit.createdAt).toLocaleDateString()}
+                  </span>
+                  <span className="stats-divider">|</span>
+                  <span className="stats-detail">
+                    {stat.completionStats[1] > 0
+                      ? (
+                          100.0 *
+                          (stat.completionStats[0] / stat.completionStats[1])
+                        ).toFixed(1)
+                      : 0}
+                    % completion rate
+                  </span>
+                </div>
+                <div className="stats-detail-row">
+                  <span className="stats-detail">
+                    Longest streak: {stat.streakStats.longestStreak} days
+                  </span>
+                  <span className="stats-divider">|</span>
+                  <span className="stats-detail">
+                    {stat.streakStats.longestStreakStart?.toLocaleDateString()}{" "}
+                    –{" "}
+                    {stat.streakStats.longestStreakEnd?.toLocaleDateString()}
+                  </span>
+                </div>
+                {stat.streakStats.currentStreak !== 0 ? (
+                  <div className="stats-streak">
+                    <span className="stats-detail">
+                      Current streak: {stat.streakStats.currentStreak} days
+                    </span>
+                    <span className="stats-detail">
+                      Since:{" "}
+                      {stat.streakStats.currentStreakStart?.toLocaleDateString()}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="stats-detail">Not currently on a streak</span>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
