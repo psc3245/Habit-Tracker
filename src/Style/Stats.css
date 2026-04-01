@@ -97,5 +97,30 @@
 
 .stats-no-user {
   color: #666;
-  font-size: 15px;
+  font-style: italic;
+  font-size: 14px;
+  margin: 0 0 12px 0;
+}
+
+
+.stats-no-user-div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stats-no-user {
+  color: #666;
+  font-style: italic;
+  font-size: 14px;
+  margin: 0;
+}
+
+.stats-habit-card--placeholder {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.stats-placeholder-text {
+  color: #999;
 }
