@@ -232,8 +232,8 @@ export default function Stats({ user }) {
       <div className="stats-page">
         <h2 className="stats-title">Statistics</h2>
         <p className="stats-no-user">Log in to see your habit statistics.</p>
-        <div className="stats-list stats-list--placeholder">
-          {PLACEHOLDER_STATS.map((stat) => renderStatCard(stat, true))}
+        <div className="stats-list">
+          {PLACEHOLDER_STATS.map((stat) => renderStatCard(stat, false))}
         </div>
       </div>
     );

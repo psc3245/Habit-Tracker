@@ -102,11 +102,6 @@
   margin: 0 0 12px 0;
 }
 
-.stats-list--placeholder {
-  opacity: 0.45;
-  pointer-events: none;
-  filter: blur(1.5px);
-}
 
 .stats-no-user-div {
   display: flex;
