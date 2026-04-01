@@ -3,9 +3,6 @@ import "../Style/AtAGlance.css";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
 const PLACEHOLDER_HABITS = {
   daily: [
     {
@@ -40,7 +37,9 @@ export default function AtAGlance({ user, selectedDate }) {
   const [timeframe, setTimeframe] = useState("weekly");
   const [completions, setCompletions] = useState([]);
   const [habits, setHabits] = useState([]);
-  const [expandedHabits, setExpandedHabits] = useState(new Set());
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const getWeekDateRange = (date) => {
     const startOfWeek = new Date(date);
@@ -124,8 +123,7 @@ export default function AtAGlance({ user, selectedDate }) {
         return Number(completion.value) >= habit.target
           ? accumulator + 1
           : accumulator;
-      else
-        return completion.value != null ? accumulator + 1 : accumulator;
+      else return completion.value != null ? accumulator + 1 : accumulator;
     }, 0);
     return [numCompletions, expected];
   };
@@ -152,14 +150,6 @@ export default function AtAGlance({ user, selectedDate }) {
     }
   };
 
-  const toggleHabit = (id) => {
-    setExpandedHabits((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
-
   const renderHabitRow = (habit, habitSummary, remainingCompletions) => (
     <div key={habit.id} className="glance-habit-row">
       <span className="glance-habit-name">{habit.name}</span>
@@ -182,12 +172,6 @@ export default function AtAGlance({ user, selectedDate }) {
           {remainingCompletions} left this{" "}
           {timeframe === "weekly" ? "week" : "month"}
         </span>
-        <button
-          className="glance-habit-row-btn"
-          onClick={() => toggleHabit(habit.id)}
-        >
-          {expandedHabits.has(habit.id) ? "▼" : "▲"}
-        </button>
       </div>
     </div>
   );
@@ -212,12 +196,6 @@ export default function AtAGlance({ user, selectedDate }) {
           {item.remainingCompletions} left this{" "}
           {timeframe === "weekly" ? "week" : "month"}
         </span>
-        <button
-          className="glance-habit-row-btn"
-          onClick={() => toggleHabit(item.habit.id)}
-        >
-          {expandedHabits.has(item.habit.id) ? "▼" : "▲"}
-        </button>
       </div>
     </div>
   );
