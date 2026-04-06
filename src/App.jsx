@@ -30,7 +30,12 @@ export default function App() {
 
   const onLoginSuccess = async (user) => {
     setUser({ ...user, id: user.user_id });
-    const settings = await SettingsHelper.loadSettingsForUser(user.user_id);
+    let settings;
+    try {
+      settings = await SettingsHelper.loadSettingsForUser(user.user_id);
+    } catch (err) {
+      settings = await SettingsHelper.createSettings(user.user_id);
+    }
     setDisplayMode(settings.display_mode);
     setLeftDefaultPage(settings.left_default_page);
     setRightDefaultPage(settings.right_default_page);
