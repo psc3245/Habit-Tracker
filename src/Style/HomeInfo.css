@@ -1,0 +1,47 @@
+.home-page,
+.info-page {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-title {
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.home-page p,
+.info-page p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0 0 12px;
+}
+
+.home-page ul,
+.info-page ul {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.home-page li,
+.info-page li {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.info-page a {
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.info-page a:hover {
+  color: var(--accent-strong);
+}

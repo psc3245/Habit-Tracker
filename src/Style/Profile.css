@@ -1,15 +1,14 @@
 .profile-container {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: left;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-p {
-    color: black;
-}
-
-h2 {
-    color: black;
+.profile-container h2 {
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 12px;
 }

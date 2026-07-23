@@ -1,11 +1,55 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light;
+
+  /* Type */
+  --font-hand: "Caveat", "Segoe Print", cursive;
+  --font-body: "Nunito", system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* Cover */
+  --cover-bg-1: #8a5a3b;
+  --cover-bg-2: #6b4226;
+  --cover-shadow: rgba(0, 0, 0, 0.35);
+  --spine-bg: #d8c8a8;
+
+  /* Paper */
+  --paper-bg: #fffdf6;
+  --paper-bg-soft: #fbf6e9;
+  --paper-rule: rgba(70, 90, 190, 0.1);
+  --paper-margin: rgba(198, 64, 64, 0.32);
+  --paper-shadow: rgba(60, 40, 10, 0.18);
+
+  /* Ink / text */
+  --ink: #2a2117;
+  --ink-soft: #5c5140;
+  --ink-faint: #8a8070;
+  --ink-on-accent: #2a2117;
+
+  /* Accent */
+  --accent: #f0b429;
+  --accent-strong: #d99a1a;
+  --accent-soft: rgba(240, 180, 41, 0.18);
+  --accent-2: #4a6fa5;
+  --accent-2-soft: rgba(74, 111, 165, 0.14);
+
+  /* Surfaces */
+  --card-bg: #fffaf0;
+  --card-border: rgba(90, 70, 40, 0.16);
+  --card-border-hover: rgba(90, 70, 40, 0.32);
+  --input-bg: #ffffff;
+  --input-border: rgba(90, 70, 40, 0.22);
+
+  /* Status */
+  --success: #3f9a5c;
+  --success-soft: rgba(63, 154, 92, 0.16);
+  --danger: #c94f4f;
+  --danger-soft: rgba(201, 79, 79, 0.14);
+
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--ink);
+  background-color: var(--cover-bg-2);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,26 +57,69 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --cover-bg-1: #2c2a3a;
+  --cover-bg-2: #1c1a26;
+  --cover-shadow: rgba(0, 0, 0, 0.55);
+  --spine-bg: #2f2c3d;
+
+  --paper-bg: #1e1c27;
+  --paper-bg-soft: #24212f;
+  --paper-rule: rgba(150, 170, 255, 0.09);
+  --paper-margin: rgba(224, 100, 100, 0.28);
+  --paper-shadow: rgba(0, 0, 0, 0.45);
+
+  --ink: #eee6d8;
+  --ink-soft: #b9ae9c;
+  --ink-faint: #837a6c;
+  --ink-on-accent: #241b06;
+
+  --accent: #f0b429;
+  --accent-strong: #ffca55;
+  --accent-soft: rgba(240, 180, 41, 0.16);
+  --accent-2: #7fa6e0;
+  --accent-2-soft: rgba(127, 166, 224, 0.14);
+
+  --card-bg: #262332;
+  --card-border: rgba(238, 230, 216, 0.1);
+  --card-border-hover: rgba(238, 230, 216, 0.22);
+  --input-bg: #201d29;
+  --input-border: rgba(238, 230, 216, 0.16);
+
+  --success: #6fce8c;
+  --success-soft: rgba(111, 206, 140, 0.14);
+  --danger: #e88080;
+  --danger-soft: rgba(232, 128, 128, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--accent-2);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--accent-strong);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-body);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1,
+h2,
+h3 {
+  font-family: var(--font-hand);
+  font-weight: 700;
 }
 
 button {
@@ -40,29 +127,18 @@ button {
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-weight: 600;
+  font-family: var(--font-body);
+  background-color: var(--card-bg);
+  color: var(--ink);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.2s ease;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }

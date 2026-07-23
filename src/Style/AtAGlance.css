@@ -1,5 +1,5 @@
 .glance-page {
-    height: 100%;
+  height: 100%;
 }
 
 .at-a-glance {
@@ -10,26 +10,27 @@
 .glance-header {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   flex-wrap: wrap;
   align-items: baseline;
 }
 
 .glance-title {
-  color: #1a1a1a;
-  font-size: 28px;
-  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 32px;
+  font-weight: 700;
   margin: 0;
 }
 
 .glance-timeframe-select {
   padding: 4px 10px;
-  border: 2px solid #ddd;
+  border: 1.5px solid var(--input-border);
   border-radius: 6px;
   font-size: 18px;
-  font-weight: 600;
-  font-family: inherit;
-  color: #1a1a1a;
+  font-weight: 700;
+  font-family: var(--font-hand);
+  color: var(--ink);
   background: transparent;
   cursor: pointer;
   transition: border-color 0.2s ease;
@@ -40,26 +41,26 @@
 
 .glance-timeframe-select:focus {
   outline: none;
-  border-color: #ffd966;
+  border-color: var(--accent);
 }
 
 .glance-timeframe-select:hover {
-  border-color: #ffd966;
+  border-color: var(--accent);
 }
 
 .glance-section {
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .glance-section-title {
-  color: #555;
+  color: var(--ink-soft);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   margin-bottom: 10px;
   padding-bottom: 4px;
-  border-bottom: 1px solid rgba(0, 0, 255, 0.08);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .glance-habit-row {
@@ -68,21 +69,23 @@
   align-items: center;
   padding: 12px 16px;
   margin-bottom: 8px;
-  background: rgba(253, 245, 230, 0.6);
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
   transition: all 0.2s ease;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .glance-habit-row:hover {
-  background: rgba(253, 245, 230, 0.9);
-  border-color: #ccc;
+  border-color: var(--card-border-hover);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .glance-habit-name {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
-  color: #2c2c2c;
+  color: var(--ink);
 }
 
 .glance-habit-stats {
@@ -90,28 +93,30 @@
   flex-direction: row;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .glance-stats-divider {
-  color: #ccc;
+  color: var(--card-border-hover);
   font-size: 14px;
 }
 
-.glance-avg, .glance-ratio {
+.glance-avg,
+.glance-ratio {
   font-size: 14px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--ink-soft);
 }
 
 .glance-empty {
-  color: #999;
+  color: var(--ink-faint);
   font-size: 14px;
   font-style: italic;
   padding: 8px 0;
 }
 
 .glance-no-user {
-  color: #666;
+  color: var(--ink-soft);
   font-size: 15px;
 }
 
@@ -120,7 +125,7 @@
   border: none;
   cursor: pointer;
   font-size: 12px;
-  color: #333;
+  color: var(--ink-soft);
   padding: 0;
   line-height: 1;
 }

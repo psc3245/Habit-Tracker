@@ -4,22 +4,23 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(10, 8, 4, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1100;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
+  padding: 20px;
 }
 
 .custom-recurrence-content {
-  background: #fffef8;
-  border-radius: 12px;
+  background: var(--paper-bg);
+  border-radius: 14px;
   padding: 32px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 2px solid #c8b89a;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  border: 1.5px solid var(--card-border);
 }
 
 .custom-recurrence-form {
@@ -38,11 +39,11 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 2px solid #ddd;
-  background: #fff;
-  color: #333;
+  border: 1.5px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--ink);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -52,12 +53,11 @@
 }
 
 .day-btn:hover {
-  border-color: #ffd966;
-  background: #fffef8;
+  border-color: var(--accent);
 }
 
 .day-btn.active {
-  background: #ffd966;
-  border-color: #ffd966;
-  color: #1a1a1a;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink-on-accent);
 }

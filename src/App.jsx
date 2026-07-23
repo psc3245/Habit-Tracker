@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import NavBar from "./Components/Navbar";
 import HabitsPage from "./Components/HabitsPage.jsx";
@@ -27,6 +27,10 @@ export default function App() {
   const [leftDefaultPage, setLeftDefaultPage] = useState("profile");
   const [rightDefaultPage, setRightDefaultPage] = useState("profile");
   const [defaultHabitType, setDefaultHabitType] = useState("checkbox");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", displayMode);
+  }, [displayMode]);
 
   const onLoginSuccess = async (user) => {
     setUser({ ...user, id: user.user_id });

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
+import { findStreaks } from "../Helpers/StreakHelper.js";
 import "../Style/Stats.css";
 
 const PLACEHOLDER_STATS = [
@@ -47,13 +48,6 @@ export default function Stats({ user }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
   useEffect(() => {
     const getCompletions = async () => {
       if (!user) return;
@@ -87,59 +81,6 @@ export default function Stats({ user }) {
     return expected;
   };
 
-  const findStreaks = (habit) => {
-    const completionDates = new Set(
-      completions.filter((c) => c.habit_id === habit.id).map((c) => c.date),
-    );
-    const parts = habit.createdAt.split("T")[0].split("-");
-    const curr = new Date(parts[0], parts[1] - 1, parts[2]);
-    let streak = 0;
-    let longestStreak = 0;
-    let longestStreakStart = null;
-    let longestStreakEnd = null;
-    let streakStart = null;
-    let streakEnd = null;
-    while (curr <= today) {
-      if (
-        habit.recurrence.days.includes(curr.getDay()) &&
-        completionDates.has(formatDate(curr)) &&
-        streak > 0
-      ) {
-        streak += 1;
-        streakEnd = new Date(curr);
-      } else if (
-        habit.recurrence.days.includes(curr.getDay()) &&
-        !completionDates.has(formatDate(curr)) &&
-        streak > 0
-      ) {
-        streak = 0;
-        streakEnd = new Date(curr);
-        streakStart = null;
-      } else if (
-        habit.recurrence.days.includes(curr.getDay()) &&
-        completionDates.has(formatDate(curr)) &&
-        streak === 0
-      ) {
-        streakStart = new Date(curr);
-        streakEnd = new Date(curr);
-        streak += 1;
-      }
-      if (longestStreak <= streak) {
-        longestStreak = streak;
-        longestStreakStart = streakStart;
-        longestStreakEnd = streakEnd;
-      }
-      curr.setDate(curr.getDate() + 1);
-    }
-    return {
-      currentStreak: streak,
-      currentStreakStart: streakStart,
-      longestStreak: longestStreak,
-      longestStreakStart: longestStreakStart,
-      longestStreakEnd: longestStreakEnd,
-    };
-  };
-
   const getCompletionStats = (habit) => {
     const expectedCompletions = getExpectedCompletions(habit, habit.createdAt);
     const totalCompletions = completions.filter(
@@ -150,11 +91,11 @@ export default function Stats({ user }) {
 
   const getAllCompletionStats = () => {
     const stats = {};
-    habits.map((habit) => {
-      stats[habit.name] = {
+    habits.forEach((habit) => {
+      stats[habit.id] = {
         habit: habit,
         completionStats: getCompletionStats(habit),
-        streakStats: findStreaks(habit),
+        streakStats: findStreaks(habit, completions, today),
       };
     });
     return stats;
