@@ -1,0 +1,71 @@
+.achievements-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.achievements-title {
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.achievements-progress {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 18px;
+}
+
+.achievements-no-user {
+  color: var(--ink-faint);
+  font-style: italic;
+  font-size: 14px;
+  margin: 0 0 18px;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.badge-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 16px 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card-bg);
+  transition: all 0.2s ease;
+}
+
+.badge-tile--earned {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+.badge-tile--locked {
+  opacity: 0.5;
+}
+
+.badge-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.badge-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.badge-description {
+  font-size: 11px;
+  color: var(--ink-faint);
+  line-height: 1.4;
+}

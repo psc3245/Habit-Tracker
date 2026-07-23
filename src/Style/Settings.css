@@ -107,3 +107,39 @@
   background: var(--danger);
   color: #fff;
 }
+
+.settings-checkbox-row {
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.settings-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin: 0;
+}
+
+.btn-secondary {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1.5px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

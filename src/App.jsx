@@ -11,7 +11,11 @@ import * as HabitHelper from "./Helpers/HabitHelper.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Info from "./Components/HomePage/Info.jsx";
 import Stats from "./Components/Stats.jsx";
+import Achievements from "./Components/Achievements.jsx";
+import History from "./Components/History.jsx";
 import * as SettingsHelper from "./Helpers/SettingsHelper.js";
+import * as CompletionHelper from "./Helpers/CompletionHelper.js";
+import * as ReminderHelper from "./Helpers/ReminderHelper.js";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -31,6 +35,36 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", displayMode);
   }, [displayMode]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const checkReminders = async () => {
+      const { enabled } = ReminderHelper.getReminderSettings(user.id);
+      if (!enabled) return;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const [rawHabits, todaysCompletions] = await Promise.all([
+        HabitHelper.getHabitsByUserId(user.id),
+        CompletionHelper.getCompletionsByUserIdAndDate(user.id, today),
+      ]);
+      const habits = rawHabits.map(HabitHelper.mapHabit);
+      const completedIds = new Set(todaysCompletions.map((c) => c.habit_id));
+
+      const incompleteNames = habits
+        .filter((h) => !h.archived)
+        .filter((h) => h.recurrence.days.includes(today.getDay()))
+        .filter((h) => !completedIds.has(h.id))
+        .map((h) => h.name);
+
+      ReminderHelper.maybeNotify(user.id, incompleteNames);
+    };
+
+    const interval = setInterval(checkReminders, 60000);
+    return () => clearInterval(interval);
+  }, [user?.id]);
 
   const onLoginSuccess = async (user) => {
     setUser({ ...user, id: user.user_id });
@@ -125,6 +159,16 @@ export default function App() {
                 {rightPageView === "glance" && (
                   <div className="placeholder-page">
                     <AtAGlance user={user} selectedDate={selectedDate} />
+                  </div>
+                )}
+                {rightPageView === "history" && (
+                  <div className="placeholder-page">
+                    <History user={user} />
+                  </div>
+                )}
+                {rightPageView === "achievements" && (
+                  <div className="placeholder-page">
+                    <Achievements user={user} />
                   </div>
                 )}
                 {rightPageView === "signup" && (

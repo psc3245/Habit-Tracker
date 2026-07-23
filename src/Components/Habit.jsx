@@ -3,12 +3,20 @@ import CheckboxHabit from "./Habits/CheckboxHabit.jsx";
 import CounterHabit from "./Habits/CounterHabit.jsx";
 import DurationHabit from "./Habits/DurationHabit.jsx";
 import SliderHabit from "./Habits/SliderHabit.jsx";
+import RatingHabit from "./Habits/RatingHabit.jsx";
+import CheckNoteHabit from "./Habits/CheckNoteHabit.jsx";
+import ShortTextHabit from "./Habits/ShortTextHabit.jsx";
+import JournalHabit from "./Habits/JournalHabit.jsx";
 
 const HABIT_TYPE_COMPONENTS = {
   checkbox: CheckboxHabit,
   counter: CounterHabit,
   duration: DurationHabit,
   slider: SliderHabit,
+  rating: RatingHabit,
+  checknote: CheckNoteHabit,
+  shorttext: ShortTextHabit,
+  journal: JournalHabit,
 };
 
 export default function Habit({
@@ -30,6 +38,7 @@ export default function Habit({
   onEdit,
   recurrence,
   streak = 0,
+  archived = false,
   ...otherProps
 }) {
   const HabitComponent = HABIT_TYPE_COMPONENTS[type];
@@ -48,9 +57,10 @@ export default function Habit({
 
   return (
     <div
-      className={`habit-row-wrapper${celebrate ? " celebrating" : ""}`}
+      className={`habit-row-wrapper${celebrate ? " celebrating" : ""}${archived ? " habit-row-wrapper--archived" : ""}`}
     >
-      {streak > 0 && (
+      {archived && <span className="archived-tag">Archived</span>}
+      {!archived && streak > 0 && (
         <span className="streak-badge" title={`${streak}-day streak`}>
           🔥 {streak}
         </span>
@@ -72,6 +82,7 @@ export default function Habit({
         colorHigh={colorHigh}
         onEdit={onEdit}
         recurrence={recurrence}
+        archived={archived}
         {...otherProps}
       />
       {celebrate && (

@@ -9,7 +9,7 @@ export default function NavBar({
   user,
 }) {
   const leftTabs = ["Habits"];
-  const rightTabs = ["Stats", "Glance"];
+  const rightTabs = ["Stats", "Glance", "History", "Achievements"];
 
   return (
     <div className="navbar">

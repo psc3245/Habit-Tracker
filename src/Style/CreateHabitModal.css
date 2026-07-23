@@ -362,6 +362,59 @@
   font-family: inherit;
 }
 
+.btn-archive {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1.5px solid var(--card-border-hover);
+  background-color: transparent;
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.btn-archive:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.template-gallery {
+  margin: -8px 0 20px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--card-border);
+}
+
+.template-gallery-label {
+  margin: 10px 0 8px;
+}
+
+.template-gallery-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.template-chip {
+  padding: 6px 14px;
+  border: 1.5px solid var(--input-border);
+  border-radius: 20px;
+  background: var(--input-bg);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.template-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .btn-delete:hover {
   background-color: var(--danger);
   color: #fff;
