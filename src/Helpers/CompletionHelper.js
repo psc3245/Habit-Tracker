@@ -13,6 +13,7 @@ export async function createCompletion(
   date,
   selectedTag,
   value,
+  textValue,
 ) {
   try {
     const res = await fetch(`${backend_base_url}/completions`, {
@@ -24,6 +25,7 @@ export async function createCompletion(
         date: formatDate(date),
         selectedTag,
         value,
+        textValue,
       }),
     });
 

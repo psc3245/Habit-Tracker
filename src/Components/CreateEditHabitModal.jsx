@@ -3,6 +3,29 @@ import { createPortal } from "react-dom";
 import "../Style/CreateHabitModal.css";
 import CustomRecurrenceModal from "./CustomRecurrenceModal.jsx";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
+import { HABIT_TYPE_LABELS } from "../Helpers/HabitHelper.js";
+
+const TYPE_HINTS = {
+  checkbox: "A simple done / not-done habit.",
+  counter: "Track a daily count against a goal (e.g. glasses of water).",
+  duration: "Track minutes spent against a daily goal.",
+  slider: "Log a numeric value on a custom scale each day.",
+  rating: "Rate your day 1-5 with an emoji scale.",
+  checknote: "Check it off, with an optional note.",
+  shorttext: "A one-line entry each day (e.g. gratitude, highlight).",
+  journal: "A longer freeform journal entry each day.",
+};
+
+const HABIT_TEMPLATES = [
+  { name: "Drink Water", type: "counter", target: "8" },
+  { name: "Exercise", type: "checkbox" },
+  { name: "Read", type: "duration", target: "20" },
+  { name: "Meditate", type: "checkbox" },
+  { name: "Sleep 8h", type: "checkbox" },
+  { name: "Mood Check-in", type: "rating" },
+  { name: "Gratitude", type: "shorttext" },
+  { name: "Journal", type: "journal" },
+];
 
 export default function CreateEditHabitModal({
   user,
@@ -33,6 +56,7 @@ export default function CreateEditHabitModal({
   const [colorLow, setColorLow] = useState("#ff6b6b");
   const [colorMid, setColorMid] = useState("#ffd966");
   const [colorHigh, setColorHigh] = useState("#51cf66");
+  const [archived, setArchived] = useState(false);
 
   useEffect(() => {
     if (!isEditing) setHabitType(defaultHabitType);
@@ -47,6 +71,7 @@ export default function CreateEditHabitModal({
     setHabitType(habitInfo.habitType);
     setHasTags(habitInfo.hasTags);
     setCustomTags(habitInfo.availableTags);
+    setArchived(habitInfo.archived ?? false);
     setInterval(habitInfo.recurrence.interval);
     setRecurrenceDays(habitInfo.recurrence.days);
     if (habitInfo.recurrence.interval === 1) {
@@ -101,12 +126,22 @@ export default function CreateEditHabitModal({
       },
       createdAt: selectedDate,
       target:
-        habitType === "slider" ? parseInt(sliderMax) : parseInt(target) || 1,
+        habitType === "slider"
+          ? parseInt(sliderMax)
+          : habitType === "rating"
+            ? 5
+            : parseInt(target) || 1,
       availableTags: hasTags ? customTags : [],
-      sliderMin: habitType === "slider" ? parseInt(sliderMin) : undefined,
+      sliderMin:
+        habitType === "slider"
+          ? parseInt(sliderMin)
+          : habitType === "rating"
+            ? 1
+            : undefined,
       colorLow: habitType === "slider" ? colorLow : undefined,
       colorMid: habitType === "slider" ? colorMid : undefined,
       colorHigh: habitType === "slider" ? colorHigh : undefined,
+      archived: isEditing ? archived : undefined,
     };
 
     try {
@@ -180,6 +215,56 @@ export default function CreateEditHabitModal({
     }
   };
 
+  const applyTemplate = (template) => {
+    setHabitName(template.name);
+    setHabitType(template.type);
+    setTarget(template.target || "");
+  };
+
+  const handleToggleArchive = async () => {
+    const nextArchived = !archived;
+    const habitData = {
+      userId: user.id,
+      name: habitName.trim(),
+      type: habitType,
+      recurrence: { interval, days: recurrenceDays },
+      target:
+        habitType === "slider"
+          ? parseInt(sliderMax)
+          : habitType === "rating"
+            ? 5
+            : parseInt(target) || 1,
+      availableTags: hasTags ? customTags : [],
+      sliderMin:
+        habitType === "slider"
+          ? parseInt(sliderMin)
+          : habitType === "rating"
+            ? 1
+            : undefined,
+      colorLow: habitType === "slider" ? colorLow : undefined,
+      colorMid: habitType === "slider" ? colorMid : undefined,
+      colorHigh: habitType === "slider" ? colorHigh : undefined,
+      archived: nextArchived,
+    };
+
+    try {
+      const updatedHabit = await onUpdateHabit(habitData, habitId);
+      if (!updatedHabit) return;
+      setArchived(nextArchived);
+      setHabits((prev) =>
+        prev.map((h) =>
+          h.id === habitId
+            ? { ...HabitHelper.mapHabit(updatedHabit), archived: nextArchived }
+            : h,
+        ),
+      );
+      onClose();
+    } catch (err) {
+      console.error("Failed to update archive state:", err);
+      alert("Error: " + err.message);
+    }
+  };
+
   return createPortal(
     <>
       {toggleCustomRecurrence && (
@@ -209,10 +294,11 @@ export default function CreateEditHabitModal({
                 onChange={(e) => setHabitType(e.target.value)}
                 className="type-select"
               >
-                <option value="checkbox">Checkbox</option>
-                <option value="counter">Counter</option>
-                <option value="duration">Duration</option>
-                <option value="slider">Slider</option>
+                {Object.entries(HABIT_TYPE_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
               </select>
               <label className="checkbox-label">
                 <input
@@ -226,6 +312,26 @@ export default function CreateEditHabitModal({
             </div>
           </div>
 
+          {!isEditing && (
+            <div className="template-gallery">
+              <p className="form-hint template-gallery-label">
+                Quick add:
+              </p>
+              <div className="template-gallery-items">
+                {HABIT_TEMPLATES.map((template) => (
+                  <button
+                    key={template.name}
+                    type="button"
+                    className="template-chip"
+                    onClick={() => applyTemplate(template)}
+                  >
+                    {template.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="habit-form">
             <div className="form-group">
               <label htmlFor="habit-name">Habit Name</label>
@@ -238,6 +344,7 @@ export default function CreateEditHabitModal({
                 className="form-input"
                 autoFocus
               />
+              <p className="form-hint">{TYPE_HINTS[habitType]}</p>
             </div>
 
             {hasTags && (
@@ -503,8 +610,15 @@ export default function CreateEditHabitModal({
                 {isEditing ? "Save Changes" : "Create Habit"}
               </button>
             </div>
-            <div className="modal-actions">
-              {isEditing ? (
+            {isEditing && (
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  onClick={handleToggleArchive}
+                  className="btn-archive"
+                >
+                  {archived ? "Unarchive Habit" : "Archive Habit"}
+                </button>
                 <button
                   type="button"
                   onClick={() => {
@@ -516,10 +630,8 @@ export default function CreateEditHabitModal({
                 >
                   Delete Habit
                 </button>
-              ) : (
-                <></>
-              )}
-            </div>
+              </div>
+            )}
           </form>
         </div>
       </div>

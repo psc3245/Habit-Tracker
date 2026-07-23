@@ -33,10 +33,13 @@
 
   /* Surfaces */
   --card-bg: #fffaf0;
+  --card-bg-hover: #fffef8;
   --card-border: rgba(90, 70, 40, 0.16);
   --card-border-hover: rgba(90, 70, 40, 0.32);
   --input-bg: #ffffff;
   --input-border: rgba(90, 70, 40, 0.22);
+  --elevated-shadow: 0 3px 10px rgba(60, 40, 10, 0.1);
+  --elevated-shadow-hover: 0 6px 18px rgba(60, 40, 10, 0.14);
 
   /* Status */
   --success: #3f9a5c;
@@ -82,11 +85,16 @@
   --accent-2: #7fa6e0;
   --accent-2-soft: rgba(127, 166, 224, 0.14);
 
-  --card-bg: #262332;
-  --card-border: rgba(238, 230, 216, 0.1);
-  --card-border-hover: rgba(238, 230, 216, 0.22);
+  --card-bg: #2a2738;
+  --card-bg-hover: #302c40;
+  --card-border: rgba(238, 230, 216, 0.16);
+  --card-border-hover: rgba(238, 230, 216, 0.34);
   --input-bg: #201d29;
-  --input-border: rgba(238, 230, 216, 0.16);
+  --input-border: rgba(238, 230, 216, 0.2);
+  --elevated-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  --elevated-shadow-hover:
+    0 8px 22px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--accent-soft);
 
   --success: #6fce8c;
   --success-soft: rgba(111, 206, 140, 0.14);

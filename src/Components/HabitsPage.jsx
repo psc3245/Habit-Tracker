@@ -5,6 +5,7 @@ import "../Style/HabitsPage.css";
 import Calendar from "./Calendar.jsx";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
+import { HABIT_TYPE_LABELS } from "../Helpers/HabitHelper.js";
 import { findStreaks, formatDate } from "../Helpers/StreakHelper.js";
 
 export default function HabitsPage({
@@ -124,6 +125,7 @@ export default function HabitsPage({
           update.date,
           update.selectedTag || null,
           update.value || null,
+          update.textValue,
         );
       } else if (update.action === "delete") {
         await CompletionHelper.deleteCompletionByHabitAndDate(
@@ -155,6 +157,9 @@ export default function HabitsPage({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [showArchived, setShowArchived] = useState(false);
 
   const toggleHabit = async (id) => {
     const habit = habits.find((h) => h.id === id);
@@ -169,6 +174,7 @@ export default function HabitsPage({
           action: "create",
           selectedTag: habit.selectedTag || null,
           value: habit.value || null,
+          textValue: habit.textValue || undefined,
           date: dateAtToggle,
         },
       }));
@@ -190,6 +196,57 @@ export default function HabitsPage({
   const updateHabitTag = (id, newTag) => {
     setHabits((prev) =>
       prev.map((h) => (h.id === id ? { ...h, selectedTag: newTag } : h)),
+    );
+  };
+
+  // shorttext / journal: typing saves the entry, clearing it removes it.
+  const updateHabitTextValue = (id, newText) => {
+    const habit = habits.find((h) => h.id === id);
+    if (!habit || !user) return;
+
+    const dateAtChange = new Date(selectedDate);
+    const isEmpty = newText.trim() === "";
+
+    setPendingCompletions((prev) => ({
+      ...prev,
+      [habit.id]: isEmpty
+        ? { action: "delete", date: dateAtChange }
+        : {
+            action: "create",
+            selectedTag: habit.selectedTag || null,
+            value: null,
+            textValue: newText,
+            date: dateAtChange,
+          },
+    }));
+
+    setHabits((prev) =>
+      prev.map((h) =>
+        h.id === id ? { ...h, textValue: newText, completed: !isEmpty } : h,
+      ),
+    );
+  };
+
+  // checknote: the note only exists while the checkbox is already checked.
+  const updateHabitNote = (id, newText) => {
+    const habit = habits.find((h) => h.id === id);
+    if (!habit || !user || !habit.completed) return;
+
+    const dateAtChange = new Date(selectedDate);
+
+    setPendingCompletions((prev) => ({
+      ...prev,
+      [habit.id]: {
+        action: "create",
+        selectedTag: habit.selectedTag || null,
+        value: null,
+        textValue: newText,
+        date: dateAtChange,
+      },
+    }));
+
+    setHabits((prev) =>
+      prev.map((h) => (h.id === id ? { ...h, textValue: newText } : h)),
     );
   };
 
@@ -223,18 +280,21 @@ export default function HabitsPage({
           if (completion) {
             let isCompleted = false;
 
-            if (habit.type === "checkbox") {
+            if (habit.type === "checkbox" || habit.type === "checknote") {
               isCompleted = true;
             } else if (habit.type === "counter" || habit.type === "duration") {
               isCompleted = (completion.value ?? 0) >= habit.target;
-            } else if (habit.type === "slider") {
+            } else if (habit.type === "slider" || habit.type === "rating") {
               isCompleted = completion.value != null;
+            } else if (habit.type === "shorttext" || habit.type === "journal") {
+              isCompleted = (completion.text_value ?? "").trim() !== "";
             }
 
             return {
               ...habit,
               completed: isCompleted,
               value: Number(completion.value),
+              textValue: completion.text_value ?? "",
               selectedTag: completion.selected_tag,
             };
           }
@@ -242,6 +302,7 @@ export default function HabitsPage({
             ...habit,
             completed: false,
             value: habit.defaultValue,
+            textValue: "",
             selectedTag: null,
           };
         });
@@ -302,6 +363,20 @@ export default function HabitsPage({
     setIsModalOpen(true);
   };
 
+  const visibleHabits = habits
+    .filter((habit) => showArchived || !habit.archived)
+    .filter(
+      (habit) => habit.archived || isHabitScheduledForDate(habit, selectedDate),
+    )
+    .filter((habit) =>
+      searchQuery.trim()
+        ? habit.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
+        : true,
+    )
+    .filter((habit) => (typeFilter === "all" ? true : habit.type === typeFilter));
+
+  const habitTypesPresent = Array.from(new Set(habits.map((h) => h.type)));
+
   return (
     <div className="daily-page">
       <div className="page-header">
@@ -351,14 +426,46 @@ export default function HabitsPage({
           />
         )}
       </div>
+      {user && habits.length > 0 && (
+        <div className="habit-filter-bar">
+          <input
+            type="text"
+            className="habit-filter-search"
+            placeholder="Search habits..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select
+            className="habit-filter-type"
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+          >
+            <option value="all">All types</option>
+            {habitTypesPresent.map((t) => (
+              <option key={t} value={t}>
+                {HABIT_TYPE_LABELS[t] || t}
+              </option>
+            ))}
+          </select>
+          <label className="habit-filter-archived">
+            <input
+              type="checkbox"
+              checked={showArchived}
+              onChange={(e) => setShowArchived(e.target.checked)}
+            />
+            Show archived
+          </label>
+        </div>
+      )}
       <div className="daily-habits-list">
-        {habits.filter((habit) => isHabitScheduledForDate(habit, selectedDate))
-          .length === 0 && (
-          <p className="daily-empty">No habits scheduled for this day.</p>
+        {visibleHabits.length === 0 && (
+          <p className="daily-empty">
+            {habits.length === 0
+              ? "No habits yet — create your first one!"
+              : "No habits match this day/filter."}
+          </p>
         )}
-        {habits
-          .filter((habit) => isHabitScheduledForDate(habit, selectedDate))
-          .map((habit) => {
+        {visibleHabits.map((habit) => {
             return (
               <Habit
                 key={habit.id}
@@ -373,10 +480,17 @@ export default function HabitsPage({
                 target={habit.target || 1}
                 recurrence={habit.recurrence}
                 streak={getStreakForHabit(habit)}
+                archived={habit.archived}
+                textValue={habit.textValue || ""}
                 onToggle={() => toggleHabit(habit.id)}
                 onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
                 onValueChange={(newValue) =>
                   updateHabitValue(habit.id, newValue)
+                }
+                onTextChange={(newText) =>
+                  habit.type === "checknote"
+                    ? updateHabitNote(habit.id, newText)
+                    : updateHabitTextValue(habit.id, newText)
                 }
                 sliderMin={habit.sliderMin}
                 colorLow={habit.colorLow}

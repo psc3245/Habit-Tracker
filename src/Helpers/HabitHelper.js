@@ -1,10 +1,23 @@
 const backend_base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
+export const HABIT_TYPE_LABELS = {
+  checkbox: "Checkbox",
+  counter: "Counter",
+  duration: "Duration",
+  slider: "Slider",
+  rating: "Rating",
+  checknote: "Yes/No + Note",
+  shorttext: "Short Text",
+  journal: "Journal",
+};
+
 export function mapHabit(habit) {
     const defaultVal =
       habit.type === "slider"
         ? Math.floor(((Number(habit.slider_min) || 1) + (Number(habit.target) || 10)) / 2)
-        : 0;
+        : habit.type === "rating"
+          ? 3
+          : 0;
 
     return {
       id: habit.habit_id,
@@ -18,6 +31,7 @@ export function mapHabit(habit) {
       },
       value: Number(defaultVal),
       defaultValue: defaultVal,
+      textValue: "",
       hasTags: (habit.available_tags ?? []).length > 0,
       availableTags: habit.available_tags ?? [],
       selectedTag: null,
@@ -26,6 +40,7 @@ export function mapHabit(habit) {
       colorLow: habit.color_low,
       colorMid: habit.color_mid,
       colorHigh: habit.color_high,
+      archived: habit.archived ?? false,
     };
   };
 
@@ -106,6 +121,7 @@ export async function onUpdateHabit(habit, habitId) {
         colorMid: habit.colorMid,
         colorHigh: habit.colorHigh,
         recurrence: habit.recurrence,
+        archived: habit.archived,
       }),
     });
 
