@@ -71,8 +71,9 @@
 }
 
 .stats-habit-card:hover {
-  border-color: var(--card-border-hover);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg-hover);
+  border-color: var(--accent);
+  box-shadow: var(--elevated-shadow-hover);
 }
 
 .stats-habit-name {
