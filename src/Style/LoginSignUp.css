@@ -1,29 +1,30 @@
 .login-form {
-    overflow: hidden;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: #fff;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
-    margin: 0 auto;
+  overflow: hidden;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--card-bg);
+  padding: 26px 32px;
+  border-radius: 14px;
+  border: 1.5px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
-    font-weight: 600;
-    color: #2c2c2c;
-    font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 14px;
 }
 
 .form-group.form-group-row {
@@ -42,58 +43,60 @@
 
 .form-input,
 select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    font-size: 15px;
-    font-family: inherit;
-    background: #fff;
-    transition: border-color 0.2s ease;
-    box-sizing: border-box;
-    color: black;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--input-border);
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--input-bg);
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  color: var(--ink);
 }
 
 .form-input:focus,
 select:focus {
-    outline: none;
-    border-color: #ffd966;
+  outline: none;
+  border-color: var(--accent);
 }
 
 .form-input::placeholder {
-    color: #999;
+  color: var(--ink-faint);
 }
 
 .form-hint {
-    font-size: 12px;
-    color: #666;
-    font-style: italic;
-    margin: 0;
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin: 0;
 }
 
 .btn-login {
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    background: #ffd966;
-    color: #1a1a1a;
-    width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: var(--accent);
+  color: var(--ink-on-accent);
+  width: 100%;
+  font-family: inherit;
+  box-shadow: 0 2px 0 var(--accent-strong);
 }
 
 .btn-login:hover {
-    background: #ffe699;
-    transform: translateY(-1px);
+  background: var(--accent-strong);
+  transform: translateY(-1px);
 }
 
 .dob-group label {
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
-  color: #000;
+  color: var(--ink);
 }
 
 .dob-row {
@@ -106,12 +109,12 @@ select:focus {
   flex: 1;
   min-width: 0;
   padding: 10px 12px;
-  border: 2px solid #ddd;
+  border: 1.5px solid var(--input-border);
   border-radius: 6px;
   font-size: 15px;
   font-family: inherit;
-  color: #000;
-  background: #fff;
+  color: var(--ink);
+  background: var(--input-bg);
   transition: border-color 0.2s ease;
   box-sizing: border-box;
   text-align: left;
@@ -124,5 +127,5 @@ select:focus {
 .dob-row select:focus,
 .dob-row input:focus {
   outline: none;
-  border-color: #ffd966;
+  border-color: var(--accent);
 }

@@ -27,14 +27,14 @@ export default function Settings({
       <h2 className="settings-title">Settings</h2>
 
       <div className="settings-section">
-        <p className="settings-label">Display Mode <i>(Coming Soon)</i></p>
+        <p className="settings-label">Display Mode</p>
         <select
           className="settings-select"
           value={displayMode}
           onChange={(e) => setDisplayMode(e.target.value)}
         >
           <option value="light">Light Mode</option>
-          {/* <option value="dark">Dark Mode</option> */}
+          <option value="dark">Dark Mode</option>
         </select>
       </div>
 

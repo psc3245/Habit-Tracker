@@ -1,103 +1,109 @@
 .settings-div {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
 }
 
 .settings-title {
-    color: #1a1a1a;
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0;
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
 }
 
 .settings-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--card-border);
 }
 
 .settings-label {
-    font-weight: 600;
-    color: #1a1a1a;
-    font-size: 15px;
-    margin: 0;
-    font-weight: bold;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 15px;
+  margin: 0;
+}
+
+.settings-label i {
+  color: var(--ink-faint);
+  font-weight: 400;
 }
 
 .settings-sublabel {
-    font-size: 14px;
-    color: #555;
-    margin: 0;
-    min-width: 40px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0;
+  min-width: 40px;
 }
 
 .settings-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .settings-select {
-    padding: 10px 12px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-    color: #1a1a1a;
-    background: transparent;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
+  padding: 10px 12px;
+  border: 1.5px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--input-bg);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
 }
 
 .settings-select:focus {
-    outline: none;
-    border-color: #ffd966;
+  outline: none;
+  border-color: var(--accent);
 }
 
 .settings-account {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
 }
 
 .btn-logout {
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    background: #ffd966;
-    color: #1a1a1a;
-    width: 100%;
-    font-family: inherit;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: var(--accent);
+  color: var(--ink-on-accent);
+  width: 100%;
+  font-family: inherit;
+  box-shadow: 0 2px 0 var(--accent-strong);
 }
 
 .btn-logout:hover {
-    background: #ffe699;
-    transform: translateY(-1px);
+  background: var(--accent-strong);
+  transform: translateY(-1px);
 }
 
 .btn-delete-acc {
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 15px;
-    font-weight: 600;
-    color: black;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s ease;
-    border-radius: 10px;
-        background-color: lightgray;
-    color: red;
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  background-color: transparent;
+  border: 1.5px solid var(--danger);
+  color: var(--danger);
 }
 
 .btn-delete-acc:hover {
-    background: red;
-    border-color: red;
-    color: #1a1a1a;
+  background: var(--danger);
+  color: #fff;
 }

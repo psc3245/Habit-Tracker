@@ -5,6 +5,7 @@ import "../Style/HabitsPage.css";
 import Calendar from "./Calendar.jsx";
 import * as CompletionHelper from "../Helpers/CompletionHelper.js";
 import * as HabitHelper from "../Helpers/HabitHelper.js";
+import { findStreaks, formatDate } from "../Helpers/StreakHelper.js";
 
 export default function HabitsPage({
   user,
@@ -78,11 +79,41 @@ export default function HabitsPage({
   const [habits, setHabits] = useState([]);
   const [pendingCompletions, setPendingCompletions] = useState({});
   const [habitInfo, setHabitInfo] = useState(null);
+  const [allCompletions, setAllCompletions] = useState([]);
+
+  const loadAllCompletions = async () => {
+    if (!user) return;
+    const result = await CompletionHelper.getCompletionsByUserId(user.id);
+    setAllCompletions(result);
+  };
+
+  useEffect(() => {
+    loadAllCompletions();
+  }, [user?.id]);
+
+  const getStreakForHabit = (habit) => {
+    const merged = new Map(
+      allCompletions
+        .filter((c) => c.habit_id === habit.id)
+        .map((c) => [c.date, c]),
+    );
+    Object.entries(pendingCompletions).forEach(([habitId, update]) => {
+      if (habitId !== String(habit.id)) return;
+      const dateKey = formatDate(new Date(update.date));
+      if (update.action === "create") {
+        merged.set(dateKey, { habit_id: habit.id, date: dateKey });
+      } else {
+        merged.delete(dateKey);
+      }
+    });
+    return findStreaks(habit, Array.from(merged.values())).currentStreak;
+  };
 
   const syncPendingCompletions = async () => {
     if (!user) return;
 
     const entries = Object.entries(pendingCompletions);
+    if (entries.length === 0) return;
 
     for (const [habitId, update] of entries) {
 
@@ -104,6 +135,7 @@ export default function HabitsPage({
     }
 
     setPendingCompletions({});
+    loadAllCompletions();
   };
 
   useEffect(() => {
@@ -319,33 +351,42 @@ export default function HabitsPage({
           />
         )}
       </div>
-      {habits
-        .filter((habit) => isHabitScheduledForDate(habit, selectedDate))
-        .map((habit) => {
-          return (
-            <Habit
-              key={habit.id}
-              id={habit.id}
-              name={habit.name}
-              completed={habit.completed}
-              type={habit.type}
-              hasTags={habit.hasTags}
-              tag={habit.selectedTag}
-              availableTags={habit.availableTags}
-              value={habit.value|| 0}
-              target={habit.target || 1}
-              recurrence={habit.recurrence}
-              onToggle={() => toggleHabit(habit.id)}
-              onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
-              onValueChange={(newValue) => updateHabitValue(habit.id, newValue)}
-              sliderMin={habit.sliderMin}
-              colorLow={habit.colorLow}
-              colorMid={habit.colorMid}
-              colorHigh={habit.colorHigh}
-              onEdit={onEdit}
-            />
-          );
-        })}
+      <div className="daily-habits-list">
+        {habits.filter((habit) => isHabitScheduledForDate(habit, selectedDate))
+          .length === 0 && (
+          <p className="daily-empty">No habits scheduled for this day.</p>
+        )}
+        {habits
+          .filter((habit) => isHabitScheduledForDate(habit, selectedDate))
+          .map((habit) => {
+            return (
+              <Habit
+                key={habit.id}
+                id={habit.id}
+                name={habit.name}
+                completed={habit.completed}
+                type={habit.type}
+                hasTags={habit.hasTags}
+                tag={habit.selectedTag}
+                availableTags={habit.availableTags}
+                value={habit.value || 0}
+                target={habit.target || 1}
+                recurrence={habit.recurrence}
+                streak={getStreakForHabit(habit)}
+                onToggle={() => toggleHabit(habit.id)}
+                onTagChange={(newTag) => updateHabitTag(habit.id, newTag)}
+                onValueChange={(newValue) =>
+                  updateHabitValue(habit.id, newValue)
+                }
+                sliderMin={habit.sliderMin}
+                colorLow={habit.colorLow}
+                colorMid={habit.colorMid}
+                colorHigh={habit.colorHigh}
+                onEdit={onEdit}
+              />
+            );
+          })}
+      </div>
 
       <CreateEditHabitModal
         user={user}

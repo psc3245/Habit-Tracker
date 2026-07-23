@@ -3,35 +3,61 @@
   flex-direction: column;
 }
 
+.page-header {
+  position: relative;
+}
+
 .daily-title {
-  color: #1a1a1a;
-  font-size: 28px;
-  margin-bottom: 20px;
-  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 34px;
+  margin: 0 0 18px;
+  font-weight: 700;
 }
 
 .new-habit-btn {
-  background: #ffd966;
-  border: 1px solid #aaa;
-  border-radius: 6px;
+  background: var(--accent);
+  color: var(--ink-on-accent);
+  border: none;
+  border-radius: 8px;
   padding: 10px 18px;
-  font-weight: bold;
+  font-weight: 800;
+  font-family: var(--font-body);
   cursor: pointer;
-  margin-bottom: 20px;
   transition: all 0.2s ease;
-  align-self: flex-start;
+  box-shadow: 0 2px 0 var(--accent-strong);
 }
 
 .new-habit-btn:hover {
-  background: #ffe699;
+  background: var(--accent-strong);
   transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--accent-strong);
+}
+
+.new-habit-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--accent-strong);
 }
 
 .daily-date {
-  margin-left: 15 px;
+  padding: 10px 16px;
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-.daily-date:focus{
-  outline:none;
+
+.daily-date:hover {
+  border-color: var(--accent);
+}
+
+.daily-date:focus {
+  outline: none;
 }
 
 .date-picker-container {
@@ -40,9 +66,12 @@
 
 .daily-habit-btns {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: flex-start;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
 }
+
 .daily-date.calendar-open {
   border-radius: 6px 6px 0 0;
   border-bottom: none;
@@ -55,4 +84,17 @@
   right: 0;
   bottom: 0;
   z-index: 99;
+}
+
+.daily-habits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.daily-empty {
+  color: var(--ink-faint);
+  font-style: italic;
+  font-size: 14px;
+  padding: 12px 0;
 }
